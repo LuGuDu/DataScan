@@ -17,7 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.2.0";
@@ -28,24 +28,18 @@ import LandingPage from "views/examples/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
 
+import Api from './components/Api.js'
+
+
 ReactDOM.render(
   <BrowserRouter>
-    <Switch>
-      <Route path="/components" render={(props) => <Index {...props} />} />
-      <Route
-        path="/landing-page"
-        render={(props) => <LandingPage {...props} />}
-      />
-      <Route
-        path="/register-page"
-        render={(props) => <RegisterPage {...props} />}
-      />
-      <Route
-        path="/profile-page"
-        render={(props) => <ProfilePage {...props} />}
-      />
-      <Redirect from="/" to="/components" />
-    </Switch>
+    <Routes>
+      <Route path='/api' element={<Api />} />
+      <Route path="/components" element={<Index />} />
+      <Route path="/landing-page" element={<LandingPage />} />
+      <Route path="/register-page" element={<RegisterPage />} />
+      <Route path="/profile-page" element={<ProfilePage />} />
+    </Routes>
   </BrowserRouter>,
   document.getElementById("root")
 );
