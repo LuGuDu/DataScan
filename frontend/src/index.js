@@ -35,7 +35,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path='/api' element={<Api />} />
-      <Route path="/components" element={<Index />} />
+      <Route path="/" element={<Index />} />
       <Route path="/landing-page" element={<LandingPage />} />
       <Route path="/register-page" element={<RegisterPage />} />
       <Route path="/profile-page" element={<ProfilePage />} />
