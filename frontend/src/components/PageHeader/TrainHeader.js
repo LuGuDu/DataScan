@@ -18,34 +18,25 @@
 import React from "react";
 
 // reactstrap components
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+import { Container } from "reactstrap";
 
-export default function Basics() {
-
+export default function TrainHeader() {
   return (
-    <div className="section section-basic" id="basic-elements">
-      <img
-        alt="..."
-        className="path"
-        src={require("assets/img/path1.png").default}
-      />
+    <div className="page-header header-filter">
+      <div className="squares square1" />
+      <div className="squares square2" />
+      <div className="squares square3" />
+      <div className="squares square4" />
+      <div className="squares square5" />
+      <div className="squares square6" />
+      <div className="squares square7" />
       <Container>
-        <h3>Selecciona una acción</h3>
-        <Row style={{display: 'flex', justifyContent: 'center'}}>
-          <Col md="10">
-            <Button className="btn-round" color="primary" syze="lg" type="button">
-              Analizar
-            </Button>
-            <Button className="btn-round" color="primary" syze="lg" type="button">
-              Entrenar
-            </Button>
-          </Col>
-        </Row>
+        <div className="content-center brand">
+          <h1 className="h1-seo">Entrenamiento</h1>
+          <h3 className="d-none d-sm-block">
+            Seleccione un archivo para poder entrenar un modelo de Machine-Learning
+          </h3>
+        </div>
       </Container>
     </div>
   );

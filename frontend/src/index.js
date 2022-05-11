@@ -24,6 +24,11 @@ import "assets/scss/blk-design-system-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
+import Train from "components/Operations/Train.js"
+import Analyze from "components/Operations/Analyze.js"
+
+
+
 import LandingPage from "views/examples/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
@@ -36,8 +41,8 @@ ReactDOM.render(
     <Routes>
       <Route path='/api' element={<Api />} />
       <Route path="/" element={<Index />} />
-      <Route path="/train" element={<LandingPage />} />
-      <Route path="/analyze" element={<LandingPage />} />
+      <Route path="/train" element={<Train />} />
+      <Route path="/analyze" element={<Analyze />} />
 
 
       <Route path="/landing-page" element={<LandingPage />} />
