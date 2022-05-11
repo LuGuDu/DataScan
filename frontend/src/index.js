@@ -36,6 +36,10 @@ ReactDOM.render(
     <Routes>
       <Route path='/api' element={<Api />} />
       <Route path="/" element={<Index />} />
+      <Route path="/train" element={<LandingPage />} />
+      <Route path="/analyze" element={<LandingPage />} />
+
+
       <Route path="/landing-page" element={<LandingPage />} />
       <Route path="/register-page" element={<RegisterPage />} />
       <Route path="/profile-page" element={<ProfilePage />} />

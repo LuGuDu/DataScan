@@ -33,7 +33,6 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
 } from "reactstrap";
 
 export default function IndexNavbar() {
@@ -69,11 +68,7 @@ export default function IndexNavbar() {
   const onCollapseExited = () => {
     setCollapseOut("");
   };
-  const scrollToDownload = () => {
-    document
-      .getElementById("download-section")
-      .scrollIntoView({ behavior: "smooth" });
-  };
+
   return (
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
@@ -167,11 +162,9 @@ export default function IndexNavbar() {
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
                 <DropdownItem tag={Link} to="/register-page">
-                  <i className="tim-icons icon-bullet-list-67" />
                   Sobre los ataques
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/landing-page">
-                  <i className="tim-icons icon-image-02" />
                   Cómo funciona
                 </DropdownItem>
               </DropdownMenu>
@@ -180,7 +173,6 @@ export default function IndexNavbar() {
               <Button
                 className="nav-link d-none d-lg-block"
                 color="primary"
-                target="_blank"
                 href="/analyze"
               >
                 <i className="tim-icons icon-zoom-split" /> Analizar
