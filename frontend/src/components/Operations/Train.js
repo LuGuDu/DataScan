@@ -44,7 +44,7 @@ export default function Train() {
             .then(result => {
                 console.log('Success:', result);
                 if(result['message'] === 200){
-                    navigate('/deploy');
+                    navigate('/');
                 }
             })
             .catch(error => {
