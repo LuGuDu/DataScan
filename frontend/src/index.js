@@ -33,13 +33,10 @@ import LandingPage from "views/examples/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
 
-import Api from './components/Api.js'
-
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
-      <Route path='/api' element={<Api />} />
       <Route path="/" element={<Index />} />
       <Route path="/train" element={<Train />} />
       <Route path="/analyze" element={<Analyze />} />

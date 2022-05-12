@@ -6,11 +6,6 @@ app = Flask(__name__)
 mylist = None
 
 
-@app.route('/api', methods=['GET'])
-def index():
-    return {"message" : 200}
-
-
 @app.route('/train', methods=['POST'])
 def entrenamiento():
     global mylist
@@ -33,6 +28,24 @@ def entrenamiento():
 
     return {"message": 500}
 
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+
+    if request.method == "POST":
+        if request.files:
+            file = request.files["file"]
+            data = pd.read_csv(file)
+
+            print(data.shape)
+            print(data.columns)
+
+            dataForPredict = ml.cleanData(data)
+            predicts = ml.predict(dataForPredict, mylist)
+
+            return {"message" : 200, "predicts" : predicts}
+
+    return {"message": 500}
     
 if __name__ == '__main__':
     app.run()
