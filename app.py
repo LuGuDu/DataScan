@@ -8,12 +8,9 @@ app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.
 mongodb_client = PyMongo(app)
 mongo = mongodb_client.db
 
-attackList = None
-
 
 @app.route('/train', methods=['POST'])
 def training():
-    global attackList
 
     if request.method == "POST":
         if request.files:
@@ -57,7 +54,7 @@ def analyze():
             data = pd.read_csv(file)
 
             dataForPredict = ml.cleanData(data)
-            predicts = ml.predict(dataForPredict, attackList)
+            predicts = ml.predict(dataForPredict, mongo)
 
             return {"message" : 200, "predicts" : predicts}
 

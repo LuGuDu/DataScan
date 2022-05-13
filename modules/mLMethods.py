@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from datetime import datetime
+from flask_pymongo import PyMongo
 
 def saveModel(model):
     # serializar nuestro modelo y salvarlo en el fichero area_model.pickle
@@ -36,6 +37,7 @@ def cleanData(data):
     newData['dst_host_diff_srv_rate'] = data['dst_host_diff_srv_rate']
     newData['count'] = data['count']
     newData['service'] = data['service']
+    
     if 'class' in data.columns:
         newData['class'] = data['class']
 
@@ -101,10 +103,11 @@ def improveModel(X_train, y_train):
     grid.fit(X_train, y_train)
 
     improvedModel = grid.best_estimator_
-    print(f"Profundidad del árbol: {improvedModel.get_depth()}")
-    print(f"Número de nodos terminales: {improvedModel.get_n_leaves()}")
+    # print(f"Profundidad del árbol: {improvedModel.get_depth()}")
+    # print(f"Número de nodos terminales: {improvedModel.get_n_leaves()}")
 
     return improvedModel
+
 
 def checkAccuracy(model, X_test, y_test):
     from sklearn.metrics import accuracy_score
@@ -112,6 +115,7 @@ def checkAccuracy(model, X_test, y_test):
     score = accuracy_score(y_test, preds)
     print("El Accuracy del modelo es: ", score)
     return score
+
 
 def checkModel(data):
     from sklearn.metrics import accuracy_score
@@ -122,12 +126,14 @@ def checkModel(data):
 
     preds = model.predict(X)
     score = accuracy_score(y, preds)
-    print("El Accuracy del modelo es: ", score)
     return score
 
-def predict(dataForPredict, mylist):
 
+def predict(dataForPredict, mongo):
+    
     model = loadModel()
+    attackList = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["attack_list"]
+    print(attackList)
 
     for col_name in dataForPredict.columns:
         if col_name == "class":
@@ -141,7 +147,6 @@ def predict(dataForPredict, mylist):
 
     predicts = ''
 
-    print("PREDICTED DATA - VALUES:")
     keys = Counter(y_prds).keys()
     values = Counter(y_prds).values()
     predictData = pd.DataFrame({'key': keys, 'value': values})
@@ -149,7 +154,7 @@ def predict(dataForPredict, mylist):
     contador = 0
     for row in predictData.iterrows():
         index = predictData.loc[contador, 'key']
-        predicts += mylist[index] + " --> " + str(predictData.loc[contador, 'value']) + '\n'
+        predicts += attackList[index] + " --> " + str(predictData.loc[contador, 'value']) + '\n'
         #print(mylist[index], " --> ", predictData.loc[contador, 'value'])
         contador += 1
     
