@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import IndexNavbar from "components/Navbars/IndexNavbar.js"
@@ -26,12 +26,42 @@ async function uploadFileForCheck(data) {
     });
 };
 
+async function getTrainingModelData() {
+    return fetch('/getModelData', {
+        method: 'GET'
+    });
+};
+
 
 export default function Train() {
 
+    const getModelInfo = (e) => {
+
+        getTrainingModelData()
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result);
+            if(result['message'] === 200){
+                var parElement = document.getElementById("resultData");
+                
+                var textToAdd = ""       
+                for (const [key, value] of Object.entries(result['modelInfo'])) {
+                    console.log(key, value);
+                    textToAdd += key + " -> " + value + "\n"
+                }
+
+                var text = document.createTextNode(textToAdd);
+                parElement.appendChild(text);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
-        // Specify how to clean up after this effect:
+        getModelInfo()
         return function cleanup() {
           document.body.classList.toggle("index-page");
         };
@@ -79,6 +109,15 @@ export default function Train() {
             });
     }
 
+    const results ={
+        marginLeft: "15px",
+        padding: "15px",
+        textAlign: "left",
+        borderRadius: "15px",
+        borderStyle: "solid",
+        borderColor: "#ffffff"
+    }
+
     return (
         <>
             <IndexNavbar />
@@ -109,6 +148,20 @@ export default function Train() {
                             </Col>
                             </Row>
                         </Container>
+                        <section className="section section-lg">
+                            <Container>
+                                <Row>
+                                    <Col>
+                                    <div className="results" style={results}>
+                                        <h1>Previous Training:</h1>
+                                        <pre id="resultData">
+                                        </pre> 
+                                    </div>
+                                    </Col>
+                                </Row>
+                            </Container>
+
+                        </section>
                     </div>
                 </div>
                 <Footer />

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from datetime import datetime
-from flask_pymongo import PyMongo
+
 
 def saveModel(model):
     # serializar nuestro modelo y salvarlo en el fichero area_model.pickle
@@ -109,6 +109,12 @@ def improveModel(X_train, y_train):
     return improvedModel
 
 
+def getModelInfo(mongo):
+    modelInfo = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])
+    modelInfo.pop('_id', None)
+    return modelInfo
+
+
 def checkAccuracy(model, X_test, y_test):
     from sklearn.metrics import accuracy_score
     preds = model.predict(X_test)
@@ -133,7 +139,6 @@ def predict(dataForPredict, mongo):
     
     model = loadModel()
     attackList = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["attack_list"]
-    print(attackList)
 
     for col_name in dataForPredict.columns:
         if col_name == "class":
