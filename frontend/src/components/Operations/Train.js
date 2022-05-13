@@ -19,6 +19,13 @@ async function uploadFile(data) {
     });
 };
 
+async function uploadFileForCheck(data) {
+    return fetch('/checkModel', {
+        method: 'POST',
+        body: data
+    });
+};
+
 
 export default function Train() {
 
@@ -32,7 +39,7 @@ export default function Train() {
 
     const navigate = useNavigate();
 
-    const update = (e) => {
+    const train = (e) => {
         e.preventDefault();
 
         const fileField = document.querySelector('input[type="file"]');
@@ -45,6 +52,26 @@ export default function Train() {
                 console.log('Success:', result);
                 if(result['message'] === 200){
                     navigate('/');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    const checkModel = (e) => {
+        e.preventDefault();
+
+        const fileField = document.querySelector('input[type="file"]');
+        const formData = new FormData();
+        formData.append('file', fileField.files[0]);
+
+        uploadFileForCheck(formData)
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                if(result['message'] === 200){
+                    alert("Accuracy: " + result['accuracy'])
                 }
             })
             .catch(error => {
@@ -72,8 +99,11 @@ export default function Train() {
                                             </label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary" onClick={(e) => update(e)} >
+                                    <button type="submit" class="btn btn-primary" onClick={(e) => train(e)} >
                                         Entrenar
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" onClick={(e) => checkModel(e)} >
+                                        Comprobar modelo
                                     </button>
                                 </form>
                             </Col>

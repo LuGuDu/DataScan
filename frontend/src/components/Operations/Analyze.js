@@ -28,8 +28,6 @@ export default function Analyze() {
         };
       },[]);
 
-      const navigate = useNavigate();
-
     const update = (e) => {
         e.preventDefault();
 

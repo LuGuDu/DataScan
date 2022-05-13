@@ -16,6 +16,7 @@
 
 */
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -26,6 +27,17 @@ import {
 } from "reactstrap";
 
 export default function Basics() {
+  const navigate = useNavigate();
+
+  const analyze = (e) => {
+    e.preventDefault();
+    navigate('/analyze');
+  }
+
+  const train = (e) => {
+    e.preventDefault();
+    navigate('/train');
+  }
 
   return (
     <div className="section section-basic" id="basic-elements">
@@ -38,10 +50,10 @@ export default function Basics() {
         <h3>Selecciona una acción</h3>
         <Row style={{display: 'flex', justifyContent: 'center'}}>
           <Col md="10">
-            <Button className="btn-round" color="primary" syze="lg" type="button">
+            <Button className="btn-round" color="primary" syze="lg" type="button" onClick={(e) => analyze(e)}>
               Analizar
             </Button>
-            <Button className="btn-round" color="primary" syze="lg" type="button">
+            <Button className="btn-round" color="primary" syze="lg" type="button" onClick={(e) => train(e)}>
               Entrenar
             </Button>
           </Col>

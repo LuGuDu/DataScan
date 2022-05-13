@@ -1,30 +1,49 @@
 from flask import Flask, request
+from flask_pymongo import PyMongo
 import pandas as pd
 import modules.mLMethods as ml
 
 app = Flask(__name__)
-mylist = None
+app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.gozlc.mongodb.net/datascan"
+mongodb_client = PyMongo(app)
+mongo = mongodb_client.db
+
+attackList = None
 
 
 @app.route('/train', methods=['POST'])
-def entrenamiento():
-    global mylist
+def training():
+    global attackList
 
     if request.method == "POST":
         if request.files:
             file = request.files["file"]
             data = pd.read_csv(file)
-            print(data.shape)
-            print(data.columns)
 
-            mylist = data['class']
-            mylist = list(dict.fromkeys(sorted(mylist)))
-            print(mylist)
+            #Debe hacerse antes de la normalizacion para obtener los nombres
+            attackList = list(dict.fromkeys(sorted(data['class'])))
+
+            fileData = {'fileName':file.filename, 'attackList': attackList}
 
             data = ml.cleanData(data)
-            ml.train(data)
+            ml.train(data, fileData, mongo)
 
             return {"message" : 200}
+
+    return {"message": 500}
+
+
+@app.route('/checkModel', methods=['POST'])
+def checkModel():
+
+    if request.method == "POST":
+        if request.files:
+            file = request.files["file"]
+            data = pd.read_csv(file)
+            data = ml.cleanData(data)
+            accuracy = ml.checkModel(data)
+
+            return {"message": 200, "accuracy": accuracy}
 
     return {"message": 500}
 
@@ -37,11 +56,8 @@ def analyze():
             file = request.files["file"]
             data = pd.read_csv(file)
 
-            print(data.shape)
-            print(data.columns)
-
             dataForPredict = ml.cleanData(data)
-            predicts = ml.predict(dataForPredict, mylist)
+            predicts = ml.predict(dataForPredict, attackList)
 
             return {"message" : 200, "predicts" : predicts}
 

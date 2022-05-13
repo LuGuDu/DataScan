@@ -1,7 +1,8 @@
-import pickle
+import pickle, time
 import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
+from datetime import datetime
 
 def saveModel(model):
     # serializar nuestro modelo y salvarlo en el fichero area_model.pickle
@@ -42,23 +43,40 @@ def cleanData(data):
     return newData
 
 
-def train(data):
+def train(data, fileData, mongo):
     print("ENTRENANDO")
     from sklearn.model_selection import train_test_split
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
-    
-    
+      
     modelDT = DecisionTreeClassifier(random_state=1)
+    
+    inicio = time.time()
     modelDT.fit(X_train, y_train)
     improvedModelDT = improveModel(X_train, y_train)
+    fin = time.time()
+    tiempoEntrenamiento = fin-inicio
+ 
+    scoreOr = checkAccuracy(modelDT, X_test, y_test)
+    scoreIm = checkAccuracy(improvedModelDT, X_test, y_test)
 
-    printAccuracy(modelDT, X_test, y_test)
-    printAccuracy(improvedModelDT, X_test, y_test)
+    finalScore = scoreIm
+    finalModel = improvedModelDT
+    improved = True
 
-    saveModel(improvedModelDT)
+    if scoreIm < scoreOr:
+        improved = False
+        finalScore = scoreOr
+        finalModel = modelDT
+
+    saveModel(finalModel)
+
+    mongo.modelTrainHistorial.insert_one({'trainingFileName': fileData['fileName'], 'date': datetime.now(), 
+        'timeTraining': tiempoEntrenamiento, 'modelFileName': 'modeloentrenado.pickle', 'improved': improved, 'accuracy': finalScore, 
+        'rows': data.shape[0], 'columns': data.columns.values.tolist(), 'attack_list': fileData['attackList']})
+
 
 def improveModel(X_train, y_train):
     from sklearn.model_selection import GridSearchCV
@@ -88,12 +106,24 @@ def improveModel(X_train, y_train):
 
     return improvedModel
 
-def printAccuracy(model, X_test, y_test):
+def checkAccuracy(model, X_test, y_test):
     from sklearn.metrics import accuracy_score
-    preds_knn = model.predict(X_test)
-    score_knn = accuracy_score(y_test, preds_knn)
-    print("El Accuracy del modelo es: ", score_knn)
-    return score_knn
+    preds = model.predict(X_test)
+    score = accuracy_score(y_test, preds)
+    print("El Accuracy del modelo es: ", score)
+    return score
+
+def checkModel(data):
+    from sklearn.metrics import accuracy_score
+    model = loadModel()
+
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
+
+    preds = model.predict(X)
+    score = accuracy_score(y, preds)
+    print("El Accuracy del modelo es: ", score)
+    return score
 
 def predict(dataForPredict, mylist):
 
