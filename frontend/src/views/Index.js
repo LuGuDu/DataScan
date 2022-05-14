@@ -24,6 +24,8 @@ import Footer from "components/Footer/Footer.js";
 
 // sections for this page/view
 import TrainAnalyze from "views/IndexSections/Train_analyze.js";
+import TrainInfo from "views/IndexSections/TrainInfo.js";
+import AnalyzeInfo from "views/IndexSections/AnalyzeInfo.js";
 
 
 export default function Index() {
@@ -40,6 +42,8 @@ export default function Index() {
       <div className="wrapper">
         <PageHeader />
         <div className="main">
+          <TrainInfo />
+          <AnalyzeInfo />
           <TrainAnalyze />
         </div>
         <Footer />

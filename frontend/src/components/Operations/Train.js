@@ -16,6 +16,7 @@ import {
     Form,
     Input,
 } from "reactstrap";
+import { isWhiteSpaceLike } from "typescript";
 
 
 async function uploadFile(data) {
@@ -137,6 +138,10 @@ export default function Train() {
             x.innerHTML = fileField.files[0]['name']
     }
 
+    const modelData = {
+        color: "gray",
+    }
+
     return (
         <>
             <IndexNavbar />
@@ -189,19 +194,19 @@ export default function Train() {
                                                         <Col md="3">
                                                             <FormGroup>
                                                                 <label>Archivo usado</label>
-                                                                <Input id="in-previous-file" defaultValue="Archivo usado" type="text" readonly="readonly" />
+                                                                <Input id="in-previous-file" style={modelData} defaultValue="Archivo usado" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="3">
                                                             <FormGroup>
                                                                 <label>Accuracy</label>
-                                                                <Input id="in-accuracy" placeholder="Accuracy" type="text" readonly="readonly" />
+                                                                <Input id="in-accuracy" style={modelData} placeholder="Accuracy" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="4">
                                                             <FormGroup>
                                                                 <label>Fecha</label>
-                                                                <Input id="in-date" placeholder="Fecha" type="text" readonly="readonly" />
+                                                                <Input id="in-date" style={modelData} placeholder="Fecha" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
@@ -209,19 +214,19 @@ export default function Train() {
                                                         <Col md="2">
                                                             <FormGroup>
                                                                 <label>Filas</label>
-                                                                <Input id="in-rows" defaultValue="Filas" type="text" readonly="readonly" />
+                                                                <Input id="in-rows" style={modelData} defaultValue="Filas" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="3">
                                                             <FormGroup>
                                                                 <label>Tiempo entrenamiento (s)</label>
-                                                                <Input id="in-time" defaultValue="Tiempo entrenamiento (s)" type="text" readonly="readonly" />
+                                                                <Input id="in-time" style={modelData} defaultValue="Tiempo entrenamiento (s)" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="2">
                                                             <FormGroup>
                                                                 <label>Podado</label>
-                                                                <Input id="in-pruning" defaultValue="Podado" type="text" readonly="readonly" />
+                                                                <Input id="in-pruning" style={modelData} defaultValue="Podado" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
@@ -229,7 +234,7 @@ export default function Train() {
                                                         <Col md="12">
                                                             <FormGroup>
                                                                 <label>Columnas</label>
-                                                                <Input id="in-columns" placeholder="Columnas" type="text" readonly="readonly" />
+                                                                <Input id="in-columns" style={modelData} placeholder="Columnas" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
@@ -237,7 +242,7 @@ export default function Train() {
                                                         <Col md="12">
                                                             <FormGroup>
                                                                 <label>Ataques</label>
-                                                                <Input id="in-attacks" placeholder="Ataques" type="text" readonly="readonly" />
+                                                                <Input id="in-attacks" style={modelData} placeholder="Ataques" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>

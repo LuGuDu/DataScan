@@ -28,8 +28,11 @@ export default function Analyze() {
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
+        document.body.classList.toggle("profile-page");
+
         // Specify how to clean up after this effect:
         return function cleanup() {
+            document.body.classList.toggle("profile-page");
             document.body.classList.toggle("index-page");
         };
     }, []);
@@ -74,7 +77,7 @@ export default function Analyze() {
 
         const fileField = document.querySelector('input[type="file"]');
         var x = document.getElementById("labelFile");
-        if(fileField.files[0])
+        if (fileField.files[0])
             x.innerHTML = fileField.files[0]['name']
     }
 
@@ -96,21 +99,28 @@ export default function Analyze() {
                     <div className="section section-basic" id="basic-elements">
                         <Container >
                             <Row >
-                                <Col md="5">
-                                    <form>
-                                        <div className="form-group">
-                                            <h3> Selecciona un archivo </h3>
-                                            <div id="fileSelector" className="custom-file">
-                                                <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
-                                                <label id="labelFile" className="custom-file-label" htmlFor="file">
-                                                    Selecciona un archivo...
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
-                                            Analizar
-                                        </button>
-                                    </form>
+                                <Col md="10">
+                                    <Card className="card-plain">
+                                        <CardHeader>
+                                            <h1 className="profile-title text-left">Selecciona el archivo</h1>
+                                            <h5 className="text-on-back">ANALIZAR</h5>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Form>
+                                                <div className="form-group">
+                                                    <div id="fileSelector" className="custom-file">
+                                                        <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
+                                                        <label id="labelFile" className="custom-file-label" htmlFor="file">
+                                                            Selecciona un archivo...
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
+                                                    Analizar
+                                                </button>
+                                            </Form>
+                                        </CardBody>
+                                    </Card>
                                 </Col>
                             </Row>
                         </Container>
@@ -118,11 +128,18 @@ export default function Analyze() {
                             <Container>
                                 <Row>
                                     <Col>
-                                        <div className="results" style={results}>
-                                            <h1>Results:</h1>
-                                            <pre id="resultData">
-                                            </pre>
-                                        </div>
+                                        <Card className="card-plain">
+                                            <CardHeader>
+                                                <h1 className="profile-title text-left">Datos del Analisis</h1>
+                                                <h5 className="text-on-back">RESULTADO</h5>
+                                            </CardHeader>
+                                            <CardBody>
+                                                <div className="results" style={results}>
+                                                    <pre id="resultData">
+                                                    </pre>
+                                                </div>
+                                            </CardBody>
+                                        </Card>
                                     </Col>
                                 </Row>
                             </Container>
