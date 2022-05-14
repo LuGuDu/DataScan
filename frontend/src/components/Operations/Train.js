@@ -16,8 +16,6 @@ import {
     Form,
     Input,
 } from "reactstrap";
-import { isWhiteSpaceLike } from "typescript";
-
 
 async function uploadFile(data) {
     return fetch('/train', {

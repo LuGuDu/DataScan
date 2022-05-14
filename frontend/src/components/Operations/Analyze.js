@@ -1,9 +1,10 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
 
 import IndexNavbar from "components/Navbars/IndexNavbar.js"
 import AnalyzeHeader from "components/PageHeader/AnalyzeHeader.js"
 import Footer from "components/Footer/Footer.js"
+
+import Chart from "chart.js"
 
 import {
     Container,
@@ -12,9 +13,7 @@ import {
     Card,
     CardHeader,
     CardBody,
-    FormGroup,
     Form,
-    Input,
 } from "reactstrap";
 
 async function uploadFile(data) {
@@ -24,7 +23,10 @@ async function uploadFile(data) {
     });
 };
 
+
 export default function Analyze() {
+
+    let myChart
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
@@ -34,6 +36,7 @@ export default function Analyze() {
         return function cleanup() {
             document.body.classList.toggle("profile-page");
             document.body.classList.toggle("index-page");
+
         };
     }, []);
 
@@ -60,8 +63,16 @@ export default function Analyze() {
                     //document.getElementById("btn-analyze").style.cursor = "auto"
 
                     var parElement = document.getElementById("resultData");
-                    var textToAdd = document.createTextNode(result['predicts']);
+
+                    var text = ""
+                    for (const [key, value] of Object.entries(result['predicts'])) {
+                        text = text + key + " --> " + value + "\n"
+                    }
+
+                    var textToAdd = document.createTextNode(text);
                     parElement.appendChild(textToAdd);
+
+                    uploadChart(result['predicts'])
                 }
             })
             .catch(error => {
@@ -89,6 +100,104 @@ export default function Analyze() {
         borderStyle: "solid",
         borderColor: "#ffffff"
     }
+
+    const getPercentage = (valuesArray) => {
+        var sum = 0;
+
+        for (var i in valuesArray) { // we find the total here
+            sum += parseInt(valuesArray[i])
+        }
+
+        var count = 0;
+        valuesArray.forEach(function (number) {
+            valuesArray[count] = (number / sum) * 100
+            count = count + 1
+        })
+
+        return valuesArray
+    }
+
+    const uploadChart = (dataset) => {
+
+        var ctx = document.getElementById('myChart');
+
+        var count = 0
+        var valuesArray = []
+        var otherValue = 0
+
+        valuesArray = getPercentage(Object.values(dataset))
+        for (const [key] of Object.entries(dataset)) {
+            if (valuesArray[count] < 1) {
+                otherValue += valuesArray[count]
+                delete dataset[key]
+            } else {
+                dataset[key] = valuesArray[count]
+            }
+            count = count + 1
+        }
+        dataset["other attacks"] = otherValue
+
+        const labelsArray = []
+        const finalValuesArray = []
+        count = 0
+        for (const [key, value] of Object.entries(dataset)) {
+            finalValuesArray[count] = value
+            labelsArray[count] = key
+            count = count + 1
+        }
+
+        const generateRandomNumber = (min, max) => {
+            return Math.floor(Math.random() * (max - min) + min);
+        };
+
+        const getColors = () => {
+            var colors = []
+
+            var count = 0
+            var r = generateRandomNumber(100, 200),
+                g = generateRandomNumber(100, 200),
+                b = generateRandomNumber(100, 200)
+            var a = 0.8
+            valuesArray.forEach(function (number) {
+                colors[count] = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
+                r = generateRandomNumber(100, 200)
+                g = generateRandomNumber(100, 200)
+                b = generateRandomNumber(100, 200)
+                count = count + 1
+            })
+
+            return colors
+        }
+
+        const data = {
+            datasets: [{
+                data: finalValuesArray,
+                backgroundColor: getColors(labelsArray)
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: labelsArray
+        };
+
+        myChart = new Chart(ctx, {
+            data: data,
+            type: 'doughnut',
+            options: {
+                title: {
+                    display: true,
+                    text: 'Porcentaje de ataques',
+                    fontSize: '18',
+                    fontColor: '#fff',
+                    padding: '20', 
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+
+    }
+
 
     return (
         <>
@@ -138,13 +247,25 @@ export default function Analyze() {
                                                     <pre id="resultData">
                                                     </pre>
                                                 </div>
+
                                             </CardBody>
                                         </Card>
                                     </Col>
                                 </Row>
                             </Container>
-
                         </section>
+                        <div className="section section-nucleo-icons">
+                            <Container>
+                                <Row>
+                                    <Col>
+                                        <div className="percentages">
+                                            <canvas id="myChart" width="100" height="100"></canvas>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Container>
+
+                        </div>
                     </div>
                 </div>
                 <Footer />

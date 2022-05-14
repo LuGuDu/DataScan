@@ -157,9 +157,11 @@ def predict(dataForPredict, mongo):
     predictData = pd.DataFrame({'key': keys, 'value': values})
 
     contador = 0
+    predicts = {}
     for row in predictData.iterrows():
         index = predictData.loc[contador, 'key']
-        predicts += attackList[index] + " --> " + str(predictData.loc[contador, 'value']) + '\n'
+        #predicts += attackList[index] + " --> " + str(predictData.loc[contador, 'value']) + '\n'
+        predicts[attackList[index]] = str(predictData.loc[contador, 'value'])
         #print(mylist[index], " --> ", predictData.loc[contador, 'value'])
         contador += 1
     
