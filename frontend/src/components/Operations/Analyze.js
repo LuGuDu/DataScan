@@ -9,6 +9,12 @@ import {
     Container,
     Row,
     Col,
+    Card,
+    CardHeader,
+    CardBody,
+    FormGroup,
+    Form,
+    Input,
 } from "reactstrap";
 
 async function uploadFile(data) {
@@ -24,9 +30,9 @@ export default function Analyze() {
         document.body.classList.toggle("index-page");
         // Specify how to clean up after this effect:
         return function cleanup() {
-          document.body.classList.toggle("index-page");
+            document.body.classList.toggle("index-page");
         };
-      },[]);
+    }, []);
 
     const update = (e) => {
         e.preventDefault();
@@ -39,12 +45,12 @@ export default function Analyze() {
         document.getElementById("file").disabled = true;
         document.getElementById("resultData").innerHTML = "";
         //document.getElementById("btn-analyze").style.cursor = "wait"
-        
+
         uploadFile(formData)
             .then(response => response.json())
             .then(result => {
                 console.log('Success:', result);
-                if(result['message'] === 200){
+                if (result['message'] === 200) {
                     //console.log(result['predicts'])
                     document.getElementById("btn-analyze").disabled = false;
                     document.getElementById("file").disabled = false;
@@ -61,9 +67,18 @@ export default function Analyze() {
                 document.getElementById("file").disabled = false;
                 //document.getElementById("btn-analyze").style.cursor = "auto"
             });
-        }
+    }
 
-    const results ={
+    const changeName = (e) => {
+        e.preventDefault();
+
+        const fileField = document.querySelector('input[type="file"]');
+        var x = document.getElementById("labelFile");
+        if(fileField.files[0])
+            x.innerHTML = fileField.files[0]['name']
+    }
+
+    const results = {
         marginLeft: "15px",
         padding: "15px",
         textAlign: "left",
@@ -75,39 +90,39 @@ export default function Analyze() {
     return (
         <>
             <IndexNavbar />
-            <div className="wrapper">           
+            <div className="wrapper">
                 <AnalyzeHeader />
                 <div className="main">
                     <div className="section section-basic" id="basic-elements">
-                        <Container >     
+                        <Container >
                             <Row >
-                            <Col md="5">
-                                <form>
-                                    <div className="form-group">
-                                        <h3> Selecciona un archivo </h3>
-                                        <div id="fileSelector" className="custom-file">
-                                            <input type="file" className="custom-file-input" name="file" id="file"/>
-                                            <label className="custom-file-label" htmlFor="file">
-                                                Selecciona un archivo...
-                                            </label>
+                                <Col md="5">
+                                    <form>
+                                        <div className="form-group">
+                                            <h3> Selecciona un archivo </h3>
+                                            <div id="fileSelector" className="custom-file">
+                                                <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
+                                                <label id="labelFile" className="custom-file-label" htmlFor="file">
+                                                    Selecciona un archivo...
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
-                                        Analizar
-                                    </button>
-                                </form>
-                            </Col>
+                                        <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
+                                            Analizar
+                                        </button>
+                                    </form>
+                                </Col>
                             </Row>
                         </Container>
                         <section className="section section-lg">
                             <Container>
                                 <Row>
                                     <Col>
-                                    <div className="results" style={results}>
-                                        <h1>Results:</h1>
-                                        <pre id="resultData">
-                                        </pre> 
-                                    </div>
+                                        <div className="results" style={results}>
+                                            <h1>Results:</h1>
+                                            <pre id="resultData">
+                                            </pre>
+                                        </div>
                                     </Col>
                                 </Row>
                             </Container>
