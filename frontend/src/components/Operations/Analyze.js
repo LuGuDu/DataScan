@@ -26,11 +26,53 @@ async function uploadFile(data) {
 
 export default function Analyze() {
 
-    let myChart
+    var percentageAttacksChart
+    var typesChart
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
         document.body.classList.toggle("profile-page");
+
+        const initializeCharts = () => {
+            var ctx = document.getElementById('percentageChart');
+    
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            percentageAttacksChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3]
+                    }]
+                },
+                options: {}
+            });
+          
+            percentageAttacksChart.render(); 
+            percentageAttacksChart.destroy();
+
+            ctx = document.getElementById('typesChart')
+
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            typesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3]
+                    }]
+                },
+                options: {}
+            });
+                      
+            typesChart.render(); 
+            typesChart.destroy();
+
+        }
+
+        initializeCharts()
 
         // Specify how to clean up after this effect:
         return function cleanup() {
@@ -57,6 +99,7 @@ export default function Analyze() {
             .then(result => {
                 console.log('Success:', result);
                 if (result['message'] === 200) {
+
                     //console.log(result['predicts'])
                     document.getElementById("btn-analyze").disabled = false;
                     document.getElementById("file").disabled = false;
@@ -72,7 +115,8 @@ export default function Analyze() {
                     var textToAdd = document.createTextNode(text);
                     parElement.appendChild(textToAdd);
 
-                    uploadChart(result['predicts'])
+                    uploadCharts(result['predicts'])
+
                 }
             })
             .catch(error => {
@@ -101,7 +145,8 @@ export default function Analyze() {
         borderColor: "#ffffff"
     }
 
-    const getPercentage = (valuesArray) => {
+    const getPercentage = (dataset) => {
+        let valuesArray = dataset
         var sum = 0;
 
         for (var i in valuesArray) { // we find the total here
@@ -117,9 +162,125 @@ export default function Analyze() {
         return valuesArray
     }
 
-    const uploadChart = (dataset) => {
+    const uploadCharts = (dataset) => {
 
-        var ctx = document.getElementById('myChart');
+        const resultsJSON = JSON.stringify(dataset);
+        
+        uploadPercentageChart(JSON.parse(resultsJSON))
+        uploadTypesChart(JSON.parse(resultsJSON))
+
+        console.log(dataset)
+    }
+
+    const uploadTypesChart = (resultsData) => {
+        var dataset = resultsData
+        var ctx = document.getElementById('typesChart');
+
+        var count = 0
+        var valuesArray = []
+
+        var dosAttacks = ["back", "land", "neptune", "pod", "smurf", "teardrop"]
+        var r2lAttacks = ["ftp_write", "guess_passwd", "imap", "multihop", "phf", "warezclient", "warezmaster"]
+        var u2rAttacks = ["buffer_overflow", "loadmodule", "perl", "rootkit"]
+        var probingAttacks = ["ipsweep", "nmap", "porstweep", "satan"]
+
+        var dosValue = 0
+        var r2lValue = 0
+        var u2rValue = 0
+        var probingValue = 0
+
+        for (const [key, value] of Object.entries(dataset)) {
+            if (dosAttacks.includes(key)) {
+                dosValue += parseInt(value)
+            } else if (r2lAttacks.includes(key)){
+                r2lValue += parseInt(value)
+            } else if (u2rAttacks.includes(key)){
+                u2rValue += parseInt(value)
+            } else if (probingAttacks.includes(key)){
+                probingValue += parseInt(value)
+            }
+            delete dataset[key]
+            count = count + 1
+        }
+        dataset["Ataques DOS"] = dosValue
+        dataset["Ataques R2L"] = r2lValue
+        dataset["Ataques U2R"] = u2rValue
+        dataset["Ataques probing"] = probingValue
+
+        console.log(dataset)
+
+        const labelsArray = []
+        const finalValuesArray = []
+        count = 0
+        for (const [key, value] of Object.entries(dataset)) {
+            finalValuesArray[count] = value
+            labelsArray[count] = key
+            count = count + 1
+        }
+
+        const data = {
+            datasets: [{
+                data: finalValuesArray,
+                backgroundColor: getColors(labelsArray)
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: labelsArray
+        };
+
+        if(typesChart != null){
+            typesChart.destroy();
+        }
+
+        typesChart = new Chart(ctx, {
+            data: data,
+            type: 'doughnut',
+            options: {
+                title: {
+                    display: true,
+                    text: 'Tipos de Ataque',
+                    fontSize: '18',
+                    fontColor: '#fff',
+                    padding: '20', 
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        });
+
+        typesChart.render()
+
+    }
+
+    const generateRandomNumber = (min, max) => {
+        return Math.floor(Math.random() * (max - min) + min);
+    };
+
+    const getColors = (labelsArray) => {
+        var colors = []
+
+        var count = 0
+        var r = generateRandomNumber(100, 200),
+            g = generateRandomNumber(100, 200),
+            b = generateRandomNumber(100, 200)
+        var a = 0.8
+        labelsArray.forEach(function (number) {
+            colors[count] = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
+            r = generateRandomNumber(100, 200)
+            g = generateRandomNumber(100, 200)
+            b = generateRandomNumber(100, 200)
+            count = count + 1
+        })
+
+        return colors
+    }
+
+    const uploadPercentageChart = (resultsData) => {
+
+        var dataset = resultsData
+
+        var ctx = document.getElementById('percentageChart');
 
         var count = 0
         var valuesArray = []
@@ -146,29 +307,6 @@ export default function Analyze() {
             count = count + 1
         }
 
-        const generateRandomNumber = (min, max) => {
-            return Math.floor(Math.random() * (max - min) + min);
-        };
-
-        const getColors = () => {
-            var colors = []
-
-            var count = 0
-            var r = generateRandomNumber(100, 200),
-                g = generateRandomNumber(100, 200),
-                b = generateRandomNumber(100, 200)
-            var a = 0.8
-            valuesArray.forEach(function (number) {
-                colors[count] = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
-                r = generateRandomNumber(100, 200)
-                g = generateRandomNumber(100, 200)
-                b = generateRandomNumber(100, 200)
-                count = count + 1
-            })
-
-            return colors
-        }
-
         const data = {
             datasets: [{
                 data: finalValuesArray,
@@ -179,7 +317,11 @@ export default function Analyze() {
             labels: labelsArray
         };
 
-        myChart = new Chart(ctx, {
+        if(percentageAttacksChart != null){
+            percentageAttacksChart.destroy();
+        }
+
+        percentageAttacksChart = new Chart(ctx, {
             data: data,
             type: 'doughnut',
             options: {
@@ -195,6 +337,8 @@ export default function Analyze() {
                 }
             }
         });
+
+        percentageAttacksChart.render()
 
     }
 
@@ -256,10 +400,15 @@ export default function Analyze() {
                         </section>
                         <div className="section section-nucleo-icons">
                             <Container>
-                                <Row>
-                                    <Col>
+                                <Row md="12">
+                                    <Col md="6">
                                         <div className="percentages">
-                                            <canvas id="myChart" width="100" height="100"></canvas>
+                                            <canvas id="percentageChart" width="100" height="100"></canvas>
+                                        </div>
+                                    </Col>
+                                    <Col md="6">
+                                        <div className="types">
+                                            <canvas id="typesChart" width="100" height="100"></canvas>
                                         </div>
                                     </Col>
                                 </Row>
