@@ -26,6 +26,7 @@ import "assets/demo/demo.css";
 import Index from "views/Index.js";
 import Train from "components/Operations/Train.js"
 import Analyze from "components/Operations/Analyze.js"
+import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
 
 
 
@@ -40,6 +41,7 @@ ReactDOM.render(
       <Route path="/" element={<Index />} />
       <Route path="/train" element={<Train />} />
       <Route path="/analyze" element={<Analyze />} />
+      <Route path="/attacks_info" element={<AttackTypesInfo />} />
 
 
       <Route path="/landing-page" element={<LandingPage />} />

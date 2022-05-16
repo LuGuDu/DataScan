@@ -185,7 +185,7 @@ export default function IndexNavbar() {
                 Más opciones
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/register-page">
+                <DropdownItem tag={Link} to="/attacks_info" onClick={(e) => smoothScroll()}>
                   Sobre los ataques
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/landing-page">
