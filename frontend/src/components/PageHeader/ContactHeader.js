@@ -20,7 +20,7 @@ import React from "react";
 // reactstrap components
 import { Container } from "reactstrap";
 
-export default function AttackTypesInfoHeader() {
+export default function ContactHeader() {
   return (
     <div className="page-header header-filter">
       <div className="squares square1" />
@@ -32,9 +32,9 @@ export default function AttackTypesInfoHeader() {
       <div className="squares square7" />
       <Container>
         <div className="content-center brand">
-          <h1 className="h1-seo">Ataques Informáticos</h1>
+          <h1 className="h1-seo">Contáctanos</h1>
           <h3 className="d-none d-sm-block">
-            Un breve resumen de cuales son algunos de los tipos de ataques más famosos y en que consisten
+            Te facilitamos un formulario para poder contactar con nosotros si tienes algo que decirnos
           </h3>
         </div>
       </Container>

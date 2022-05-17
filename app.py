@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
+import smtplib
 import pandas as pd
 import modules.mLMethods as ml
 
@@ -7,6 +8,33 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.gozlc.mongodb.net/datascan"
 mongodb_client = PyMongo(app)
 mongo = mongodb_client.db
+
+
+@app.route('/sendMessage', methods=['POST'])
+def sendEmail():
+
+    from email.mime.text import MIMEText
+
+    if request.method == "POST":
+
+        name = request.json['emailName']
+        subject = request.json['emailSubject']
+        message =  MIMEText(name + "\n" + request.json['emailMessage'])
+
+        message['Subject'] = subject
+        message['From'] = "datascan.contacto@gmail.com"
+        message['To'] = "datascan.contacto@gmail.com"
+
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login("datascan.contacto@gmail.com", "datascan2122")
+        server.sendmail("datascan.contacto@gmail.com", "datascan.contacto@gmail.com", message.as_string())
+
+        print("Successfully sent email")
+
+        return {"message": 200}
+    
+    return {"message": 500}
 
 
 @app.route('/getModelData', methods=['GET'])

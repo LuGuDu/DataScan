@@ -188,6 +188,9 @@ export default function IndexNavbar() {
                 <DropdownItem tag={Link} to="/attacks_info" onClick={(e) => smoothScroll()}>
                   Sobre los ataques
                 </DropdownItem>
+                <DropdownItem tag={Link} to="/contact" onClick={(e) => smoothScroll()}>
+                  Contáctanos
+                </DropdownItem>
                 <DropdownItem tag={Link} to="/landing-page">
                   Cómo funciona
                 </DropdownItem>

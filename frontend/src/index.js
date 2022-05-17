@@ -27,6 +27,7 @@ import Index from "views/Index.js";
 import Train from "components/Operations/Train.js"
 import Analyze from "components/Operations/Analyze.js"
 import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
+import Contact from "components/Operations/Contact.js"
 
 
 
@@ -42,6 +43,7 @@ ReactDOM.render(
       <Route path="/train" element={<Train />} />
       <Route path="/analyze" element={<Analyze />} />
       <Route path="/attacks_info" element={<AttackTypesInfo />} />
+      <Route path="/contact" element={<Contact />} />
 
 
       <Route path="/landing-page" element={<LandingPage />} />

@@ -16,7 +16,6 @@
 
 */
 import React from "react";
-import { useNavigate } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -44,13 +43,6 @@ const carouselItems = [
 ];
 
 export default function Basics() {
-    const navigate = useNavigate();
-
-    const analyze = (e) => {
-        e.preventDefault();
-        navigate('/analyze');
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
 
     return (
         <div className="section">
@@ -68,7 +60,7 @@ export default function Basics() {
                         encontrar vulnerabilidades conocidas que le permitan hackear toda la red. 
                         </p>
                         <div className="btn-wrapper pt-3">
-                            <Button className="btn-simple" color="primary" onClick={(e) => analyze(e)} >
+                            <Button className="btn-simple" color="primary" href="" >
                                 Más información
                             </Button>
                         </div>

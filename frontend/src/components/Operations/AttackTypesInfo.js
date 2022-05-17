@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
 
 import IndexNavbar from "components/Navbars/IndexNavbar.js"
 import AttackTypesInfoHeaderHeader from "components/PageHeader/AttackTypesInfoHeader.js"
@@ -14,14 +13,6 @@ import Footer from "components/Footer/Footer.js"
 
 import {
     Container,
-    Row,
-    Col,
-    Card,
-    CardHeader,
-    CardBody,
-    FormGroup,
-    Form,
-    Input,
 } from "reactstrap";
 
 export default function AttackTypesInfo() {
@@ -36,8 +27,6 @@ export default function AttackTypesInfo() {
             document.body.classList.toggle("index-page");
         };
     }, []);
-
-    const navigate = useNavigate();
 
     return (
         <>

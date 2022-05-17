@@ -177,7 +177,6 @@ export default function Analyze() {
         var ctx = document.getElementById('typesChart');
 
         var count = 0
-        var valuesArray = []
 
         var dosAttacks = ["back", "land", "neptune", "pod", "smurf", "teardrop"]
         var r2lAttacks = ["ftp_write", "guess_passwd", "imap", "multihop", "phf", "warezclient", "warezmaster"]

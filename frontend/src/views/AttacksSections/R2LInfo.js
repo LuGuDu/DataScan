@@ -16,7 +16,6 @@
 
 */
 import React from "react";
-import { useNavigate } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -43,14 +42,7 @@ const carouselItems = [
     },
 ];
 
-export default function Basics() {
-    const navigate = useNavigate();
-
-    const analyze = (e) => {
-        e.preventDefault();
-        navigate('/analyze');
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+export default function R2LInfo() {
 
     return (
         <div className="section">
@@ -64,7 +56,7 @@ export default function Basics() {
                         en esa máquina que le permita obtener acceso local como usuario de esa máquina. 
                         </p>
                         <div className="btn-wrapper pt-3">
-                            <Button className="btn-simple" color="primary" onClick={(e) => analyze(e)} >
+                            <Button className="btn-simple" color="primary" href="">
                                 Más información
                             </Button>
                         </div>
