@@ -29,6 +29,11 @@ import Analyze from "components/Operations/Analyze.js"
 import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
 import Contact from "components/Operations/Contact.js"
 
+import Admin from "components/Operations/Admin.js"
+import ModelInfo from "components/Admin/Model/ModelInfo.js"
+import ModelHistory from "components/Admin/Model/ModelHistory.js"
+
+
 
 
 import LandingPage from "views/examples/LandingPage.js";
@@ -44,6 +49,14 @@ ReactDOM.render(
       <Route path="/analyze" element={<Analyze />} />
       <Route path="/attacks_info" element={<AttackTypesInfo />} />
       <Route path="/contact" element={<Contact />} />
+
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin/model/train" element={<Admin />} />
+      <Route path="/admin/model/info" element={<ModelInfo />} />
+      <Route path="/admin/model/history" element={<ModelHistory />} />
+      <Route path="/admin/users" element={<Admin />} />
+      <Route path="/admin/stadistics" element={<Admin />} />
+
 
 
       <Route path="/landing-page" element={<LandingPage />} />

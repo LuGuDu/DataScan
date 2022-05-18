@@ -114,6 +114,18 @@ def getModelInfo(mongo):
     modelInfo.pop('_id', None)
     return modelInfo
 
+def getTrainModelHistory(mongo):
+    modelHistory = list(mongo.modelTrainHistorial.find(sort=[("date", -1)]))
+    
+    for element in modelHistory:
+        element.pop('_id', None)
+        element.pop('modelFileName', None)
+        element.update({'accuracy': str(round(element['accuracy'],4))})
+        element.update({'timeTraining': str(round(element['timeTraining'],2))})
+        element.update({'date': str(element['date'])})
+    
+    return modelHistory
+
 
 def checkAccuracy(model, X_test, y_test):
     from sklearn.metrics import accuracy_score

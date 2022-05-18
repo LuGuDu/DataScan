@@ -21,48 +21,33 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Collapse,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
   NavbarBrand,
   Navbar,
   NavItem,
-  NavLink,
   Nav,
+  NavLink,
   Container,
   Row,
   Col,
+  UncontrolledDropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
 } from "reactstrap";
 
-export default function IndexNavbar() {
+export default function AdminNavbar() {
 
   const navigate = useNavigate();
 
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
-  const [color, setColor] = React.useState("navbar-transparent");
-  
-  React.useEffect(() => {
-    window.addEventListener("scroll", changeColor);
-    return function cleanup() {
-      window.removeEventListener("scroll", changeColor);
-    };
-  },[]);
 
-  const changeColor = () => {
-    if (
-      document.documentElement.scrollTop > 99 ||
-      document.body.scrollTop > 99
-    ) {
-      setColor("bg-info");
-    } else if (
-      document.documentElement.scrollTop < 100 ||
-      document.body.scrollTop < 100
-    ) {
-      setColor("navbar-transparent");
-    }
-  };
+  React.useEffect(() => {
+
+    return function cleanup() {
+
+    };
+  }, []);
 
   const toggleCollapse = () => {
     document.documentElement.classList.toggle("nav-open");
@@ -81,30 +66,18 @@ export default function IndexNavbar() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const analyze = (e) => {
+  const goBack = (e) => {
     e.preventDefault();
-    navigate('/analyze');
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const train = (e) => {
-    e.preventDefault();
-    navigate('/train');
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const goAdminPane = (e) => {
-    e.preventDefault();
-    navigate('/admin');
+    navigate('/');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
-    <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
+    <Navbar className={"fixed-top bg-info"} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
-            <span>DataScan </span>
+          <NavbarBrand to="/admin" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
+            <span>DataScan - Panel administrador</span>
           </NavbarBrand>
           <button
             aria-expanded={collapseOpen}
@@ -142,92 +115,57 @@ export default function IndexNavbar() {
             </Row>
           </div>
           <Nav navbar>
-            <NavItem className="p-0">
-              <NavLink
-                data-placement="bottom"
-                href="https://twitter.com/"
-                rel="noopener noreferrer"
-                target="_blank"
-                title="Follow us on Twitter"
-              >
-                <i className="fab fa-twitter" />
-                <p className="d-lg-none d-xl-none">Twitter</p>
-              </NavLink>
-            </NavItem>
-            <NavItem className="p-0">
-              <NavLink
-                data-placement="bottom"
-                href="https://www.facebook.com/"
-                rel="noopener noreferrer"
-                target="_blank"
-                title="Like us on Facebook"
-              >
-                <i className="fab fa-facebook-square" />
-                <p className="d-lg-none d-xl-none">Facebook</p>
-              </NavLink>
-            </NavItem>
-            <NavItem className="p-0">
-              <NavLink
-                data-placement="bottom"
-                href="https://www.instagram.com/"
-                rel="noopener noreferrer"
-                target="_blank"
-                title="Follow us on Instagram"
-              >
-                <i className="fab fa-instagram" />
-                <p className="d-lg-none d-xl-none">Instagram</p>
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav>
+          <UncontrolledDropdown nav>
               <DropdownToggle
                 caret
-                color="default"
+                color="primary"
                 data-toggle="dropdown"
-                href="/"
+                href="/admin/model"
                 nav
                 onClick={(e) => e.preventDefault()}
               >
                 <i className="fa fa-cogs d-lg-none d-xl-none" />
-                Más opciones
+                Modelo
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/attacks_info" onClick={(e) => smoothScroll()}>
-                  Sobre los ataques
+                <DropdownItem tag={Link} to="/admin/model/train" onClick={(e) => smoothScroll()}>
+                  Entrenamiento
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/contact" onClick={(e) => smoothScroll()}>
-                  Contáctanos
+                <DropdownItem tag={Link} to="/admin/model/info" onClick={(e) => smoothScroll()}>
+                  Modelo actual
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/landing-page">
-                  Cómo funciona
+                <DropdownItem tag={Link} to="/admin/model/history">
+                  Ver historial
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
             <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="primary"
-                onClick={(e) => analyze(e)}
+            <NavLink
+                data-placement="bottom"
+                href="admin/users"
+                rel="noopener noreferrer"
               >
-                <i className="tim-icons icon-zoom-split" /> Analizar
-              </Button>
+                <p className="d-lg d-xl">Usuarios</p>
+              </NavLink>
+            </NavItem>
+            <NavItem>
+            <NavItem>
+            <NavLink
+                data-placement="bottom"
+                href="admin/stadistics"
+                rel="noopener noreferrer"
+              >
+                <p className="d-lg d-xl">Estadisticas</p>
+              </NavLink>
+            </NavItem>
             </NavItem>
             <NavItem>
               <Button
                 className="nav-link d-none d-lg-block"
                 color="default"
-                onClick={(e) => train(e)}
+                onClick={(e) => goBack(e)}
               >
-                <i className="tim-icons icon-settings-gear-63" /> Entrenar
-              </Button>
-            </NavItem>
-
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="success"
-                onClick={(e) => goAdminPane(e)}
-              >
-                <i className="tim-icons icon-settings-gear-63" /> Panel administrador
+                Volver
               </Button>
             </NavItem>
           </Nav>

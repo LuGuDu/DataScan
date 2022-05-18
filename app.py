@@ -46,6 +46,15 @@ def getModelData():
     return {"message": 500}
 
 
+@app.route('/getTrainModelHistory', methods=['GET'])
+def getTrainModelHistory():
+    if request.method == "GET":
+        modelHistory = ml.getTrainModelHistory(mongo)
+        return {"message": 200, "modelHistory": modelHistory}
+    
+    return {"message": 500}
+
+
 @app.route('/train', methods=['POST'])
 def training():
 
