@@ -26,10 +26,14 @@ import {
   Container,
   Row,
   Col,
-  UncontrolledTooltip,
 } from "reactstrap";
 
 export default function Footer() {
+
+  const smoothScroll = (e) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <footer className="footer">
       <Container>
@@ -40,17 +44,17 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/" tag={Link}>
+                <NavLink to="/" tag={Link} onClick={(e) => smoothScroll(e)}>
                   Home
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/train" tag={Link}>
+                <NavLink to="/train" tag={Link} onClick={(e) => smoothScroll(e)}>
                   Entrenar
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/analyze" tag={Link}>
+                <NavLink to="/analyze" tag={Link} onClick={(e) => smoothScroll(e)}>
                   Analizar
                 </NavLink>
               </NavItem>
@@ -59,40 +63,48 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink href="/contact-us">
+                <NavLink href="/contact" onClick={(e) => smoothScroll(e)}>
                   Contacta
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="about-us">
+                <NavLink href="about-us" onClick={(e) => smoothScroll(e)}>
                   Acerca de
                 </NavLink>
               </NavItem>
             </Nav>
           </Col>
           <Col md="3">
-            <h3 className="title">Follow us:</h3>
+            <h3 className="title">Síguenos:</h3>
             <div className="btn-wrapper profile">
               <Button
                 className="btn-icon btn-neutral btn-round btn-simple"
                 color="default"
-                href=""
+                href="https://twitter.com/"
                 id="tooltip622135962"
                 target="_blank"
               >
                 <i className="fab fa-twitter" />
               </Button>
-              <UncontrolledTooltip delay={0} target="tooltip622135962">
-                Follow us
-              </UncontrolledTooltip>
+
               <Button
                 className="btn-icon btn-neutral btn-round btn-simple"
                 color="default"
-                href=""
+                href="https://www.facebook.com/"
                 id="tooltip230450801"
                 target="_blank"
               >
                 <i className="fab fa-facebook-square" />
+              </Button>
+
+              <Button
+                className="btn-icon btn-neutral btn-round btn-simple"
+                color="default"
+                href="https://www.instagram.com/"
+                id="tooltip230450801"
+                target="_blank"
+              >
+                <i className="fab fa-instagram" />
               </Button>
             </div>
           </Col>

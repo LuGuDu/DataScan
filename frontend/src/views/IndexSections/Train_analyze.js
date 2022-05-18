@@ -16,40 +16,69 @@
 
 */
 import React from "react";
-import classnames from "classnames";
-// plugin that creates slider
-import Slider from "nouislider";
+import { useNavigate } from 'react-router-dom';
 
 // reactstrap components
 import {
   Button,
-  Label,
-  FormGroup,
-  Input,
   Container,
   Row,
   Col,
 } from "reactstrap";
 
 export default function Basics() {
+  const navigate = useNavigate();
+
+  const analyze = (e) => {
+    e.preventDefault();
+    navigate('/analyze');
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const train = (e) => {
+    e.preventDefault();
+    navigate('/train');
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
-    <div className="section section-basic" id="basic-elements">
+    <div className="section section-nucleo-icons">
       <img
         alt="..."
         className="path"
-        src={require("assets/img/path1.png").default}
+        src={require("assets/img/path3.png").default}
       />
       <Container>
-        <h3>Selecciona una acción</h3>
-        <Row style={{display: 'flex', justifyContent: 'center'}}>
-          <Col md="10">
-            <Button className="btn-round" color="primary" syze="lg" type="button">
-              Analizar
-            </Button>
-            <Button className="btn-round" color="primary" syze="lg" type="button">
-              Entrenar
-            </Button>
+        <Row className="justify-content-center">
+          <Col lg="8" md="12">
+            <h2 className="title">¿Qué quiere hacer?</h2>
+            <h4 className="description">
+              DataScan le proporciona estas dos funcionalidades principales entre otras
+              muchas más que se irán desarrollando con el paso del tiempo o que usted mismo
+              descubrirá conforme use la aplicación web.
+            </h4>
+            <div className="btn-wrapper">
+              <Button
+                className="btn-round"
+                color="primary"
+                href="/train"
+                rel="noopener noreferrer"
+                target="_blank"
+                onClick={(e) => train(e)}
+              >
+                Entrenar
+              </Button>
+              <Button
+                className="btn-round"
+                color="primary"
+                href="/analyze"
+                rel="noopener noreferrer"
+                target="_blank"
+                onClick={(e) => analyze(e)}
+              >
+                Analizar
+              </Button>
+            </div>
           </Col>
         </Row>
       </Container>

@@ -17,27 +17,46 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
+import Train from "components/Operations/Train.js"
+import Analyze from "components/Operations/Analyze.js"
+import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
+import Contact from "components/Operations/Contact.js"
+
+import Admin from "components/Operations/Admin.js"
+import ModelInfo from "components/Admin/Model/ModelInfo.js"
+import ModelHistory from "components/Admin/Model/ModelHistory.js"
+
+
+
+
 import LandingPage from "views/examples/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
-
-import Api from './components/Api.js'
 
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
-      <Route path='/api' element={<Api />} />
       <Route path="/" element={<Index />} />
-      <Route path="/train" element={<LandingPage />} />
-      <Route path="/analyze" element={<LandingPage />} />
+      <Route path="/train" element={<Train />} />
+      <Route path="/analyze" element={<Analyze />} />
+      <Route path="/attacks_info" element={<AttackTypesInfo />} />
+      <Route path="/contact" element={<Contact />} />
+
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin/model/train" element={<Admin />} />
+      <Route path="/admin/model/info" element={<ModelInfo />} />
+      <Route path="/admin/model/history" element={<ModelHistory />} />
+      <Route path="/admin/users" element={<Admin />} />
+      <Route path="/admin/stadistics" element={<Admin />} />
+
 
 
       <Route path="/landing-page" element={<LandingPage />} />
