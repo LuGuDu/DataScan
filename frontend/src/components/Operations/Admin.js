@@ -3,18 +3,6 @@ import React from "react";
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 
 import {
-    Container,
-    Row,
-    Col,
-    Card,
-    CardHeader,
-    CardBody,
-    FormGroup,
-    Form,
-    Input,
-    Nav,
-    NavItem,
-    NavLink,
 } from "reactstrap";
 
 export default function Admin() {
@@ -31,7 +19,6 @@ export default function Admin() {
     return (
         <>
             <AdminNavbar />
-
         </>
     );
 };

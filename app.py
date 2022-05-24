@@ -3,6 +3,8 @@ from flask_pymongo import PyMongo
 import smtplib
 import pandas as pd
 import modules.mLMethods as ml
+import json
+
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.gozlc.mongodb.net/datascan"
@@ -106,5 +108,45 @@ def analyze():
 
     return {"message": 500}
     
+
+#un metodo para subir el archivo, de ahi se creará el modelo auxiliar (post) tambien guardara el data en un fichero auxiliar
+@app.route('/setFile', methods=['POST'])
+def trainAux():
+    if request.method == "POST":
+        if request.files:
+            file = request.files["file"]
+            accuracy, predictors = ml.trainAuxModel(file)
+            return {"message" : 200, "accuracy" : accuracy, "predictors": predictors}
+    
+    return {"message": 500}
+
+#un metodo para recibir los predictores y su importancia del modelo auxiliar (get)
+@app.route('/setPredictors', methods=['POST'])
+def setPredictors():
+    if request.method == "POST":
+        predictors = json.loads(request.data.decode())["predictors"]
+        accuracy = ml.checkPredictors(predictors)
+        return {"message": 200, "accuracy" : accuracy}
+    
+    return {"message": 500}
+
+#un metodo para actualizar los predictores del modelo auxiliar (post)
+@app.route('/prunning', methods=['GET', 'POST'])
+def getPrunningInfo():
+    if request.method == "GET":
+        accuracy = ml.getPrunningAccuracy()
+        return {"message": 200, "accuracy" : accuracy}
+    return {"message": 500}
+
+
+#un metodo para entrenar el modelo final
+@app.route('/finishModelTrain', methods=[ 'POST'])
+def finishModelTrain():
+    if request.method == "POST":
+        accuracy = ml.getPrunningAccuracy()
+        return {"message": 200, "accuracy" : accuracy}
+    return {"message": 500}
+
+
 if __name__ == '__main__':
     app.run()

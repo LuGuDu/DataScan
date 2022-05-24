@@ -2,25 +2,38 @@ import pickle, time
 import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
 from datetime import datetime
 
 
-def saveModel(model):
+def saveModel(model, fileName):
     # serializar nuestro modelo y salvarlo en el fichero area_model.pickle
-    with open("models/modeloEntrenado.pickle", "wb") as file:
+    with open("models/" + fileName, "wb") as file:
         pickle.dump(model, file)
     print ("MODELO GUARDADO")
 
 
-def loadModel():
-    with open('models/modeloEntrenado.pickle', "rb") as file:
+def loadModel(fileName):
+    with open('models/' + fileName, "rb") as file:
         modelLoad = pickle.load(file)
     print("MODELO CARGADO")
     return modelLoad
 
 
+def normalizeData(data):
+    le = LabelEncoder()
+
+    #Pasar los datos no numericos a valores numericos
+    for col_name in data.columns:
+        if data[col_name].dtype == object:
+            data[col_name] = le.fit_transform(data[col_name])
+        
+    data['class'] = data.pop('class')
+
+    return data
+
 def cleanData(data):
-    from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
 
     #Pasar los datos no numericos a valores numericos
@@ -44,10 +57,85 @@ def cleanData(data):
     print('DATOS LIMPIADOS')
     return newData
 
+def cleanDataPredictors(data, predictorsList):
+
+    newData = pd.DataFrame()
+    #para cada elemento de la lsita de predictorsList hacer new data...
+    for column in predictorsList:
+        if column != 'class':
+            newData[column] = data[column]
+    
+    if 'class' in data.columns:
+        newData['class'] = data['class']
+
+    return newData
+
+
+def checkAccuracy(model, X_test, y_test):
+    from sklearn.metrics import accuracy_score
+    preds = model.predict(X_test)
+    score = accuracy_score(y_test, preds)
+    print("El Accuracy del modelo es: ", score)
+    return score
+
+
+def trainAuxModel(file):
+    data = pd.read_csv(file)
+    data.to_csv('models/dataTrain.csv', encoding='utf-8', index=False)
+    #guardar lista de ataques?
+    data = normalizeData(data)
+
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+      
+    modelDT = DecisionTreeClassifier(random_state=1)
+    modelDT.fit(X_train, y_train)
+    accuracy = checkAccuracy(modelDT, X_test, y_test)
+
+    importancia_predictores = pd.DataFrame({'predictor': X.columns,
+        'importancia': modelDT.feature_importances_}).sort_values('importancia', ascending=False)
+
+    return accuracy, importancia_predictores.to_json(orient = 'records')
+
+
+def checkPredictors(predictors):
+    data = pd.read_csv('models/dataTrain.csv')
+    data = normalizeData(data)
+    data = cleanDataPredictors(data, predictors)
+    data.to_csv('models/dataTrainNewPredictors.csv', encoding='utf-8', index=False)
+
+
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+      
+    modelDT = DecisionTreeClassifier(random_state=1)
+    modelDT.fit(X_train, y_train)
+    accuracy = checkAccuracy(modelDT, X_test, y_test)
+
+    return accuracy
+
+
+def getPrunningAccuracy():
+    data = pd.read_csv('models/dataTrainNewPredictors.csv')
+
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+      
+    improvedModelDT = improveModel(X_train, y_train)
+
+    accuracy = checkAccuracy(improvedModelDT, X_test, y_test)
+
+    return accuracy
+
 
 def train(data, fileData, mongo):
     print("ENTRENANDO")
-    from sklearn.model_selection import train_test_split
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
 
@@ -127,17 +215,9 @@ def getTrainModelHistory(mongo):
     return modelHistory
 
 
-def checkAccuracy(model, X_test, y_test):
+def checkModel(data, modelName):
     from sklearn.metrics import accuracy_score
-    preds = model.predict(X_test)
-    score = accuracy_score(y_test, preds)
-    print("El Accuracy del modelo es: ", score)
-    return score
-
-
-def checkModel(data):
-    from sklearn.metrics import accuracy_score
-    model = loadModel()
+    model = loadModel(modelName)
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -149,7 +229,7 @@ def checkModel(data):
 
 def predict(dataForPredict, mongo):
     
-    model = loadModel()
+    model = loadModel("modeloEntrenado.pickle")
     attackList = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["attack_list"]
 
     for col_name in dataForPredict.columns:
