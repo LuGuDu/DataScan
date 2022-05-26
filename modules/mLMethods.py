@@ -1,3 +1,4 @@
+from fileinput import filename
 import pickle, time
 import pandas as pd
 import numpy as np
@@ -28,34 +29,34 @@ def normalizeData(data):
     for col_name in data.columns:
         if data[col_name].dtype == object:
             data[col_name] = le.fit_transform(data[col_name])
-        
-    data['class'] = data.pop('class')
+
+    if 'class' in data.columns:
+        data['class'] = data.pop('class')
 
     return data
 
-def cleanData(data):
-    le = LabelEncoder()
+#este hay que trnasformarlo, hay que settear las columnas que tenga el modelo si o si
+def cleanData(data, mongo):
 
-    #Pasar los datos no numericos a valores numericos
-    for col_name in data.columns:
-        if data[col_name].dtype == object:
-            data[col_name] = le.fit_transform(data[col_name])
+    columns = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["columns"]
+
+    data = normalizeData(data)
 
     #Seleccionar unicamente las columnas mas relevantes para el modelo
     newData = pd.DataFrame()
 
-    newData['same_srv_rate'] = data['same_srv_rate']
-    newData['src_bytes'] = data['src_bytes']
-    newData['protocol_type'] = data['protocol_type']
-    newData['dst_host_diff_srv_rate'] = data['dst_host_diff_srv_rate']
-    newData['count'] = data['count']
-    newData['service'] = data['service']
+    for col_name in columns:
+        if col_name == 'class':
+            continue
+        else:
+            newData[col_name] = data[col_name]
     
     if 'class' in data.columns:
         newData['class'] = data['class']
 
     print('DATOS LIMPIADOS')
     return newData
+
 
 def cleanDataPredictors(data, predictorsList):
 
@@ -82,7 +83,9 @@ def checkAccuracy(model, X_test, y_test):
 def trainAuxModel(file):
     data = pd.read_csv(file)
     data.to_csv('models/dataTrain.csv', encoding='utf-8', index=False)
-    #guardar lista de ataques?
+    f = open("models/fileName.txt", "w")
+    f.write(file.filename)
+
     data = normalizeData(data)
 
     X = data.iloc[:, :-1]
@@ -105,7 +108,6 @@ def checkPredictors(predictors):
     data = normalizeData(data)
     data = cleanDataPredictors(data, predictors)
     data.to_csv('models/dataTrainNewPredictors.csv', encoding='utf-8', index=False)
-
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -134,38 +136,62 @@ def getPrunningAccuracy():
     return accuracy
 
 
-def train(data, fileData, mongo):
-    print("ENTRENANDO")
+def finalTrainModel(prunning, mongo):
+    data = pd.read_csv('models/dataTrainNewPredictors.csv')
+
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
-      
-    modelDT = DecisionTreeClassifier(random_state=1)
+
+    beginTime = 0
+    finalTime = 0
+
+    modelDT = ""
+
+    if(prunning): 
+        beginTime = time.time()
+        modelDT = improveModel(X_train, y_train)
+    else:
+        beginTime = time.time()
+        modelDT = normalModel(X_train, y_train)
     
-    inicio = time.time()
-    modelDT.fit(X_train, y_train)
-    improvedModelDT = improveModel(X_train, y_train)
-    fin = time.time()
-    tiempoEntrenamiento = fin-inicio
- 
-    scoreOr = checkAccuracy(modelDT, X_test, y_test)
-    scoreIm = checkAccuracy(improvedModelDT, X_test, y_test)
+    finalTime = time.time()
+    timeTraining = finalTime-beginTime
+    
+    accuracy = checkAccuracy(modelDT, X_test, y_test)
 
-    finalScore = scoreIm
-    finalModel = improvedModelDT
-    improved = True
+    saveModel(modelDT, "modeloEntrenado.pickle")
 
-    if scoreIm < scoreOr:
-        improved = False
-        finalScore = scoreOr
-        finalModel = modelDT
+    f = open("models/fileName.txt", "r")
+    fileName = f.read()
+    f.close()
+    print(fileName)
+    dataOriginal = pd.read_csv('models/dataTrain.csv')
 
-    saveModel(finalModel)
+    #Debe hacerse antes de la normalizacion para obtener los nombres
+    attackList = list(dict.fromkeys(sorted(dataOriginal['class'])))
+    fileData = {'fileName':fileName, 'attackList': attackList}
 
+    saveModelBBDD(fileData, timeTraining, prunning, accuracy, data, mongo)
+
+    #delete aux files
+    import os
+    os.remove("models/dataTrain.csv")
+    os.remove("models/dataTrainNewPredictors.csv")
+    os.remove("models/fileName.txt")
+
+
+def saveModelBBDD(fileData, timeTraining, improved, accuracy, data, mongo):
     mongo.modelTrainHistorial.insert_one({'trainingFileName': fileData['fileName'], 'date': datetime.now(), 
-        'timeTraining': tiempoEntrenamiento, 'modelFileName': 'modeloentrenado.pickle', 'improved': improved, 'accuracy': finalScore, 
+        'timeTraining': timeTraining, 'modelFileName': 'modeloentrenado.pickle', 'improved': improved, 'accuracy': accuracy, 
         'rows': data.shape[0], 'columns': data.columns.values.tolist(), 'attack_list': fileData['attackList']})
+
+
+def normalModel(X_train, y_train):
+    modelDT = DecisionTreeClassifier(random_state=1)
+    modelDT.fit(X_train, y_train)
+    return modelDT
 
 
 def improveModel(X_train, y_train):
@@ -197,10 +223,12 @@ def improveModel(X_train, y_train):
     return improvedModel
 
 
+#este metodo hay que mejorarlo un poco para que devuelva la foto del arbol
 def getModelInfo(mongo):
     modelInfo = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])
     modelInfo.pop('_id', None)
     return modelInfo
+
 
 def getTrainModelHistory(mongo):
     modelHistory = list(mongo.modelTrainHistorial.find(sort=[("date", -1)]))
@@ -215,9 +243,12 @@ def getTrainModelHistory(mongo):
     return modelHistory
 
 
-def checkModel(data, modelName):
+def checkModel(file, mongo):
     from sklearn.metrics import accuracy_score
-    model = loadModel(modelName)
+    model = loadModel("modeloEntrenado.pickle")
+
+    data = pd.read_csv(file)
+    data = cleanData(data, mongo)
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -227,7 +258,10 @@ def checkModel(data, modelName):
     return score
 
 
-def predict(dataForPredict, mongo):
+def predict(file, mongo):
+
+    data = pd.read_csv(file)
+    dataForPredict = cleanData(data, mongo)
     
     model = loadModel("modeloEntrenado.pickle")
     attackList = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["attack_list"]

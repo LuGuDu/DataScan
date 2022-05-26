@@ -20,8 +20,44 @@ async function getTrainingModelData() {
     });
 };
 
+async function uploadFileForCheck(data) {
+    return fetch('/checkModel', {
+        method: 'POST',
+        body: data
+    });
+};
+
 
 export default function ModelInfo() {
+
+    const checkModel = (e) => {
+        e.preventDefault();
+
+        const fileField = document.querySelector('input[type="file"]');
+        const formData = new FormData();
+        formData.append('file', fileField.files[0]);
+
+        uploadFileForCheck(formData)
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                if (result['message'] === 200) {
+                    alert("Accuracy: " + result['accuracy'])
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    const changeName = (e) => {
+        e.preventDefault();
+
+        const fileField = document.querySelector('input[type="file"]');
+        var x = document.getElementById("labelFile");
+        if(fileField.files[0])
+            x.innerHTML = fileField.files[0]['name']
+    }
 
     const getModelInfo = (e) => {
 
@@ -146,6 +182,32 @@ export default function ModelInfo() {
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
+                                                </Form>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md="10">
+                                        <Card className="card-plain">
+                                            <CardHeader>
+                                                <h1 className="profile-title text-left">Check the model</h1>
+                                                <h5 className="text-on-back">Check</h5>
+                                            </CardHeader>
+                                            <CardBody>
+                                                <Form>
+                                                    <div class="form-group" >
+                                                        <div class="custom-file" >
+                                                            <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" />
+                                                            <label id="labelFile" class="custom-file-label" for="file">
+                                                                Seleccionar un archivo
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary" onClick={(e) => checkModel(e)} >
+                                                        Comprobar modelo
+                                                    </button>
                                                 </Form>
                                             </CardBody>
                                         </Card>

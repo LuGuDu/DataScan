@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 
 import AdminNavBar from "components/Navbars/AdminNavbar"
@@ -38,9 +39,10 @@ async function getPrunningData() {
     });
 };
 
-async function finishModelTrain() {
+async function finishModelTrain(data) {
     return fetch('/finishModelTrain', {
-        method: 'POST'
+        method: 'POST',
+        body: data
     });
 };
 
@@ -165,7 +167,6 @@ export default function Train() {
     }
 
     const prunning = () => {
-
         $('.AlertPrunningContainer').show()
         $('.AccuracyPrunningAlert').text("Calculando accuracy...")
 
@@ -182,15 +183,25 @@ export default function Train() {
             });
     }
 
+    const navigate = useNavigate();
+
     const finishTrain = () => {
 
-        //ver si el check box esta marcado o no
+        var jsonData = {}
 
-        finishModelTrain()
+        var remember = document.getElementById('prunning');
+        if (remember.checked){
+            jsonData["prunning"] = true
+        } else {
+            jsonData["prunning"] = false
+        }
+
+        finishModelTrain(JSON.stringify(jsonData))
             .then(response => response.json())
             .then(result => {
                 console.log('Success:', result);
-
+                alert("Success training!")
+                navigate('/admin/model/info');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -293,7 +304,7 @@ export default function Train() {
                                                         <Row>
                                                             <FormGroup check className="text-left">
                                                                 <Label check>
-                                                                    <Input type="checkbox" />
+                                                                    <Input id="prunning" type="checkbox" />
                                                                     <span className="form-check-sign" />Deseo podar el arbol
                                                                 </Label>
                                                             </FormGroup>
