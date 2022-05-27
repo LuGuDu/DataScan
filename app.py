@@ -1,8 +1,7 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
-import modules.mLMethods as ml
+import controllers.MachineLearningController as ml
 import json
-
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.gozlc.mongodb.net/datascan"

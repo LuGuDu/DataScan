@@ -2,10 +2,16 @@ from fileinput import filename
 import pickle, time
 import pandas as pd
 import numpy as np
+
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from datetime import datetime
+
+from model.ModelRegistry import ModelRegistry
+from dao.ModelRegistryDAO import ModelRegistryDAO
+
+modelRegistryDAO = ModelRegistryDAO()
 
 
 def saveModel(model, fileName):
@@ -166,26 +172,24 @@ def finalTrainModel(prunning, mongo):
     f = open("models/fileName.txt", "r")
     fileName = f.read()
     f.close()
-    print(fileName)
     dataOriginal = pd.read_csv('models/dataTrain.csv')
 
     #Debe hacerse antes de la normalizacion para obtener los nombres
     attackList = list(dict.fromkeys(sorted(dataOriginal['class'])))
-    fileData = {'fileName':fileName, 'attackList': attackList}
+    #fileData = {'fileName':fileName, 'attackList': attackList}
 
-    saveModelBBDD(fileData, timeTraining, prunning, accuracy, data, mongo)
+    rows = data.shape[0]
+    columns = data.columns.values.tolist()
+
+    modelRegistry = ModelRegistry(fileName, datetime.now(), timeTraining, prunning, accuracy, rows, columns, attackList)
+
+    modelRegistryDAO.save(modelRegistry.getJson(), mongo)
 
     #delete aux files
     import os
     os.remove("models/dataTrain.csv")
     os.remove("models/dataTrainNewPredictors.csv")
     os.remove("models/fileName.txt")
-
-
-def saveModelBBDD(fileData, timeTraining, improved, accuracy, data, mongo):
-    mongo.modelTrainHistorial.insert_one({'trainingFileName': fileData['fileName'], 'date': datetime.now(), 
-        'timeTraining': timeTraining, 'modelFileName': 'modeloentrenado.pickle', 'improved': improved, 'accuracy': accuracy, 
-        'rows': data.shape[0], 'columns': data.columns.values.tolist(), 'attack_list': fileData['attackList']})
 
 
 def normalModel(X_train, y_train):
@@ -223,15 +227,14 @@ def improveModel(X_train, y_train):
     return improvedModel
 
 
-#este metodo hay que mejorarlo un poco para que devuelva la foto del arbol
 def getModelInfo(mongo):
-    modelInfo = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])
+    modelInfo = modelRegistryDAO.getLastRegistry(mongo)
     modelInfo.pop('_id', None)
     return modelInfo
 
 
 def getTrainModelHistory(mongo):
-    modelHistory = list(mongo.modelTrainHistorial.find(sort=[("date", -1)]))
+    modelHistory = list(modelRegistryDAO.getLastRegistry(mongo))
     
     for element in modelHistory:
         element.pop('_id', None)
@@ -264,7 +267,8 @@ def predict(file, mongo):
     dataForPredict = cleanData(data, mongo)
     
     model = loadModel("modeloEntrenado.pickle")
-    attackList = mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["attack_list"]
+
+    attackList = modelRegistryDAO.getLastAttackList(mongo)
 
     for col_name in dataForPredict.columns:
         if col_name == "class":
