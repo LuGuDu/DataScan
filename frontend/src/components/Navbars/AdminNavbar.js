@@ -77,7 +77,7 @@ export default function AdminNavbar() {
       <Container>
         <div className="navbar-translate">
           <NavbarBrand to="/admin" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
-            <span>DataScan - Panel administrador</span>
+            <span>DataScan - Admin pane</span>
           </NavbarBrand>
           <button
             aria-expanded={collapseOpen}
@@ -125,17 +125,17 @@ export default function AdminNavbar() {
                 onClick={(e) => e.preventDefault()}
               >
                 <i className="fa fa-cogs d-lg-none d-xl-none" />
-                Modelo
+                Model
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
                 <DropdownItem tag={Link} to="/admin/model/train" onClick={(e) => smoothScroll()}>
-                  Entrenamiento
+                  Train
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/admin/model/info" onClick={(e) => smoothScroll()}>
-                  Modelo actual
+                  Actual model
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/admin/model/history">
-                  Ver historial
+                  History
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -145,7 +145,7 @@ export default function AdminNavbar() {
                 href="admin/users"
                 rel="noopener noreferrer"
               >
-                <p className="d-lg d-xl">Usuarios</p>
+                <p className="d-lg d-xl">Users</p>
               </NavLink>
             </NavItem>
             <NavItem>
@@ -155,7 +155,7 @@ export default function AdminNavbar() {
                 href="admin/stadistics"
                 rel="noopener noreferrer"
               >
-                <p className="d-lg d-xl">Estadisticas</p>
+                <p className="d-lg d-xl">Stadistics</p>
               </NavLink>
             </NavItem>
             </NavItem>
@@ -165,7 +165,7 @@ export default function AdminNavbar() {
                 color="default"
                 onClick={(e) => goBack(e)}
               >
-                Volver
+                Back
               </Button>
             </NavItem>
           </Nav>

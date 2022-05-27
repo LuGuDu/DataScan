@@ -32,9 +32,9 @@ export default function TrainHeader() {
       <div className="squares square7" />
       <Container>
         <div className="content-center brand">
-          <h1 className="h1-seo">Entrenamiento</h1>
+          <h1 className="h1-seo">Training</h1>
           <h3 className="d-none d-sm-block">
-            Seleccione un archivo para poder entrenar un modelo de Machine-Learning
+            Select a file to train a Machine-Learning model
           </h3>
         </div>
       </Container>

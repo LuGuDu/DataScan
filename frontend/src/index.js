@@ -24,7 +24,6 @@ import "assets/scss/blk-design-system-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
-import Train from "components/Operations/Train.js"
 import Analyze from "components/Operations/Analyze.js"
 import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
 import Contact from "components/Operations/Contact.js"
@@ -46,7 +45,6 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Index />} />
-      <Route path="/train" element={<Train />} />
       <Route path="/analyze" element={<Analyze />} />
       <Route path="/attacks_info" element={<AttackTypesInfo />} />
       <Route path="/contact" element={<Contact />} />

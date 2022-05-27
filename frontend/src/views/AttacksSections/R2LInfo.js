@@ -51,13 +51,15 @@ export default function R2LInfo() {
                     <Col md="6">
                         <Label className="text-on-back">R2L</Label>
                         <p className="profile-description text-left">
-                        Remote to Local (r2l): Ocurre cuando un atacante no tiene una cuenta en la máquina víctima, e intenta obtener 
-                        acceso enviando paquetes a una máquina a través de una red para generar alguna vulnerabilidad 
-                        en esa máquina que le permita obtener acceso local como usuario de esa máquina. 
+                        Remote to Local (r2l): It occurs when an attacker does not have an account on the 
+                        victim machine, and attempts to gain access by sending packets to a machine over 
+                        a network to generate a vulnerability.  access by sending packets to a machine over 
+                        a network to generate some vulnerability on that machine that will on that machine 
+                        that allows him to gain local access as a user of that machine. 
                         </p>
                         <div className="btn-wrapper pt-3">
                             <Button className="btn-simple" color="primary" href="">
-                                Más información
+                                More info
                             </Button>
                         </div>
                     </Col>

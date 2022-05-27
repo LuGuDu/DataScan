@@ -354,8 +354,8 @@ export default function Analyze() {
                                 <Col md="10">
                                     <Card className="card-plain">
                                         <CardHeader>
-                                            <h1 className="profile-title text-left">Selecciona el archivo</h1>
-                                            <h5 className="text-on-back">ANALIZAR</h5>
+                                            <h1 className="profile-title text-left">Select a file</h1>
+                                            <h5 className="text-on-back">ANALYZE</h5>
                                         </CardHeader>
                                         <CardBody>
                                             <Form>
@@ -363,12 +363,12 @@ export default function Analyze() {
                                                     <div id="fileSelector" className="custom-file">
                                                         <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
                                                         <label id="labelFile" className="custom-file-label" htmlFor="file">
-                                                            Selecciona un archivo...
+                                                            Select a file...
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
-                                                    Analizar
+                                                    Analyze
                                                 </button>
                                             </Form>
                                         </CardBody>
@@ -382,8 +382,8 @@ export default function Analyze() {
                                     <Col>
                                         <Card className="card-plain">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">Datos del Analisis</h1>
-                                                <h5 className="text-on-back">RESULTADO</h5>
+                                                <h1 className="profile-title text-left">Analyze data</h1>
+                                                <h5 className="text-on-back">RESULTS</h5>
                                             </CardHeader>
                                             <CardBody>
                                                 <div className="results" style={results}>

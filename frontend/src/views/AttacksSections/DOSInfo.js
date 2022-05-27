@@ -51,12 +51,12 @@ export default function DOSInfo() {
                     <Col md="6">
                         <Label className="text-on-back">DOS</Label>
                         <p className="profile-description text-left mb-0">
-                        Denial of Service (DoS): Se produce cuando un atacante intenta denegar a los usuarios legítimos 
-                        el acceso a un determinado servicio o recurso. 
+                        Denial of Service (DoS): It occurs when an attacker attempts to deny legitimate 
+                        users access to a particular service or resource. access to a particular service or resource. 
                         </p>
                         <div className="btn-wrapper pt-3">
                             <Button className="btn-simple" color="primary" href="https://es.wikipedia.org/wiki/Ataque_de_denegaci%C3%B3n_de_servicio" target="_blank">
-                                Más información
+                                More info
                             </Button>
                         </div>
                     </Col>

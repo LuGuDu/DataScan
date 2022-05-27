@@ -49,13 +49,8 @@ export default function Footer() {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/train" tag={Link} onClick={(e) => smoothScroll(e)}>
-                  Entrenar
-                </NavLink>
-              </NavItem>
-              <NavItem>
                 <NavLink to="/analyze" tag={Link} onClick={(e) => smoothScroll(e)}>
-                  Analizar
+                  Analyze
                 </NavLink>
               </NavItem>
             </Nav>
@@ -64,18 +59,18 @@ export default function Footer() {
             <Nav>
               <NavItem>
                 <NavLink href="/contact" onClick={(e) => smoothScroll(e)}>
-                  Contacta
+                  Contact us
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="about-us" onClick={(e) => smoothScroll(e)}>
-                  Acerca de
+                  About us
                 </NavLink>
               </NavItem>
             </Nav>
           </Col>
           <Col md="3">
-            <h3 className="title">Síguenos:</h3>
+            <h3 className="title">Follow us:</h3>
             <div className="btn-wrapper profile">
               <Button
                 className="btn-icon btn-neutral btn-round btn-simple"

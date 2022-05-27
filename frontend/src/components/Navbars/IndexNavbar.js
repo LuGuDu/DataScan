@@ -87,12 +87,6 @@ export default function IndexNavbar() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const train = (e) => {
-    e.preventDefault();
-    navigate('/train');
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   const goAdminPane = (e) => {
     e.preventDefault();
     navigate('/admin');
@@ -188,17 +182,17 @@ export default function IndexNavbar() {
                 onClick={(e) => e.preventDefault()}
               >
                 <i className="fa fa-cogs d-lg-none d-xl-none" />
-                Más opciones
+                More options
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
                 <DropdownItem tag={Link} to="/attacks_info" onClick={(e) => smoothScroll()}>
-                  Sobre los ataques
+                  About attacks
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/contact" onClick={(e) => smoothScroll()}>
-                  Contáctanos
+                  Contact us
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/landing-page">
-                  Cómo funciona
+                  how it works?
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -208,16 +202,7 @@ export default function IndexNavbar() {
                 color="primary"
                 onClick={(e) => analyze(e)}
               >
-                <i className="tim-icons icon-zoom-split" /> Analizar
-              </Button>
-            </NavItem>
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="default"
-                onClick={(e) => train(e)}
-              >
-                <i className="tim-icons icon-settings-gear-63" /> Entrenar
+                <i className="tim-icons icon-zoom-split" /> Analyze
               </Button>
             </NavItem>
 
@@ -227,7 +212,7 @@ export default function IndexNavbar() {
                 color="success"
                 onClick={(e) => goAdminPane(e)}
               >
-                <i className="tim-icons icon-settings-gear-63" /> Panel administrador
+                <i className="tim-icons icon-settings-gear-63" /> Admin pane
               </Button>
             </NavItem>
           </Nav>

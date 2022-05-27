@@ -56,12 +56,12 @@ export default function U2RInfo() {
                     <Col md="6">
                         <Label className="text-on-back">U2R</Label>
                         <p className="profile-description text-left">
-                        User to Root (u2r): Se produce cuando un usuario normal del sistema accede ilegalmente a los 
-                        privilegios de root o de superusuario. 
+                        User to Root (u2r): It occurs when a normal system user illegally 
+                        accesses root or superuser privileges. root or superuser privileges. 
                         </p>
                         <div className="btn-wrapper pt-3">
                             <Button className="btn-simple" color="primary" href="" >
-                                Más información
+                                More info
                             </Button>
                         </div>
                     </Col>

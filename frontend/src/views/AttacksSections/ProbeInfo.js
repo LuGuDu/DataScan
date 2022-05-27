@@ -56,12 +56,13 @@ export default function Basics() {
                     <Col md="6">
                         <Label className="text-on-back">Probe</Label>
                         <p className="profile-description text-left">
-                        Probe: Se produce cuando un atacante escanea una red para recopilar información o 
-                        encontrar vulnerabilidades conocidas que le permitan hackear toda la red. 
+                        Probe: It occurs when an attacker scans a network to gather information or 
+                        find known vulnerabilities that will allow him to find known vulnerabilities 
+                        that allow him to hack the entire network. 
                         </p>
                         <div className="btn-wrapper pt-3">
                             <Button className="btn-simple" color="primary" href="" >
-                                Más información
+                                More info
                             </Button>
                         </div>
                     </Col>

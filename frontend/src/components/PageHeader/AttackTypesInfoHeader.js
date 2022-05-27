@@ -32,9 +32,9 @@ export default function AttackTypesInfoHeader() {
       <div className="squares square7" />
       <Container>
         <div className="content-center brand">
-          <h1 className="h1-seo">Ataques Informáticos</h1>
+          <h1 className="h1-seo">Cyberattacks</h1>
           <h3 className="d-none d-sm-block">
-            Un breve resumen de cuales son algunos de los tipos de ataques más famosos y en que consisten
+            A brief summary of some of the most famous types of attacks and what they consist of
           </h3>
         </div>
       </Container>

@@ -32,9 +32,9 @@ export default function ContactHeader() {
       <div className="squares square7" />
       <Container>
         <div className="content-center brand">
-          <h1 className="h1-seo">Contáctanos</h1>
+          <h1 className="h1-seo">Contact us</h1>
           <h3 className="d-none d-sm-block">
-            Te facilitamos un formulario para poder contactar con nosotros si tienes algo que decirnos
+            write a description of page
           </h3>
         </div>
       </Container>

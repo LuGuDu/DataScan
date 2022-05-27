@@ -40,8 +40,8 @@ export default function Contact() {
                                     <Col md="8">
                                         <Card className="card-plain">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">Formulario</h1>
-                                                <h5 className="text-on-back">Contacta</h5>
+                                                <h1 className="profile-title text-left">Contact data</h1>
+                                                <h5 className="text-on-back">CONTACT US</h5>
                                             </CardHeader>
                                             <CardBody>
 

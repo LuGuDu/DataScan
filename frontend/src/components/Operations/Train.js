@@ -152,8 +152,8 @@ export default function Train() {
                                 <Col md="10">
                                     <Card className="card-plain">
                                         <CardHeader>
-                                            <h1 className="profile-title text-left">Selecciona el archivo</h1>
-                                            <h5 className="text-on-back">ENTRENAR</h5>
+                                            <h1 className="profile-title text-left">Select a file</h1>
+                                            <h5 className="text-on-back">TRAIN</h5>
                                         </CardHeader>
                                         <CardBody>
                                             <Form>
@@ -161,15 +161,15 @@ export default function Train() {
                                                     <div class="custom-file" >
                                                         <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" />
                                                         <label id="labelFile" class="custom-file-label" for="file">
-                                                            Seleccionar un archivo
+                                                            Select a file...
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary" onClick={(e) => train(e)} >
-                                                    Entrenar
+                                                    Train
                                                 </button>
                                                 <button type="submit" class="btn btn-primary" onClick={(e) => checkModel(e)} >
-                                                    Comprobar modelo
+                                                    Check model
                                                 </button>
                                             </Form>
                                         </CardBody>
@@ -183,16 +183,16 @@ export default function Train() {
                                     <Col md="10">
                                         <Card className="card-plain">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">Datos del Entrenamiento Anterior</h1>
-                                                <h5 className="text-on-back">MODELO</h5>
+                                                <h1 className="profile-title text-left">Last train data</h1>
+                                                <h5 className="text-on-back">MODEL</h5>
                                             </CardHeader>
                                             <CardBody>
                                                 <Form>
                                                     <Row>
                                                         <Col md="3">
                                                             <FormGroup>
-                                                                <label>Archivo usado</label>
-                                                                <Input id="in-previous-file" style={modelData} defaultValue="Archivo usado" type="text" readonly="readonly" />
+                                                                <label>File used</label>
+                                                                <Input id="in-previous-file" style={modelData} defaultValue="File used" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="3">
@@ -203,44 +203,44 @@ export default function Train() {
                                                         </Col>
                                                         <Col md="4">
                                                             <FormGroup>
-                                                                <label>Fecha</label>
-                                                                <Input id="in-date" style={modelData} placeholder="Fecha" type="text" readonly="readonly" />
+                                                                <label>Date</label>
+                                                                <Input id="in-date" style={modelData} placeholder="Date" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
                                                     <Row>
                                                         <Col md="2">
                                                             <FormGroup>
-                                                                <label>Filas</label>
-                                                                <Input id="in-rows" style={modelData} defaultValue="Filas" type="text" readonly="readonly" />
+                                                                <label>Rows</label>
+                                                                <Input id="in-rows" style={modelData} defaultValue="Rows" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="3">
                                                             <FormGroup>
-                                                                <label>Tiempo entrenamiento (s)</label>
-                                                                <Input id="in-time" style={modelData} defaultValue="Tiempo entrenamiento (s)" type="text" readonly="readonly" />
+                                                                <label>Training time (s)</label>
+                                                                <Input id="in-time" style={modelData} defaultValue="Training time (s)" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="2">
                                                             <FormGroup>
-                                                                <label>Podado</label>
-                                                                <Input id="in-pruning" style={modelData} defaultValue="Podado" type="text" readonly="readonly" />
+                                                                <label>Prunning</label>
+                                                                <Input id="in-pruning" style={modelData} defaultValue="Prunning" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
                                                     <Row>
                                                         <Col md="12">
                                                             <FormGroup>
-                                                                <label>Columnas</label>
-                                                                <Input id="in-columns" style={modelData} placeholder="Columnas" type="text" readonly="readonly" />
+                                                                <label>Colums</label>
+                                                                <Input id="in-columns" style={modelData} placeholder="Columns" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
                                                     <Row>
                                                         <Col md="12">
                                                             <FormGroup>
-                                                                <label>Ataques</label>
-                                                                <Input id="in-attacks" style={modelData} placeholder="Ataques" type="text" readonly="readonly" />
+                                                                <label>Attacks</label>
+                                                                <Input id="in-attacks" style={modelData} placeholder="Attacks" type="text" readonly="readonly" />
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
