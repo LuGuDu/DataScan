@@ -55,8 +55,6 @@ export default function Train() {
         $('.AlertPredictorsContainer').hide()
         $('.AlertPrunningContainer').hide()
 
-
-
         // Specify how to clean up after this effect:
         return function cleanup() {
             document.body.classList.toggle("profile-page");
@@ -219,7 +217,7 @@ export default function Train() {
                                 <Col md="10">
                                     <Card className="card-plain">
                                         <CardHeader>
-                                            <h5 className="text-on-back">Seleccion</h5>
+                                            <h5 className="text-on-back">Select</h5>
                                         </CardHeader>
                                         <CardBody>
                                             <Form>
@@ -227,17 +225,17 @@ export default function Train() {
                                                     <div className="custom-file" >
                                                         <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
                                                         <label id="labelFile" className="custom-file-label" htmlFor="file">
-                                                            Seleccionar un archivo
+                                                            Select file
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <button type="submit" className="btn btn-primary" onClick={(e) => train(e)} >
-                                                    Entrenar
+                                                    Train
                                                 </button>
                                             </Form>
                                             <div className="AlertContainer">
                                                 <Alert className="AccuracyAlert" color="info">
-                                                    <strong>Entrenamiento completo!</strong>
+                                                    <strong>Train completed!</strong>
                                                 </Alert >
                                             </div>
                                         </CardBody>
@@ -251,7 +249,7 @@ export default function Train() {
                                             <Col md="12">
                                                 <Card className="card-plain">
                                                     <CardHeader>
-                                                        <h5 className="text-on-back">Predictores</h5>
+                                                        <h5 className="text-on-back">Predictors</h5>
                                                     </CardHeader>
                                                     <CardBody>
                                                         <Col className="" lg="12" md="6" >
@@ -260,8 +258,8 @@ export default function Train() {
                                                                     <tr>
                                                                         <th className="text-left">#</th>
                                                                         <th className="text-left">Predictor</th>
-                                                                        <th className="text-left">Importancia</th>
-                                                                        <th className="text-left">Seleccionar</th>
+                                                                        <th className="text-left">Importance</th>
+                                                                        <th className="text-left">Select</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody> </tbody>
@@ -273,7 +271,7 @@ export default function Train() {
                                         </Row>
                                         <Row>
                                             <button type="submit" className="btn btn-primary" onClick={(e) => checkPredictors(e)} >
-                                                Actualizar Predictores
+                                                Update predictors
                                             </button>
                                         </Row>
                                         <Row>
@@ -292,7 +290,7 @@ export default function Train() {
                                             <Col md="12">
                                                 <Card className="card-plain">
                                                     <CardHeader>
-                                                        <h5 className="text-on-back">Podado</h5>
+                                                        <h5 className="text-on-back">Pruning</h5>
                                                     </CardHeader>
                                                     <CardBody>
                                                         <Col className="" lg="12" md="6" >
@@ -305,7 +303,7 @@ export default function Train() {
                                                             <FormGroup check className="text-left">
                                                                 <Label check>
                                                                     <Input id="prunning" type="checkbox" />
-                                                                    <span className="form-check-sign" />Deseo podar el arbol
+                                                                    <span className="form-check-sign" />I want to pruning the tree
                                                                 </Label>
                                                             </FormGroup>
                                                         </Row>
@@ -315,7 +313,7 @@ export default function Train() {
                                         </Row>
                                         <Row>
                                             <button type="submit" className="btn btn-primary" onClick={(e) => finishTrain(e)} >
-                                                Finalizar entrenamiento
+                                                End train
                                             </button>
                                         </Row>
                                     </Container>

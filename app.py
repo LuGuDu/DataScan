@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
 import controllers.MachineLearningController as ml
+import controllers.UserController as userController
 import json
 
 app = Flask(__name__)
@@ -90,6 +91,46 @@ def finishModelTrain():
         prunning = json.loads(request.data.decode())["prunning"]
         ml.finalTrainModel(prunning, mongo)
 
+        return {"message": 200}
+    return {"message": 500}
+
+
+@app.route('/createUser', methods=['POST'])
+def createUser():
+    if request.method == "POST":
+        userController.createUser(request.data, mongo)
+        return {"message": 200}
+    
+    return {"message": 500}
+
+@app.route('/getUsers', methods=['GET'])
+def getUsers():
+    if request.method == "GET":
+        userList = userController.getUserList(mongo)
+        return {"message": 200, "users": userList}
+    return {"message": 500}
+
+@app.route('/deleteUser', methods=['DELETE'])
+def deleteUser():
+    if request.method == 'DELETE':
+        userController.deleteUser(request.data, mongo)
+        return {"message": 200}
+    return {"message": 500}
+
+@app.route('/getUser', methods=['GET'])
+def getUser():
+    if request.method == "GET":
+        username = request.args.get('username')
+        email = request.args.get('email')
+        user = userController.getUser(username, email, mongo)
+        return {"message": 200, "user": user}
+    return {"message": 500}
+
+
+@app.route('/modifyUser', methods=['PUT'])
+def modifyUser():
+    if request.method == "PUT":
+        userController.modifyUser(request.data, mongo)
         return {"message": 200}
     return {"message": 500}
 

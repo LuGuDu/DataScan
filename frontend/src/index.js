@@ -33,7 +33,8 @@ import ModelInfo from "components/Admin/Model/ModelInfo.js"
 import ModelTrain from "components/Admin/Model/ModelTrain.js"
 import ModelHistory from "components/Admin/Model/ModelHistory.js"
 
-
+import Users from "components/Admin/Users/UserList.js"
+import UserCreateForm from "components/Admin/Users/CreateUserForm.js"
 
 
 import LandingPage from "views/examples/LandingPage.js";
@@ -53,9 +54,12 @@ ReactDOM.render(
       <Route path="/admin/model/train" element={<ModelTrain />} />
       <Route path="/admin/model/info" element={<ModelInfo />} />
       <Route path="/admin/model/history" element={<ModelHistory />} />
-      <Route path="/admin/users" element={<Admin />} />
-      <Route path="/admin/stadistics" element={<Admin />} />
 
+      <Route path="/admin/users" element={<Users />} />
+      <Route path="/admin/users/create" element={<UserCreateForm />} />
+
+
+      <Route path="/admin/stadistics" element={<Admin />} />
 
 
       <Route path="/landing-page" element={<LandingPage />} />

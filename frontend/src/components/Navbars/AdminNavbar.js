@@ -115,7 +115,7 @@ export default function AdminNavbar() {
             </Row>
           </div>
           <Nav navbar>
-          <UncontrolledDropdown nav>
+            <UncontrolledDropdown nav>
               <DropdownToggle
                 caret
                 color="primary"
@@ -139,25 +139,38 @@ export default function AdminNavbar() {
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <NavItem>
-            <NavLink
-                data-placement="bottom"
-                href="admin/users"
-                rel="noopener noreferrer"
+
+            <UncontrolledDropdown nav>
+              <DropdownToggle
+                caret
+                color="primary"
+                data-toggle="dropdown"
+                href="/admin/user"
+                nav
+                onClick={(e) => e.preventDefault()}
               >
-                <p className="d-lg d-xl">Users</p>
-              </NavLink>
-            </NavItem>
+                <i className="fa fa-cogs d-lg-none d-xl-none" />
+                Users
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-with-icons">
+                <DropdownItem tag={Link} to="/admin/users" onClick={(e) => smoothScroll()}>
+                  List
+                </DropdownItem>
+                <DropdownItem tag={Link} to="/admin/users/create" onClick={(e) => smoothScroll()}>
+                  Create
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
             <NavItem>
-            <NavItem>
-            <NavLink
-                data-placement="bottom"
-                href="admin/stadistics"
-                rel="noopener noreferrer"
-              >
-                <p className="d-lg d-xl">Stadistics</p>
-              </NavLink>
-            </NavItem>
+              <NavItem>
+                <NavLink
+                  data-placement="bottom"
+                  href="admin/stadistics"
+                  rel="noopener noreferrer"
+                >
+                  <p className="d-lg d-xl">Stadistics</p>
+                </NavLink>
+              </NavItem>
             </NavItem>
             <NavItem>
               <Button
