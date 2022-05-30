@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
 
 import LoginNavBar from "components/Navbars/LoginNavBar.js"
@@ -20,13 +20,25 @@ import {
     Row,
     Col,
 } from "reactstrap";
+
 import { useNavigate } from "react-router-dom";
+
+async function registerUser(data) {
+    return fetch('/registerUser', {
+        method: 'POST',
+        body: data
+    });
+};
 
 export default function Login() {
 
     const [fullNameFocus, setFullNameFocus] = React.useState(false);
     const [emailFocus, setEmailFocus] = React.useState(false);
     const [passwordFocus, setPasswordFocus] = React.useState(false);
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
@@ -35,6 +47,31 @@ export default function Login() {
             document.body.classList.toggle("index-page");
         };
     }, []);
+
+    const register = (e) => {
+        e.preventDefault();
+
+
+        var jsonData = {
+            "username": username,
+            "password": password,
+            "email": email        
+        }
+
+        //if(validateData())
+
+        registerUser(JSON.stringify(jsonData))
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                if (result['message'] === 200) {
+                    navigate('/login');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     const navigate = useNavigate();
 
@@ -82,10 +119,11 @@ export default function Login() {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              placeholder="Full Name"
+                              placeholder="Username"
                               type="text"
                               onFocus={(e) => setFullNameFocus(true)}
                               onBlur={(e) => setFullNameFocus(false)}
+                              onChange={e => setUsername(e.target.value)}
                             />
                           </InputGroup>
                           <InputGroup
@@ -103,6 +141,7 @@ export default function Login() {
                               type="text"
                               onFocus={(e) => setEmailFocus(true)}
                               onBlur={(e) => setEmailFocus(false)}
+                              onChange={e => setEmail(e.target.value)}
                             />
                           </InputGroup>
                           <InputGroup
@@ -120,12 +159,13 @@ export default function Login() {
                               type="text"
                               onFocus={(e) => setPasswordFocus(true)}
                               onBlur={(e) => setPasswordFocus(false)}
+                              onChange={e => setPassword(e.target.value)}
                             />
                           </InputGroup>
                         </Form>
                       </CardBody>
                       <CardFooter>
-                        <Button className="btn-round" color="info" size="lg">
+                        <Button className="btn-round" color="info" size="lg" onClick={(e) => register(e)}>
                           Register
                         </Button>
                         <Button className="btn-round" color="info" size="lg" onClick={(e) => goLogin(e)}>

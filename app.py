@@ -95,6 +95,15 @@ def finishModelTrain():
     return {"message": 500}
 
 
+@app.route('/registerUser', methods=['POST'])
+def registerUser():
+    if request.method == "POST":
+        userController.registerUser(request.data, mongo)
+        return {"message": 200}
+    
+    return {"message": 500}
+
+
 @app.route('/createUser', methods=['POST'])
 def createUser():
     if request.method == "POST":
