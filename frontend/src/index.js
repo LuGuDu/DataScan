@@ -24,6 +24,10 @@ import "assets/scss/blk-design-system-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
+
+import Login from "components/Operations/Login.js"
+import Register from "components/Operations/Register.js"
+
 import Analyze from "components/Operations/Analyze.js"
 import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
 import Contact from "components/Operations/Contact.js"
@@ -46,6 +50,10 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Index />} />
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
       <Route path="/analyze" element={<Analyze />} />
       <Route path="/attacks_info" element={<AttackTypesInfo />} />
       <Route path="/contact" element={<Contact />} />
