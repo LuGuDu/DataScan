@@ -21,6 +21,7 @@ import {
     Row,
     Col,
     FormGroup,
+    FormFeedback,
 } from "reactstrap";
 
 async function createUser(data) {
@@ -30,6 +31,18 @@ async function createUser(data) {
     });
 };
 
+// Function to check whether the email introduced has the correct format
+function checkEmail(email) {
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+}
+
+// Function to check whether the password introduced has the correct format
+function checkPassword(pwd) {
+    var strongPwdPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    return strongPwdPattern.test(pwd);
+}
+
 export default function CreateUserForm() {
 
     const [fullNameFocus, setFullNameFocus] = React.useState(false);
@@ -38,13 +51,58 @@ export default function CreateUserForm() {
 
 
     const [username, setUsername] = useState('');
+
     const [password, setPassword] = useState('');
+    // Variable to store if the pwd introduced is valid
+    const [isValidPwd, setIsValidPwd] = useState(false);
+    // Variable to store if the pwd introduced is invalid
+    const [isInvalidPwd, setIsInvalidPwd] = useState(false);
+
     const [email, setEmail] = useState('');
+    // Variable to store if the email introduced is valid
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    // Variable to store if the email introduced is invalid
+    const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+
+    // Variable to show or not the feedback
+    const [showFeedback, setShowFeedback] = useState(false);
+
+    const passRequirements = `Password requirements:
+    Must have a minimum length of 8 characters
+    Must include 1 capital letter and 1 small letter
+    Must include 1 number
+    Must include 1 special char`
+
 
     const navigate = useNavigate();
 
+    const validateInputs = () => {
+        var valid = false
+        if (!checkEmail(email)) {
+            setShowFeedback(true);
+            setIsValidEmail(false);
+            setIsInvalidEmail(true);
+        } else if (!checkPassword(password)) {
+            setIsValidEmail(true);
+            setIsInvalidEmail(false);
+            setShowFeedback(true);
+            setIsValidPwd(false);
+            setIsInvalidPwd(true);
+        } else {
+            setIsValidEmail(true);
+            setIsInvalidEmail(false);
+            setIsValidPwd(true);
+            setIsInvalidPwd(false);
+            setShowFeedback(true);
+            valid = true
+        }
+
+        return valid
+    }
+
     const create = (e) => {
         e.preventDefault();
+        setShowFeedback(false);
 
         var role = document.getElementById('in-role').checked
 
@@ -55,17 +113,20 @@ export default function CreateUserForm() {
             "role": role
         }
 
-        createUser(JSON.stringify(jsonData))
-            .then(response => response.json())
-            .then(result => {
-                console.log('Success:', result);
-                if (result['message'] === 200) {
-                    //navigate('/admin/users');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        if (validateInputs()) {
+
+            createUser(JSON.stringify(jsonData))
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Success:', result);
+                    if (result['message'] === 200) {
+                        navigate('/admin/users');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
     }
 
     React.useEffect(() => {
@@ -78,6 +139,16 @@ export default function CreateUserForm() {
         };
     }, []);
 
+    const renderFeedback = (input, success, error) => {
+        return (input
+            ? <FormFeedback valid>
+                {success}
+            </FormFeedback>
+            : <FormFeedback invalid>
+                {error}
+            </FormFeedback>);
+    }
+
     return (
         <>
             <AdminNavbar />
@@ -87,7 +158,7 @@ export default function CreateUserForm() {
                     <div className="section section-basic" id="basic-elements">
                         <section className="section section-lg">
                             <Container>
-                            <h5 className="text-on-back">User</h5>
+                                <h5 className="text-on-back">User</h5>
                                 <Row>
                                     <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
                                         <div
@@ -142,7 +213,12 @@ export default function CreateUserForm() {
                                                             onFocus={(e) => setEmailFocus(true)}
                                                             onBlur={(e) => setEmailFocus(false)}
                                                             onChange={e => setEmail(e.target.value)}
+                                                            valid={isValidEmail}
+                                                            invalid={isInvalidEmail}
                                                         />
+                                                        {showFeedback ? renderFeedback(isValidEmail,
+                                                            "Valid email.", "Invalid email.") : null}
+
                                                     </InputGroup>
                                                     <InputGroup
                                                         className={classnames({
@@ -160,7 +236,11 @@ export default function CreateUserForm() {
                                                             onFocus={(e) => setPasswordFocus(true)}
                                                             onBlur={(e) => setPasswordFocus(false)}
                                                             onChange={e => setPassword(e.target.value)}
-                                                        />
+                                                            valid={isValidPwd}
+                                                            invalid={isInvalidPwd}
+                                                            Title={passRequirements} />
+                                                        {showFeedback ? renderFeedback(isValidPwd,
+                                                            "Valid password.", "Invalid password.") : null}
                                                     </InputGroup>
                                                     <FormGroup className="text-center">
                                                         <Input type="checkbox" id="in-role" />Admin

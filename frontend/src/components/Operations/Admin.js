@@ -26,9 +26,11 @@ export default function Admin() {
             <PermissionsGate
                 scopes={[SCOPES.administratorCanAccess]}
                 RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
-            ></PermissionsGate>
-            <AdminNavbar />
-            <AdminHeader />
+            >
+                <AdminNavbar />
+                <AdminHeader />
+            </PermissionsGate>
+
         </>
     );
 };

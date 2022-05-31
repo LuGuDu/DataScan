@@ -23,6 +23,7 @@ import {
     InputGroupText,
     Button,
     Alert,
+    FormFeedback,
 } from "reactstrap";
 
 async function modifyUser(data) {
@@ -51,13 +52,36 @@ async function getUser(data) {
     });
 };
 
-
+// Function to check whether the password introduced has the correct format
+function checkPassword(pwd) {
+    var strongPwdPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    return strongPwdPattern.test(pwd);
+}
 
 export default function CreateUserForm() {
 
     const [fullNameFocus, setFullNameFocus] = React.useState(false);
     const [emailFocus, setEmailFocus] = React.useState(false);
     const [passwordFocus, setPasswordFocus] = React.useState(false);
+
+    // Variable to store if the email introduced is valid
+    const [isValidEmail, setIsValidEmail] = React.useState(false);
+    // Variable to store if the email introduced is invalid
+    const [isInvalidEmail, setIsInvalidEmail] = React.useState(false);
+
+    // Variable to store if the pwd introduced is valid
+    const [isValidPwd, setIsValidPwd] = React.useState(false);
+    // Variable to store if the pwd introduced is invalid
+    const [isInvalidPwd, setIsInvalidPwd] = React.useState(false);
+
+    // Variable to show or not the feedback
+    const [showFeedback, setShowFeedback] = React.useState(false);
+
+    const passRequirements = `Password requirements:
+        Must have a minimum length of 8 characters
+        Must include 1 capital letter and 1 small letter
+        Must include 1 number
+        Must include 1 special char`
 
     const getUsers = (e) => {
 
@@ -147,6 +171,9 @@ export default function CreateUserForm() {
 
     const showUser = (data) => {
 
+        setShowFeedback(false);
+        setIsInvalidEmail(false);
+
         getUser(data)
             .then(response => response.json())
             .then(result => {
@@ -181,6 +208,22 @@ export default function CreateUserForm() {
             });
     }
 
+    const validateInputs = (password) => {
+        var valid = false
+        if (!checkPassword(password)) {
+            setShowFeedback(true);
+            setIsValidPwd(false);
+            setIsInvalidPwd(true);
+        } else {
+            setIsValidPwd(true);
+            setIsInvalidPwd(false);
+            setShowFeedback(true);
+            valid = true
+        }
+
+        return valid
+    }
+
     const modify = (e) => {
 
         e.preventDefault();
@@ -190,6 +233,12 @@ export default function CreateUserForm() {
         var email = document.getElementById('in-email').value
         var role = document.getElementById('in-role').checked
 
+        if (email === "") {
+            setShowFeedback(true);
+            setIsValidEmail(false);
+            setIsInvalidEmail(true);
+            return
+        } 
 
         var changePass = document.getElementById('in-changePass').checked
 
@@ -200,7 +249,9 @@ export default function CreateUserForm() {
         }
 
         if (changePass) {
-            jsonData["password"] = password
+            if (validateInputs(password)) {
+                jsonData["password"] = password
+            };
         }
 
         modifyUser(JSON.stringify(jsonData))
@@ -230,6 +281,17 @@ export default function CreateUserForm() {
             document.body.classList.toggle("index-page");
         };
     }, []);
+
+    const renderFeedback = (input, success, error) => {
+        return (input
+            ? <FormFeedback valid>
+                {success}
+            </FormFeedback>
+            : <FormFeedback invalid>
+                {error}
+            </FormFeedback>);
+    }
+
 
     return (
         <>
@@ -295,7 +357,11 @@ export default function CreateUserForm() {
                                                             readonly="readonly"
                                                             onFocus={(e) => setEmailFocus(true)}
                                                             onBlur={(e) => setEmailFocus(false)}
+                                                            valid={isValidEmail}
+                                                            invalid={isInvalidEmail}
                                                         />
+                                                        {showFeedback ? renderFeedback(isValidEmail,
+                                                            "Valid email.", "No user is selected.") : null}
                                                     </InputGroup>
                                                     <InputGroup
                                                         className={classnames({
@@ -313,7 +379,10 @@ export default function CreateUserForm() {
                                                             type="password"
                                                             onFocus={(e) => setPasswordFocus(true)}
                                                             onBlur={(e) => setPasswordFocus(false)}
-                                                        />
+                                                            invalid={isInvalidPwd}
+                                                            Title={passRequirements} />
+                                                        {showFeedback ? renderFeedback(isValidPwd,
+                                                            "Valid password.", "Invalid password.") : null}
                                                     </InputGroup>
                                                     <FormGroup className="text-center">
                                                         <Row>
@@ -334,7 +403,7 @@ export default function CreateUserForm() {
                                             </CardFooter>
                                         </Card>
                                     </Col>
-                                    <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                                    <Col className="offset-lg-0 offset-md-3" lg="7" md="7">
                                         <div
                                             className="square square-7"
                                             id="square7"
