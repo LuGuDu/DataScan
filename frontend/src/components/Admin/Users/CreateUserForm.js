@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import classnames from "classnames";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
 
 import {
-    Container,
-    Row,
-    Col,
+    Button,
     Card,
     CardHeader,
     CardBody,
-    FormGroup,
+    CardFooter,
+    CardImg,
+    CardTitle,
     Form,
     Input,
-    Button,
+    InputGroupAddon,
+    InputGroupText,
+    InputGroup,
+    Container,
+    Row,
+    Col,
+    FormGroup,
 } from "reactstrap";
 
 async function createUser(data) {
@@ -24,6 +31,11 @@ async function createUser(data) {
 };
 
 export default function CreateUserForm() {
+
+    const [fullNameFocus, setFullNameFocus] = React.useState(false);
+    const [emailFocus, setEmailFocus] = React.useState(false);
+    const [passwordFocus, setPasswordFocus] = React.useState(false);
+
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -48,7 +60,7 @@ export default function CreateUserForm() {
             .then(result => {
                 console.log('Success:', result);
                 if (result['message'] === 200) {
-                    navigate('/admin/users');
+                    //navigate('/admin/users');
                 }
             })
             .catch(error => {
@@ -66,10 +78,6 @@ export default function CreateUserForm() {
         };
     }, []);
 
-    const modelData = {
-        color: "gray",
-    }
-
     return (
         <>
             <AdminNavbar />
@@ -79,54 +87,95 @@ export default function CreateUserForm() {
                     <div className="section section-basic" id="basic-elements">
                         <section className="section section-lg">
                             <Container>
+                            <h5 className="text-on-back">User</h5>
                                 <Row>
-                                    <Col md="16">
-                                        <Card className="card-plain">
+                                    <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                                        <div
+                                            className="square square-7"
+                                            id="square7"
+                                        />
+                                        <div
+                                            className="square square-8"
+                                            id="square8"
+                                        />
+                                        <Card className="card-register">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">Create form</h1>
-                                                <h5 className="text-on-back">Users</h5>
+                                                <CardImg
+                                                    alt="..."
+                                                    src={require("assets/img/square1.png").default}
+                                                />
+                                                <CardTitle tag="h5">Create</CardTitle>
                                             </CardHeader>
                                             <CardBody>
-                                                <Form>
-                                                    <Row>
-                                                        <Col md="3">
-                                                            <FormGroup>
-                                                                <label>Username</label>
-                                                                <Input id="in-username" style={modelData} placeholder="Username" type="text" onChange={e => setUsername(e.target.value)} />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="3">
-                                                            <FormGroup>
-                                                                <label>Password</label>
-                                                                <Input id="in-pass" style={modelData} placeholder="Password" type="password" onChange={e => setPassword(e.target.value)} />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="4">
-                                                            <FormGroup>
-                                                                <label>Email</label>
-                                                                <Input id="in-email" style={modelData} placeholder="email" type="email" onChange={e => setEmail(e.target.value)} />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md="3">
-                                                            <FormGroup>                                                              
-                                                                <Input type="checkbox" id="in-role" />Admin
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md="5">
-                                                            <Button type="submit" className="btn btn-primary" onClick={(e) => create(e)} >
-                                                                Create User
-                                                            </Button>
-                                                        </Col>
-                                                    </Row>
+                                                <Form className="form" autocomplete="off">
+                                                    <InputGroup
+                                                        className={classnames({
+                                                            "input-group-focus": fullNameFocus,
+                                                        })}
+                                                    >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText>
+                                                                <i className="tim-icons icon-single-02" />
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Input
+                                                            placeholder="Username"
+                                                            type="text"
+                                                            onFocus={(e) => setFullNameFocus(true)}
+                                                            onBlur={(e) => setFullNameFocus(false)}
+                                                            onChange={e => setUsername(e.target.value)}
+                                                        />
+                                                    </InputGroup>
+                                                    <InputGroup
+                                                        className={classnames({
+                                                            "input-group-focus": emailFocus,
+                                                        })}
+                                                    >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText>
+                                                                <i className="tim-icons icon-email-85" />
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Input
+                                                            placeholder="Email"
+                                                            type="text"
+                                                            onFocus={(e) => setEmailFocus(true)}
+                                                            onBlur={(e) => setEmailFocus(false)}
+                                                            onChange={e => setEmail(e.target.value)}
+                                                        />
+                                                    </InputGroup>
+                                                    <InputGroup
+                                                        className={classnames({
+                                                            "input-group-focus": passwordFocus,
+                                                        })}
+                                                    >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText>
+                                                                <i className="tim-icons icon-lock-circle" />
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Input
+                                                            placeholder="Password"
+                                                            type="password"
+                                                            onFocus={(e) => setPasswordFocus(true)}
+                                                            onBlur={(e) => setPasswordFocus(false)}
+                                                            onChange={e => setPassword(e.target.value)}
+                                                        />
+                                                    </InputGroup>
+                                                    <FormGroup className="text-center">
+                                                        <Input type="checkbox" id="in-role" />Admin
+                                                    </FormGroup>
                                                 </Form>
                                             </CardBody>
+                                            <CardFooter>
+                                                <Button className="btn-round" color="info" size="lg" onClick={(e) => create(e)}>
+                                                    Create
+                                                </Button>
+                                            </CardFooter>
                                         </Card>
                                     </Col>
                                 </Row>
+
                             </Container>
                         </section>
                     </div>

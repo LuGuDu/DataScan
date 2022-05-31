@@ -1,5 +1,6 @@
 import React from "react";
 import $ from 'jquery';
+import classnames from "classnames";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
 
@@ -8,12 +9,18 @@ import {
     Row,
     Col,
     Card,
+    CardTitle,
+    CardImg,
     CardHeader,
     CardBody,
+    CardFooter,
     Table,
     Form,
     FormGroup,
     Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
     Button,
     Alert,
 } from "reactstrap";
@@ -47,6 +54,10 @@ async function getUser(data) {
 
 
 export default function CreateUserForm() {
+
+    const [fullNameFocus, setFullNameFocus] = React.useState(false);
+    const [emailFocus, setEmailFocus] = React.useState(false);
+    const [passwordFocus, setPasswordFocus] = React.useState(false);
 
     const getUsers = (e) => {
 
@@ -129,6 +140,11 @@ export default function CreateUserForm() {
             });
     }
 
+    const goUp = (e) => {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     const showUser = (data) => {
 
         getUser(data)
@@ -139,7 +155,6 @@ export default function CreateUserForm() {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
 
                     document.getElementById("in-username").value = result['user']['username'];
-                    //document.getElementById("in-pass").value = result['user']['password'];
                     document.getElementById("in-email").value = result['user']['email'];
                     document.getElementById("in-role").checked = result['user']['role'];
                 }
@@ -184,7 +199,7 @@ export default function CreateUserForm() {
             "role": role
         }
 
-        if (changePass){
+        if (changePass) {
             jsonData["password"] = password
         }
 
@@ -216,10 +231,6 @@ export default function CreateUserForm() {
         };
     }, []);
 
-    const modelData = {
-        color: "gray",
-    }
-
     return (
         <>
             <AdminNavbar />
@@ -228,71 +239,122 @@ export default function CreateUserForm() {
                     <div className="section section-basic" id="basic-elements">
                         <section className="section section-lg">
                             <Container>
+                                <h5 className="text-on-back">User</h5>
                                 <Row>
-                                    <Col md="16">
-                                        <Card className="card-plain">
+                                    <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                                        <div
+                                            className="square square-7"
+                                            id="square7"
+                                        />
+                                        <div
+                                            className="square square-8"
+                                            id="square8"
+                                        />
+                                        <Card className="card-register">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">User list</h1>
-                                                <h5 className="text-on-back">Users</h5>
+                                                <CardImg
+                                                    alt="..."
+                                                    src={require("assets/img/square1.png").default}
+                                                />
+                                                <CardTitle tag="h5">Modify</CardTitle>
                                             </CardHeader>
                                             <CardBody>
-                                                <Row>
-                                                    <Col lg="10" md="5">
-                                                        <Form>
-                                                            <Row>
-                                                                <Col md="3">
-                                                                    <FormGroup>
-                                                                        <label>Username</label>
-                                                                        <Input id="in-username" style={modelData} placeholder="Username" type="text" />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                                <Col md="5">
-                                                                    <FormGroup>
-                                                                        <label>New Password (optional)</label>
-                                                                        <Input id="in-pass" style={modelData} placeholder="New Password" type="password" />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                                <Col md="4">
-                                                                    <FormGroup>
-                                                                        <label>Email</label>
-                                                                        <Input id="in-email" style={modelData} placeholder="Email" type="email" readonly="readonly" />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col md="3">
-                                                                    <FormGroup>
-                                                                        <Input type="checkbox" id="in-role" />Admin
-                                                                    </FormGroup>
-
-                                                                    <FormGroup>
-                                                                        <Input type="checkbox" id="in-changePass" />Change Pass?
-                                                                    </FormGroup>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row>
-                                                                <Col md="5">
-                                                                    <Button type="submit" className="btn btn-primary" onClick={(e) => modify(e)} >
-                                                                        Modify User
-                                                                    </Button>
-                                                                </Col>
-                                                            </Row>
-                                                        </Form>
-                                                    </Col>
-                                                </Row>
-                                                <br />
-                                                <Row>
-                                                    <div className="AlertContainer">
-                                                        <Alert className="Alert" color="info">
-                                                            <strong></strong>
-                                                        </Alert >
-                                                    </div>
-                                                </Row>
-
-                                                <br />
+                                                <Form className="form" autocomplete="off">
+                                                    <InputGroup
+                                                        className={classnames({
+                                                            "input-group-focus": fullNameFocus,
+                                                        })}
+                                                    >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText>
+                                                                <i className="tim-icons icon-single-02" />
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Input
+                                                            id="in-username"
+                                                            placeholder="Username"
+                                                            type="text"
+                                                            onFocus={(e) => setFullNameFocus(true)}
+                                                            onBlur={(e) => setFullNameFocus(false)}
+                                                        />
+                                                    </InputGroup>
+                                                    <InputGroup
+                                                        className={classnames({
+                                                            "input-group-focus": emailFocus,
+                                                        })}
+                                                    >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText>
+                                                                <i className="tim-icons icon-email-85" />
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Input
+                                                            id="in-email"
+                                                            placeholder="Email"
+                                                            type="text"
+                                                            readonly="readonly"
+                                                            onFocus={(e) => setEmailFocus(true)}
+                                                            onBlur={(e) => setEmailFocus(false)}
+                                                        />
+                                                    </InputGroup>
+                                                    <InputGroup
+                                                        className={classnames({
+                                                            "input-group-focus": passwordFocus,
+                                                        })}
+                                                    >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText>
+                                                                <i className="tim-icons icon-lock-circle" />
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Input
+                                                            id="in-pass"
+                                                            placeholder="New password"
+                                                            type="password"
+                                                            onFocus={(e) => setPasswordFocus(true)}
+                                                            onBlur={(e) => setPasswordFocus(false)}
+                                                        />
+                                                    </InputGroup>
+                                                    <FormGroup className="text-center">
+                                                        <Row>
+                                                            <Col>
+                                                                <Input type="checkbox" id="in-role" />Admin
+                                                            </Col>
+                                                            <Col>
+                                                                <Input type="checkbox" id="in-changePass" />Change Pass?
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Form>
+                                            </CardBody>
+                                            <CardFooter>
+                                                <Button className="btn-round" color="info" size="lg" onClick={(e) => modify(e)}>
+                                                    Modify
+                                                </Button>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                    <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                                        <div
+                                            className="square square-7"
+                                            id="square7"
+                                        />
+                                        <div
+                                            className="square square-8"
+                                            id="square8"
+                                        />
+                                        <Card className="card-register">
+                                            <CardHeader>
+                                                <CardImg
+                                                    alt="..."
+                                                    src={require("assets/img/square1.png").default}
+                                                />
+                                                <CardTitle tag="h5">list</CardTitle>
+                                            </CardHeader>
+                                            <CardBody>
                                                 <Row lg="15" >
                                                     <Col lg="10" md="5" >
-                                                        <Table responsive id="myTable" data-show-toggle="false" data-expand-first="true">
+                                                        <Table id="myTable" data-show-toggle="false" data-expand-first="true">
                                                             <thead>
                                                                 <tr>
                                                                     <th className="text-left">#</th>
@@ -307,8 +369,28 @@ export default function CreateUserForm() {
                                                     </Col>
                                                 </Row>
                                             </CardBody>
+                                            <CardFooter>
+                                                <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
+                                                    Go up
+                                                </Button>
+                                            </CardFooter>
                                         </Card>
                                     </Col>
+                                </Row>
+                            </Container>
+                            <Container>
+                                <Row>
+                                    <div className="AlertContainer">
+                                        <Alert className="Alert" color="info">
+                                            <strong></strong>
+                                        </Alert >
+                                    </div>
+                                </Row>
+                            </Container>
+
+                            <Container>
+                                <Row>
+
                                 </Row>
                             </Container>
                         </section>

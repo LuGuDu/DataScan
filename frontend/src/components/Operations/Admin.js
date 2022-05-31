@@ -1,6 +1,7 @@
 import React from "react";
 
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
+import AdminHeader from "components/PageHeader/AdminHeader";
 
 import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
 import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
@@ -27,6 +28,7 @@ export default function Admin() {
                 RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
             ></PermissionsGate>
             <AdminNavbar />
+            <AdminHeader />
         </>
     );
 };
