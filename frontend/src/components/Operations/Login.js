@@ -186,7 +186,7 @@ export default function Login() {
                                                         onChange={e => setPassword(e.target.value)}
                                                     />
                                                 </InputGroup>
-                                                <FormGroup check className="text-left">
+                                                <FormGroup check className="text-right">
                                                     <Label check>
                                                         Click {" "}
                                                         <a

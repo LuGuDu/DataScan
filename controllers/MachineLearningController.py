@@ -234,7 +234,7 @@ def getModelInfo(mongo):
 
 
 def getTrainModelHistory(mongo):
-    modelHistory = list(modelRegistryDAO.getLastRegistry(mongo))
+    modelHistory = list(modelRegistryDAO.getAllRegistry(mongo))
     
     for element in modelHistory:
         element.pop('_id', None)

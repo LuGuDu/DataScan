@@ -7,10 +7,13 @@ import {
     Row,
     Col,
     Card,
+    CardTitle,
+    CardImg,
     CardHeader,
     CardBody,
-
+    CardFooter,
     Table,
+    Button,
 } from "reactstrap";
 
 async function getTrainModelHistory() {
@@ -94,6 +97,11 @@ export default function ModelHistory() {
         };
     }, []);
 
+    const goUp = (e) => {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     return (
         <>
             <AdminNavbar />
@@ -103,42 +111,42 @@ export default function ModelHistory() {
                     <div className="section section-basic" id="basic-elements">
                         <section className="section section-lg">
                             <Container>
-                                <Row>
-                                    <Col md="12">
-                                        <Card className="card-plain">
-                                            <CardHeader>
-                                                <h1 className="profile-title text-left">Historial de entrenamientos</h1>
-                                                <h5 className="text-on-back">MODELO</h5>
-                                            </CardHeader>
-                                            <CardBody>
-                                                <Col className="ml-auto mr-auto" lg="12" md="5" >
+                                <h5 className="text-on-back">Model</h5>
 
-                                                    <Table responsive id="myTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th className="text-left">#</th>
-                                                                <th classname="text-left">Archivo usado</th>
-                                                                <th className="text-left">Fecha</th>
-                                                                <th className="text-left">Tiempo </th>
-                                                                <th className="text-left">Podado</th>
-                                                                <th className="text-left">Accuracy</th>
-                                                                <th className="text-left">Filas</th>
-                                                                <th className="text-left">Columnas</th>
-                                                                <th className="text-left">Ataques</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
+                                <Card >
+                                    <CardHeader>
+                                        <CardTitle tag="h3">History list</CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <Row>
+                                            <Col>
+                                                <Table responsive id="myTable" data-show-toggle="false" data-expand-first="true">
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="text-left">#</th>
+                                                            <th classname="text-left">Archivo usado</th>
+                                                            <th className="text-left">Fecha</th>
+                                                            <th className="text-left">Tiempo </th>
+                                                            <th className="text-left">Podado</th>
+                                                            <th className="text-left">Accuracy</th>
+                                                            <th className="text-left">Filas</th>
+                                                            <th className="text-left">Columnas</th>
+                                                            <th className="text-left">Ataques</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
-                                                        </tbody>
-                                                    </Table>
-                                                </Col>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                <Row>
-
-                                </Row>
+                                                    </tbody>
+                                                </Table>
+                                            </Col>
+                                        </Row>
+                                    </CardBody>
+                                    <CardFooter>
+                                        <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
+                                            Go up
+                                        </Button>
+                                    </CardFooter>
+                                </Card>
                             </Container>
                         </section>
                     </div>

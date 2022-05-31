@@ -8,5 +8,8 @@ class ModelRegistryDAO:
 
     def getLastRegistry(self, mongo):
         return mongo.modelTrainHistorial.find_one(sort=[("date", -1)])
+
+    def getAllRegistry(self, mongo):
+        return mongo.modelTrainHistorial.find(sort=[("date", -1)])
     
     
