@@ -93,6 +93,12 @@ export default function IndexNavbar() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const goLogin = (e) => {
+    e.preventDefault();
+    navigate('/login');
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
@@ -213,6 +219,16 @@ export default function IndexNavbar() {
                 onClick={(e) => goAdminPane(e)}
               >
                 <i className="tim-icons icon-settings-gear-63" /> Admin pane
+              </Button>
+            </NavItem>
+
+            <NavItem>
+              <Button
+                className="nav-link d-none d-lg-block"
+                color="danger"
+                onClick={(e) => goLogin(e)}
+              >
+                <i className="tim-icons icon-user-run" /> Logout
               </Button>
             </NavItem>
           </Nav>

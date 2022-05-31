@@ -1,8 +1,10 @@
+import hashlib
+
 class User:
 
     def __init__ (self, username, password, email, role):
         self.username = username
-        self.password = password
+        self.password = hashlib.sha256(password.encode()).hexdigest()
         self.email = email
         self.role = role
 

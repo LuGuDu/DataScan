@@ -18,3 +18,6 @@ class UserDAO:
     def update(self, mongo, user):
         print(user)
         mongo.users.update_one({'email': user["email"]}, {'$set': {"username": user["username"], "password": user["password"], "role": user["role"]}})
+
+    def getByEmail(self, mongo, email):
+        return mongo.users.find_one({"email": email})

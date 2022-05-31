@@ -156,10 +156,10 @@ export default function Login() {
                             </InputGroupAddon>
                             <Input
                               placeholder="Password"
-                              type="text"
+                              type="password"
                               onFocus={(e) => setPasswordFocus(true)}
                               onBlur={(e) => setPasswordFocus(false)}
-                              onChange={e => setPassword(e.target.value)}
+                              onChange={(e) => setPassword(e.target.value)}
                             />
                           </InputGroup>
                         </Form>

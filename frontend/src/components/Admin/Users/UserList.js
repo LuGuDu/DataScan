@@ -139,7 +139,7 @@ export default function CreateUserForm() {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
 
                     document.getElementById("in-username").value = result['user']['username'];
-                    document.getElementById("in-pass").value = result['user']['password'];
+                    //document.getElementById("in-pass").value = result['user']['password'];
                     document.getElementById("in-email").value = result['user']['email'];
                     document.getElementById("in-role").checked = result['user']['role'];
                 }
@@ -175,11 +175,17 @@ export default function CreateUserForm() {
         var email = document.getElementById('in-email').value
         var role = document.getElementById('in-role').checked
 
+
+        var changePass = document.getElementById('in-changePass').checked
+
         var jsonData = {
             "username": username,
-            "password": password,
             "email": email,
             "role": role
+        }
+
+        if (changePass){
+            jsonData["password"] = password
         }
 
         modifyUser(JSON.stringify(jsonData))
@@ -240,16 +246,16 @@ export default function CreateUserForm() {
                                                                         <Input id="in-username" style={modelData} placeholder="Username" type="text" />
                                                                     </FormGroup>
                                                                 </Col>
-                                                                <Col md="3">
+                                                                <Col md="5">
                                                                     <FormGroup>
-                                                                        <label>Password</label>
-                                                                        <Input id="in-pass" style={modelData} placeholder="Password" type="password" />
+                                                                        <label>New Password (optional)</label>
+                                                                        <Input id="in-pass" style={modelData} placeholder="New Password" type="password" />
                                                                     </FormGroup>
                                                                 </Col>
                                                                 <Col md="4">
                                                                     <FormGroup>
                                                                         <label>Email</label>
-                                                                        <Input id="in-email" style={modelData} placeholder="email" type="email" readonly="readonly" />
+                                                                        <Input id="in-email" style={modelData} placeholder="Email" type="email" readonly="readonly" />
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
@@ -257,6 +263,10 @@ export default function CreateUserForm() {
                                                                 <Col md="3">
                                                                     <FormGroup>
                                                                         <Input type="checkbox" id="in-role" />Admin
+                                                                    </FormGroup>
+
+                                                                    <FormGroup>
+                                                                        <Input type="checkbox" id="in-changePass" />Change Pass?
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>

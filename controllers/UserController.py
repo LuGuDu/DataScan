@@ -1,8 +1,23 @@
 from model.User import User
 from dao.UserDAO import UserDAO
 import json
+import hashlib
 
 userDAO = UserDAO()
+
+
+def loginUser(data, mongo):
+    password = json.loads(data.decode())["password"]
+    email = json.loads(data.decode())["email"]
+
+    #buscar si el email y la contraseña existen
+    user = userDAO.getByEmail(mongo, email) 
+
+    encryptPass = hashlib.sha256(password.encode()).hexdigest()
+    if(user and encryptPass == user["password"]):
+        return True
+
+    return False
 
 
 def registerUser(data, mongo):
@@ -52,13 +67,25 @@ def getUser(username, email, mongo):
     return user
 
 def modifyUser(data, mongo):
-    username = json.loads(data.decode())["username"]
-    password = json.loads(data.decode())["password"]
-    email = json.loads(data.decode())["email"]
-    role = json.loads(data.decode())["role"]
 
-    user = User(username, password, email, role)
+    userJson = json.loads(data.decode())
+
+    username = userJson["username"]
+    email = userJson["email"]
+    role = userJson["role"]
+
+    user = userDAO.getByEmail(mongo, email) 
+
+    if "password" in userJson:
+        password = json.loads(data.decode())["password"]
+        user["password"] = hashlib.sha256(password.encode()).hexdigest()
+
+    #user = User(username, password, email, role)
+
+    user["username"] = username
+    user["email"] = email
+    user["role"] = role
 
     #buscar si el email ya existe
 
-    userDAO.update(mongo, user.getJson())
+    userDAO.update(mongo, user)

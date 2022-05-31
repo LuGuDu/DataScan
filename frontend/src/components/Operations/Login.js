@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
+
+import { useNavigate } from "react-router-dom";
 
 import LoginNavbar from "components/Navbars/LoginNavBar.js"
 
@@ -23,10 +25,20 @@ import {
     Label
 } from "reactstrap";
 
+async function loginUser(data) {
+    return fetch('/loginUser', {
+        method: 'POST',
+        body: data
+    });
+};
+
 export default function Login() {
 
     const [emailFocus, setEmailFocus] = React.useState(false);
     const [passwordFocus, setPasswordFocus] = React.useState(false);
+
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
@@ -35,6 +47,35 @@ export default function Login() {
             document.body.classList.toggle("index-page");
         };
     }, []);
+
+    const navigate = useNavigate();
+
+    const login = (e) => {
+        e.preventDefault();
+
+        var jsonData = {
+            "password": password,
+            "email": email        
+        }
+
+        //if(validateData())
+
+        loginUser(JSON.stringify(jsonData))
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                if (result['message'] === 200) {
+                    if(result['login']){
+                        navigate('/');
+                    }else {
+                        alert('email or password incorrect')
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     const smoothScroll = (e) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -67,7 +108,7 @@ export default function Login() {
                                             <CardTitle tag="h4">Login</CardTitle>
                                         </CardHeader>
                                         <CardBody>
-                                            <Form className="form">
+                                            <Form className="form" autocomplete="off">
                                                 <InputGroup
                                                     className={classnames({
                                                         "input-group-focus": emailFocus,
@@ -83,7 +124,8 @@ export default function Login() {
                                                         type="text"
                                                         onFocus={(e) => setEmailFocus(true)}
                                                         onBlur={(e) => setEmailFocus(false)}
-                                                    />
+                                                        onChange={e => setEmail(e.target.value)}
+                                                        />
                                                 </InputGroup>
                                                 <InputGroup
                                                     className={classnames({
@@ -97,9 +139,10 @@ export default function Login() {
                                                     </InputGroupAddon>
                                                     <Input
                                                         placeholder="Password"
-                                                        type="text"
+                                                        type="password"
                                                         onFocus={(e) => setPasswordFocus(true)}
                                                         onBlur={(e) => setPasswordFocus(false)}
+                                                        onChange={e => setPassword(e.target.value)}
                                                     />
                                                 </InputGroup>
                                                 <FormGroup check className="text-left">
@@ -117,7 +160,7 @@ export default function Login() {
                                             </Form>
                                         </CardBody>
                                         <CardFooter>
-                                            <Button className="btn-round" color="info" size="lg">
+                                            <Button className="btn-round" color="info" size="lg" onClick={(e) => login(e)}>
                                                 Login
                                             </Button>
                                         </CardFooter>
