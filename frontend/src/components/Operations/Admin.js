@@ -2,6 +2,10 @@ import React from "react";
 
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import {
 } from "reactstrap";
 
@@ -18,6 +22,10 @@ export default function Admin() {
 
     return (
         <>
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            ></PermissionsGate>
             <AdminNavbar />
         </>
     );

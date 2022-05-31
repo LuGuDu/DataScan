@@ -145,6 +145,15 @@ def getUser():
     return {"message": 500}
 
 
+@app.route('/getRole', methods=['GET'])
+def getRole():
+    if request.method == "GET":
+        email = request.args.get('email')
+        role = userController.getRole(email, mongo)
+        return {"message": 200, "role": role}
+    return {"message": 500}
+
+
 @app.route('/modifyUser', methods=['PUT'])
 def modifyUser():
     if request.method == "PUT":

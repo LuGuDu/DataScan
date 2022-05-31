@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
+import { AES } from 'crypto-js';
 
 import { useNavigate } from "react-router-dom";
 
@@ -25,10 +26,27 @@ import {
     Label
 } from "reactstrap";
 
+function getRandomKey(string_length) {
+    var random_string = ''
+    var char = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    var i
+
+    for (i = 0; i < string_length; i++) {
+        random_string = random_string + char.charAt(Math.floor(Math.random() * char.length))
+    }
+    return random_string
+}
+
 async function loginUser(data) {
     return fetch('/loginUser', {
         method: 'POST',
         body: data
+    });
+};
+
+async function getUserRole(data) {
+    return fetch(`/getRole?email=${data['email']}`, {
+        method: 'GET'
     });
 };
 
@@ -39,6 +57,8 @@ export default function Login() {
 
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+
+    const [isLogged, setIsLogged] = useState(false);
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
@@ -55,7 +75,7 @@ export default function Login() {
 
         var jsonData = {
             "password": password,
-            "email": email        
+            "email": email
         }
 
         //if(validateData())
@@ -65,9 +85,10 @@ export default function Login() {
             .then(result => {
                 console.log('Success:', result);
                 if (result['message'] === 200) {
-                    if(result['login']){
+                    if (result['login']) {
+                        setIsLogged(true);
                         navigate('/');
-                    }else {
+                    } else {
                         alert('email or password incorrect')
                     }
                 }
@@ -76,6 +97,26 @@ export default function Login() {
                 console.error('Error:', error);
             });
     }
+
+    useEffect(() => {
+        if (isLogged) {
+
+            var data = {
+                "email": email
+            }
+
+            getUserRole(data)
+                .then(response => response.json())
+                .then(result => {
+                    let key = getRandomKey(16);
+                    sessionStorage.setItem("VALUE", key);
+                    sessionStorage.setItem("userRole", AES.encrypt(result["role"], key).toString());
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }, [isLogged])
 
     const smoothScroll = (e) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -125,7 +166,7 @@ export default function Login() {
                                                         onFocus={(e) => setEmailFocus(true)}
                                                         onBlur={(e) => setEmailFocus(false)}
                                                         onChange={e => setEmail(e.target.value)}
-                                                        />
+                                                    />
                                                 </InputGroup>
                                                 <InputGroup
                                                     className={classnames({

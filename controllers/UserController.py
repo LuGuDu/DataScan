@@ -66,6 +66,16 @@ def getUser(username, email, mongo):
         user['_id'] = str(user['_id'])
     return user
 
+def getRole(email, mongo):
+    user = userDAO.getByEmail(mongo, email)
+
+    if(user["role"]):
+        role = "administrator"
+    else:
+        role = "normal"
+
+    return role
+
 def modifyUser(data, mongo):
 
     userJson = json.loads(data.decode())

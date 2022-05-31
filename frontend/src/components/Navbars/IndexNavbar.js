@@ -93,8 +93,11 @@ export default function IndexNavbar() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const goLogin = (e) => {
+  const logout = (e) => {
     e.preventDefault();
+
+    sessionStorage.setItem("userRole", 'no-logged')
+
     navigate('/login');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -226,7 +229,7 @@ export default function IndexNavbar() {
               <Button
                 className="nav-link d-none d-lg-block"
                 color="danger"
-                onClick={(e) => goLogin(e)}
+                onClick={(e) => logout(e)}
               >
                 <i className="tim-icons icon-user-run" /> Logout
               </Button>
