@@ -43,6 +43,10 @@ export default function ModelInfo() {
     const checkModel = (e) => {
         e.preventDefault();
 
+        //Disable components
+        document.getElementById("file").disabled = true;
+        document.getElementById("btn-checkModel").disabled = true;
+
         const fileField = document.querySelector('input[type="file"]');
         const formData = new FormData();
         formData.append('file', fileField.files[0]);
@@ -50,7 +54,11 @@ export default function ModelInfo() {
         uploadFileForCheck(formData)
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
+
+                //Enable components
+                document.getElementById("file").disabled = false;
+                document.getElementById("btn-checkModel").disabled = false;
+
                 if (result['message'] === 200) {
                     $('.AlertContainer').show()
                     $('.AccuracyAlert').text("Accuracy: " + result["accuracy"])
@@ -108,7 +116,7 @@ export default function ModelInfo() {
 
         var parElement = document.getElementById("resultData");
 
-        if(parElement != null){
+        if (parElement != null) {
             getModelInfo()
         }
         // Specify how to clean up after this effect:
@@ -226,7 +234,7 @@ export default function ModelInfo() {
                                                             </div>
                                                         </div>
 
-                                                        <Button className="btn-round" color="info" onClick={(e) => checkModel(e)} >
+                                                        <Button className="btn-round" color="info" id="btn-checkModel" onClick={(e) => checkModel(e)} >
                                                             Check model
                                                         </Button>
                                                     </Form>

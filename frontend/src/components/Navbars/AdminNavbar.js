@@ -25,7 +25,6 @@ import {
   Navbar,
   NavItem,
   Nav,
-  NavLink,
   Container,
   Row,
   Col,
@@ -161,17 +160,6 @@ export default function AdminNavbar() {
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <NavItem>
-              <NavItem>
-                <NavLink
-                  data-placement="bottom"
-                  href="admin/stadistics"
-                  rel="noopener noreferrer"
-                >
-                  <p className="d-lg d-xl">Stadistics</p>
-                </NavLink>
-              </NavItem>
-            </NavItem>
             <NavItem>
               <Button
                 className="nav-link d-none d-lg-block"

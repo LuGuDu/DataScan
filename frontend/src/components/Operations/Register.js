@@ -116,11 +116,13 @@ export default function Login() {
     }
 
     if (validateInputs()) {
-      
+      document.getElementById("btn-register").disabled = true;
+      document.getElementById("btn-login").disabled = true;
       registerUser(JSON.stringify(jsonData))
         .then(response => response.json())
         .then(result => {
-          console.log('Success:', result);
+          document.getElementById("btn-register").disabled = false;
+          document.getElementById("btn-login").disabled = false;
           if (result['message'] === 200) {
             navigate('/login');
           }
@@ -242,10 +244,10 @@ export default function Login() {
                       </Form>
                     </CardBody>
                     <CardFooter>
-                      <Button className="btn-round" color="info" size="lg" onClick={(e) => register(e)}>
+                      <Button className="btn-round" color="info" size="lg" id="btn-register" onClick={(e) => register(e)}>
                         Register
                       </Button>
-                      <Button className="btn-round" color="info" size="lg" onClick={(e) => goLogin(e)}>
+                      <Button className="btn-round" color="info" size="lg" id="btn-login" onClick={(e) => goLogin(e)}>
                         Login
                       </Button>
                     </CardFooter>

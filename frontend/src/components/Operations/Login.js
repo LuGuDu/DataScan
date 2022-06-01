@@ -77,11 +77,11 @@ export default function Login() {
             "password": password,
             "email": email
         }
-
+        document.getElementById("btn-login").disabled = true;
         loginUser(JSON.stringify(jsonData))
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
+                document.getElementById("btn-login").disabled = false;
                 if (result['message'] === 200) {
                     if (result['login']) {
                         setIsLogged(true)
@@ -199,7 +199,7 @@ export default function Login() {
                                             </Form>
                                         </CardBody>
                                         <CardFooter>
-                                            <Button className="btn-round" color="info" size="lg" onClick={(e) => login(e)}>
+                                            <Button className="btn-round" id="btn-login" color="info" size="lg" onClick={(e) => login(e)}>
                                                 Login
                                             </Button>
                                         </CardFooter>

@@ -108,6 +108,7 @@ export default function CreateUserForm() {
         e.preventDefault();
         setShowFeedback(false);
 
+
         var role = document.getElementById('in-role').checked
 
         var jsonData = {
@@ -119,11 +120,14 @@ export default function CreateUserForm() {
 
         if (validateInputs()) {
 
+            document.getElementById("btn-create").disabled = true;
+
             createUser(JSON.stringify(jsonData))
                 .then(response => response.json())
                 .then(result => {
-                    console.log('Success:', result);
+                    document.getElementById("btn-create").disabled = false;
                     if (result['message'] === 200) {
+                        alert("User has been created!")
                         navigate('/admin/users');
                     }
                 })
@@ -250,7 +254,7 @@ export default function CreateUserForm() {
                                                     </Form>
                                                 </CardBody>
                                                 <CardFooter>
-                                                    <Button className="btn-round" color="info" size="lg" onClick={(e) => create(e)}>
+                                                    <Button className="btn-round" color="info" id="btn-create" size="lg" onClick={(e) => create(e)}>
                                                         Create
                                                     </Button>
                                                 </CardFooter>

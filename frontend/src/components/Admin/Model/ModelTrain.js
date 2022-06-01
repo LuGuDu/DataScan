@@ -59,6 +59,9 @@ export default function Train() {
         $('.AlertPredictorsContainer').hide()
         $('.AlertPrunningContainer').hide()
 
+        document.getElementById("btn-updatePredictors").disabled = true;
+        document.getElementById("btn-trainModel").disabled = true;
+
         // Specify how to clean up after this effect:
         return function cleanup() {
             document.body.classList.toggle("profile-page");
@@ -66,12 +69,38 @@ export default function Train() {
             $('.AlertContainer').hide()
             $('.AlertPredictorsContainer').hide()
             $('.AlertPrunningContainer').hide()
+
         };
     }, []);
+
+    const cleanTableAndAlerts = () => {
+        var tableHeaderRowCount = 1;
+        var table = document.getElementById('myTable');
+        if (table != null) {
+            var rowCount = table.rows.length;
+            for (var i = tableHeaderRowCount; i < rowCount; i++) {
+                table.deleteRow(tableHeaderRowCount);
+            }
+
+            $('.AlertPredictorsContainer').hide()
+            $('.AlertPrunningContainer').hide()
+        }
+    }
 
 
     const train = (e) => {
         e.preventDefault();
+
+        cleanTableAndAlerts();
+
+        $('.AlertContainer').show()
+        $('.AccuracyAlert').text("Analyzing file, wait please...")
+
+        //Disable other buttons
+        document.getElementById("file").disabled = true;
+        document.getElementById("btn-analyzeFile").disabled = true;
+        document.getElementById("btn-updatePredictors").disabled = true;
+        document.getElementById("btn-trainModel").disabled = true;
 
         const fileField = document.querySelector('input[type="file"]');
         const formData = new FormData();
@@ -84,7 +113,12 @@ export default function Train() {
                 if (result['message'] === 200) {
 
                     $('.AlertContainer').show()
-                    $('.AccuracyAlert').text("Listo! - Seleccione los predictores")
+                    $('.AccuracyAlert').text("Ready! - Now choose the predictors")
+
+                    //Enable buttons
+                    document.getElementById("file").disabled = false;
+                    document.getElementById("btn-analyzeFile").disabled = false;
+                    document.getElementById("btn-updatePredictors").disabled = false;
 
                     var myObj = JSON.parse(result['predictors']);
                     var counter = 1;
@@ -141,14 +175,25 @@ export default function Train() {
 
         var predictors = [];
 
+        document.getElementById("btn-trainModel").disabled = true;
+
         var resume_table = document.getElementById("myTable");
+
+        var predictorsCount = 0;
 
         $('table [type="checkbox"]').each(function (i, chk) {
             if (chk.checked) {
                 //console.log(resume_table.rows[i + 1].cells[1].innerText, "Checked!");
                 predictors.push(resume_table.rows[i + 1].cells[1].innerText)
+                predictorsCount += 1
             }
         });
+
+        if (predictorsCount < 2) {
+            $('.AlertPredictorsContainer').show()
+            $('.AccuracyPredictorsAlert').text("You must choose at least 2 predictors")
+            return
+        }
 
         var jsonData = {}
         jsonData["predictors"] = predictors
@@ -170,14 +215,16 @@ export default function Train() {
 
     const prunning = () => {
         $('.AlertPrunningContainer').show()
-        $('.AccuracyPrunningAlert').text("Calculando accuracy...")
+        $('.AccuracyPrunningAlert').text("Calculating the accuracy, wait please...")
+        document.getElementById("btn-trainModel").disabled = true;
 
         getPrunningData()
             .then(response => response.json())
             .then(result => {
                 console.log('Success:', result);
                 if (result['message'] === 200) {
-                    $('.AccuracyPrunningAlert').text("Accuracy (podado): " + result["accuracy"])
+                    $('.AccuracyPrunningAlert').text("Accuracy (with pruning): " + result["accuracy"])
+                    document.getElementById("btn-trainModel").disabled = false;
                 }
             })
             .catch(error => {
@@ -188,6 +235,11 @@ export default function Train() {
     const navigate = useNavigate();
 
     const finishTrain = () => {
+
+        document.getElementById("file").disabled = true;
+        document.getElementById("btn-analyzeFile").disabled = true;
+        document.getElementById("btn-updatePredictors").disabled = true;
+        document.getElementById("btn-trainModel").disabled = true;
 
         var jsonData = {}
 
@@ -237,8 +289,8 @@ export default function Train() {
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <button type="submit" className="btn btn-primary" onClick={(e) => train(e)} >
-                                                        Train
+                                                    <button type="submit" id="btn-analyzeFile" className="btn btn-info btn-round" onClick={(e) => train(e)} >
+                                                        Analyze file
                                                     </button>
                                                 </Form>
                                                 <div className="AlertContainer">
@@ -278,7 +330,7 @@ export default function Train() {
                                                 </Col>
                                             </Row>
                                             <Row>
-                                                <button type="submit" className="btn btn-primary" onClick={(e) => checkPredictors(e)} >
+                                                <button type="submit" id="btn-updatePredictors" className="btn btn-info btn-round" onClick={(e) => checkPredictors(e)} >
                                                     Update predictors
                                                 </button>
                                             </Row>
@@ -311,7 +363,7 @@ export default function Train() {
                                                                 <FormGroup check className="text-left">
                                                                     <Label check>
                                                                         <Input id="prunning" type="checkbox" />
-                                                                        <span className="form-check-sign" />I want to pruning the tree
+                                                                        <span className="form-check-sign" />I want to pruning the model tree
                                                                     </Label>
                                                                 </FormGroup>
                                                             </Row>
@@ -320,8 +372,8 @@ export default function Train() {
                                                 </Col>
                                             </Row>
                                             <Row>
-                                                <button type="submit" className="btn btn-primary" onClick={(e) => finishTrain(e)} >
-                                                    End train
+                                                <button type="submit" className="btn btn-info btn-round" id="btn-trainModel" onClick={(e) => finishTrain(e)} >
+                                                    Train the model
                                                 </button>
                                             </Row>
                                         </Container>

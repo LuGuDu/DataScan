@@ -185,6 +185,7 @@ export default function CreateUserForm() {
 
                     document.getElementById("in-username").value = result['user']['username'];
                     document.getElementById("in-email").value = result['user']['email'];
+                    document.getElementById("in-pass").value = "";
                     document.getElementById("in-role").checked = result['user']['role'];
                 }
             })
@@ -255,11 +256,11 @@ export default function CreateUserForm() {
                 jsonData["password"] = password
             };
         }
-
+        document.getElementById("btn-modify").disabled = true;
         modifyUser(JSON.stringify(jsonData))
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
+                document.getElementById("btn-modify").disabled = false;
                 if (result['message'] === 200) {
                     getUsers()
                     $('.AlertContainer').show()
@@ -402,7 +403,7 @@ export default function CreateUserForm() {
                                                     </Form>
                                                 </CardBody>
                                                 <CardFooter>
-                                                    <Button className="btn-round" color="info" size="lg" onClick={(e) => modify(e)}>
+                                                    <Button className="btn-round" id="btn-modify" color="info" size="lg" onClick={(e) => modify(e)}>
                                                         Modify
                                                     </Button>
                                                 </CardFooter>
