@@ -82,7 +82,7 @@ export default function IndexNavbar() {
     <Navbar className={"fixed-top bg-info"} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/login" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
+          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
             <span>DataScan </span>
           </NavbarBrand>
           <button
@@ -105,7 +105,7 @@ export default function IndexNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/login" onClick={(e) => smoothScroll(e)}>
+                <a href="/" onClick={(e) => smoothScroll(e)}>
                   DataScan
                 </a>
               </Col>

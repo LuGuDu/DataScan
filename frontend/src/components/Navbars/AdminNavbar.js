@@ -68,7 +68,7 @@ export default function AdminNavbar() {
 
   const goBack = (e) => {
     e.preventDefault();
-    navigate('/');
+    navigate('/welcome');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -99,7 +99,7 @@ export default function AdminNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/" onClick={(e) => smoothScroll(e)}>
+                <a href="/welcome" onClick={(e) => smoothScroll(e)}>
                   DataScan
                 </a>
               </Col>

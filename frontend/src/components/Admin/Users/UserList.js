@@ -4,6 +4,10 @@ import classnames from "classnames";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import {
     Container,
     Row,
@@ -95,9 +99,7 @@ export default function CreateUserForm() {
         getUserList()
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
                 if (result['message'] === 200) {
-                    console.log(result['users'])
 
                     var counter = 1;
                     result['users'].forEach((element) => {
@@ -238,7 +240,7 @@ export default function CreateUserForm() {
             setIsValidEmail(false);
             setIsInvalidEmail(true);
             return
-        } 
+        }
 
         var changePass = document.getElementById('in-changePass').checked
 
@@ -270,15 +272,15 @@ export default function CreateUserForm() {
     }
 
     React.useEffect(() => {
-        document.body.classList.toggle("profile-page");
-        document.body.classList.toggle("index-page");
+
         $('.AlertContainer').hide()
-        getUsers()
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            $('.AlertContainer').hide()
-            document.body.classList.toggle("profile-page");
-            document.body.classList.toggle("index-page");
+        var table = document.getElementById('myTable');
+
+        if(table != null){
+            getUsers()
+        }
+
+        return () => {
         };
     }, []);
 
@@ -292,180 +294,184 @@ export default function CreateUserForm() {
             </FormFeedback>);
     }
 
-
     return (
         <>
-            <AdminNavbar />
-            <div className="wrapper">
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <section className="section section-lg">
-                            <Container>
-                                <h5 className="text-on-back">User</h5>
-                                <Row>
-                                    <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
-                                        <div
-                                            className="square square-7"
-                                            id="square7"
-                                        />
-                                        <div
-                                            className="square square-8"
-                                            id="square8"
-                                        />
-                                        <Card className="card-register">
-                                            <CardHeader>
-                                                <CardImg
-                                                    alt="..."
-                                                    src={require("assets/img/square1.png").default}
-                                                />
-                                                <CardTitle tag="h5">Modify</CardTitle>
-                                            </CardHeader>
-                                            <CardBody>
-                                                <Form className="form" autocomplete="off">
-                                                    <InputGroup
-                                                        className={classnames({
-                                                            "input-group-focus": fullNameFocus,
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-single-02" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            id="in-username"
-                                                            placeholder="Username"
-                                                            type="text"
-                                                            onFocus={(e) => setFullNameFocus(true)}
-                                                            onBlur={(e) => setFullNameFocus(false)}
-                                                        />
-                                                    </InputGroup>
-                                                    <InputGroup
-                                                        className={classnames({
-                                                            "input-group-focus": emailFocus,
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-email-85" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            id="in-email"
-                                                            placeholder="Email"
-                                                            type="text"
-                                                            readonly="readonly"
-                                                            onFocus={(e) => setEmailFocus(true)}
-                                                            onBlur={(e) => setEmailFocus(false)}
-                                                            valid={isValidEmail}
-                                                            invalid={isInvalidEmail}
-                                                        />
-                                                        {showFeedback ? renderFeedback(isValidEmail,
-                                                            "Valid email.", "No user is selected.") : null}
-                                                    </InputGroup>
-                                                    <InputGroup
-                                                        className={classnames({
-                                                            "input-group-focus": passwordFocus,
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-lock-circle" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            id="in-pass"
-                                                            placeholder="New password"
-                                                            type="password"
-                                                            onFocus={(e) => setPasswordFocus(true)}
-                                                            onBlur={(e) => setPasswordFocus(false)}
-                                                            invalid={isInvalidPwd}
-                                                            Title={passRequirements} />
-                                                        {showFeedback ? renderFeedback(isValidPwd,
-                                                            "Valid password.", "Invalid password.") : null}
-                                                    </InputGroup>
-                                                    <FormGroup className="text-center">
-                                                        <Row>
-                                                            <Col>
-                                                                <Input type="checkbox" id="in-role" />Admin
-                                                            </Col>
-                                                            <Col>
-                                                                <Input type="checkbox" id="in-changePass" />Change Pass?
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Form>
-                                            </CardBody>
-                                            <CardFooter>
-                                                <Button className="btn-round" color="info" size="lg" onClick={(e) => modify(e)}>
-                                                    Modify
-                                                </Button>
-                                            </CardFooter>
-                                        </Card>
-                                    </Col>
-                                    <Col className="offset-lg-0 offset-md-3" lg="7" md="7">
-                                        <div
-                                            className="square square-7"
-                                            id="square7"
-                                        />
-                                        <div
-                                            className="square square-8"
-                                            id="square8"
-                                        />
-                                        <Card className="card-register">
-                                            <CardHeader>
-                                                <CardImg
-                                                    alt="..."
-                                                    src={require("assets/img/square1.png").default}
-                                                />
-                                                <CardTitle tag="h5">list</CardTitle>
-                                            </CardHeader>
-                                            <CardBody>
-                                                <Row lg="15" >
-                                                    <Col lg="10" md="5" >
-                                                        <Table id="myTable" data-show-toggle="false" data-expand-first="true">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th className="text-left">#</th>
-                                                                    <th classname="username text-left">Username</th>
-                                                                    <th className="email text-left">Email</th>
-                                                                    <th className="text-right">Actions</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </Table>
-                                                    </Col>
-                                                </Row>
-                                            </CardBody>
-                                            <CardFooter>
-                                                <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
-                                                    Go up
-                                                </Button>
-                                            </CardFooter>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </Container>
-                            <Container>
-                                <Row>
-                                    <div className="AlertContainer">
-                                        <Alert className="Alert" color="info">
-                                            <strong></strong>
-                                        </Alert >
-                                    </div>
-                                </Row>
-                            </Container>
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            >
+                <AdminNavbar />
+                <div className="wrapper">
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <section className="section section-lg">
+                                <Container>
+                                    <h5 className="text-on-back">User</h5>
+                                    <Row>
+                                        <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                                            <div
+                                                className="square square-7"
+                                                id="square7"
+                                            />
+                                            <div
+                                                className="square square-8"
+                                                id="square8"
+                                            />
+                                            <Card className="card-register">
+                                                <CardHeader>
+                                                    <CardImg
+                                                        alt="..."
+                                                        src={require("assets/img/square1.png").default}
+                                                    />
+                                                    <CardTitle tag="h5">Modify</CardTitle>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <Form className="form" autocomplete="off">
+                                                        <InputGroup
+                                                            className={classnames({
+                                                                "input-group-focus": fullNameFocus,
+                                                            })}
+                                                        >
+                                                            <InputGroupAddon addonType="prepend">
+                                                                <InputGroupText>
+                                                                    <i className="tim-icons icon-single-02" />
+                                                                </InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <Input
+                                                                id="in-username"
+                                                                placeholder="Username"
+                                                                type="text"
+                                                                onFocus={(e) => setFullNameFocus(true)}
+                                                                onBlur={(e) => setFullNameFocus(false)}
+                                                            />
+                                                        </InputGroup>
+                                                        <InputGroup
+                                                            className={classnames({
+                                                                "input-group-focus": emailFocus,
+                                                            })}
+                                                        >
+                                                            <InputGroupAddon addonType="prepend">
+                                                                <InputGroupText>
+                                                                    <i className="tim-icons icon-email-85" />
+                                                                </InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <Input
+                                                                id="in-email"
+                                                                placeholder="Email"
+                                                                type="text"
+                                                                readonly="readonly"
+                                                                onFocus={(e) => setEmailFocus(true)}
+                                                                onBlur={(e) => setEmailFocus(false)}
+                                                                valid={isValidEmail}
+                                                                invalid={isInvalidEmail}
+                                                            />
+                                                            {showFeedback ? renderFeedback(isValidEmail,
+                                                                "Valid email.", "No user is selected.") : null}
+                                                        </InputGroup>
+                                                        <InputGroup
+                                                            className={classnames({
+                                                                "input-group-focus": passwordFocus,
+                                                            })}
+                                                        >
+                                                            <InputGroupAddon addonType="prepend">
+                                                                <InputGroupText>
+                                                                    <i className="tim-icons icon-lock-circle" />
+                                                                </InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <Input
+                                                                id="in-pass"
+                                                                placeholder="New password"
+                                                                type="password"
+                                                                onFocus={(e) => setPasswordFocus(true)}
+                                                                onBlur={(e) => setPasswordFocus(false)}
+                                                                invalid={isInvalidPwd}
+                                                                Title={passRequirements} />
+                                                            {showFeedback ? renderFeedback(isValidPwd,
+                                                                "Valid password.", "Invalid password.") : null}
+                                                        </InputGroup>
+                                                        <FormGroup className="text-center">
+                                                            <Row>
+                                                                <Col>
+                                                                    <Input type="checkbox" id="in-role" />Admin
+                                                                </Col>
+                                                                <Col>
+                                                                    <Input type="checkbox" id="in-changePass" />Change Pass?
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Form>
+                                                </CardBody>
+                                                <CardFooter>
+                                                    <Button className="btn-round" color="info" size="lg" onClick={(e) => modify(e)}>
+                                                        Modify
+                                                    </Button>
+                                                </CardFooter>
+                                            </Card>
+                                        </Col>
+                                        <Col className="offset-lg-0 offset-md-3" lg="7" md="7">
+                                            <div
+                                                className="square square-7"
+                                                id="square7"
+                                            />
+                                            <div
+                                                className="square square-8"
+                                                id="square8"
+                                            />
+                                            <Card className="card-register">
+                                                <CardHeader>
+                                                    <CardImg
+                                                        alt="..."
+                                                        src={require("assets/img/square1.png").default}
+                                                    />
+                                                    <CardTitle tag="h5">list</CardTitle>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <Row lg="15" >
+                                                        <Col lg="10" md="5" >
+                                                            <Table id="myTable" data-show-toggle="false" data-expand-first="true">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th className="text-left">#</th>
+                                                                        <th classname="username text-left">Username</th>
+                                                                        <th className="email text-left">Email</th>
+                                                                        <th className="text-right">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </Table>
+                                                        </Col>
+                                                    </Row>
+                                                </CardBody>
+                                                <CardFooter>
+                                                    <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
+                                                        Go up
+                                                    </Button>
+                                                </CardFooter>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                                <Container>
+                                    <Row>
+                                        <div className="AlertContainer">
+                                            <Alert className="Alert" color="info">
+                                                <strong></strong>
+                                            </Alert >
+                                        </div>
+                                    </Row>
+                                </Container>
 
-                            <Container>
-                                <Row>
+                                <Container>
+                                    <Row>
 
-                                </Row>
-                            </Container>
-                        </section>
+                                    </Row>
+                                </Container>
+                            </section>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PermissionsGate>
         </>
     );
 };

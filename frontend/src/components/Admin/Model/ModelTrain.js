@@ -4,6 +4,10 @@ import $ from 'jquery';
 
 import AdminNavBar from "components/Navbars/AdminNavbar"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import {
     Container,
     Row,
@@ -188,7 +192,7 @@ export default function Train() {
         var jsonData = {}
 
         var remember = document.getElementById('prunning');
-        if (remember.checked){
+        if (remember.checked) {
             jsonData["prunning"] = true
         } else {
             jsonData["prunning"] = false
@@ -208,121 +212,126 @@ export default function Train() {
 
     return (
         <>
-            <AdminNavBar />
-            <div className="wrapper">
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <Container >
-                            <Row >
-                                <Col md="10">
-                                    <Card className="card-plain">
-                                        <CardHeader>
-                                            <h5 className="text-on-back">Select</h5>
-                                        </CardHeader>
-                                        <CardBody>
-                                            <Form>
-                                                <div className="form-group" >
-                                                    <div className="custom-file" >
-                                                        <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
-                                                        <label id="labelFile" className="custom-file-label" htmlFor="file">
-                                                            Select file
-                                                        </label>
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            >
+                <AdminNavBar />
+                <div className="wrapper">
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <Container >
+                                <Row >
+                                    <Col md="10">
+                                        <Card className="card-plain">
+                                            <CardHeader>
+                                                <h5 className="text-on-back">Select</h5>
+                                            </CardHeader>
+                                            <CardBody>
+                                                <Form>
+                                                    <div className="form-group" >
+                                                        <div className="custom-file" >
+                                                            <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
+                                                            <label id="labelFile" className="custom-file-label" htmlFor="file">
+                                                                Select file
+                                                            </label>
+                                                        </div>
                                                     </div>
+                                                    <button type="submit" className="btn btn-primary" onClick={(e) => train(e)} >
+                                                        Train
+                                                    </button>
+                                                </Form>
+                                                <div className="AlertContainer">
+                                                    <Alert className="AccuracyAlert" color="info">
+                                                        <strong>Train completed!</strong>
+                                                    </Alert >
                                                 </div>
-                                                <button type="submit" className="btn btn-primary" onClick={(e) => train(e)} >
-                                                    Train
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <section className="section section-lg">
+                                        <Container>
+                                            <Row>
+                                                <Col md="12">
+                                                    <Card className="card-plain">
+                                                        <CardHeader>
+                                                            <h5 className="text-on-back">Predictors</h5>
+                                                        </CardHeader>
+                                                        <CardBody>
+                                                            <Col className="" lg="12" md="6" >
+                                                                <Table className="table responsive" id="myTable">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th className="text-left">#</th>
+                                                                            <th className="text-left">Predictor</th>
+                                                                            <th className="text-left">Importance</th>
+                                                                            <th className="text-left">Select</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody> </tbody>
+                                                                </Table>
+                                                            </Col>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <button type="submit" className="btn btn-primary" onClick={(e) => checkPredictors(e)} >
+                                                    Update predictors
                                                 </button>
-                                            </Form>
-                                            <div className="AlertContainer">
-                                                <Alert className="AccuracyAlert" color="info">
-                                                    <strong>Train completed!</strong>
-                                                </Alert >
-                                            </div>
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <section className="section section-lg">
-                                    <Container>
-                                        <Row>
-                                            <Col md="12">
-                                                <Card className="card-plain">
-                                                    <CardHeader>
-                                                        <h5 className="text-on-back">Predictors</h5>
-                                                    </CardHeader>
-                                                    <CardBody>
-                                                        <Col className="" lg="12" md="6" >
-                                                            <Table className="table responsive" id="myTable">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th className="text-left">#</th>
-                                                                        <th className="text-left">Predictor</th>
-                                                                        <th className="text-left">Importance</th>
-                                                                        <th className="text-left">Select</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody> </tbody>
-                                                            </Table>
-                                                        </Col>
-                                                    </CardBody>
-                                                </Card>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <button type="submit" className="btn btn-primary" onClick={(e) => checkPredictors(e)} >
-                                                Update predictors
-                                            </button>
-                                        </Row>
-                                        <Row>
-                                            <div className="AlertPredictorsContainer">
-                                                <Alert className="AccuracyPredictorsAlert" color="info">
-                                                </Alert >
-                                            </div>
-                                        </Row>
-                                    </Container>
-                                </section>
-                            </Row>
-                            <Row>
-                                <section className="section section-lg">
-                                    <Container>
-                                        <Row>
-                                            <Col md="12">
-                                                <Card className="card-plain">
-                                                    <CardHeader>
-                                                        <h5 className="text-on-back">Pruning</h5>
-                                                    </CardHeader>
-                                                    <CardBody>
-                                                        <Col className="" lg="12" md="6" >
-                                                            <div className="AlertPrunningContainer">
-                                                                <Alert className="AccuracyPrunningAlert" color="info">
-                                                                </Alert >
-                                                            </div>
-                                                        </Col>
-                                                        <Row>
-                                                            <FormGroup check className="text-left">
-                                                                <Label check>
-                                                                    <Input id="prunning" type="checkbox" />
-                                                                    <span className="form-check-sign" />I want to pruning the tree
-                                                                </Label>
-                                                            </FormGroup>
-                                                        </Row>
-                                                    </CardBody>
-                                                </Card>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <button type="submit" className="btn btn-primary" onClick={(e) => finishTrain(e)} >
-                                                End train
-                                            </button>
-                                        </Row>
-                                    </Container>
-                                </section>
-                            </Row>
-                        </Container>
+                                            </Row>
+                                            <Row>
+                                                <div className="AlertPredictorsContainer">
+                                                    <Alert className="AccuracyPredictorsAlert" color="info">
+                                                    </Alert >
+                                                </div>
+                                            </Row>
+                                        </Container>
+                                    </section>
+                                </Row>
+                                <Row>
+                                    <section className="section section-lg">
+                                        <Container>
+                                            <Row>
+                                                <Col md="12">
+                                                    <Card className="card-plain">
+                                                        <CardHeader>
+                                                            <h5 className="text-on-back">Pruning</h5>
+                                                        </CardHeader>
+                                                        <CardBody>
+                                                            <Col className="" lg="12" md="6" >
+                                                                <div className="AlertPrunningContainer">
+                                                                    <Alert className="AccuracyPrunningAlert" color="info">
+                                                                    </Alert >
+                                                                </div>
+                                                            </Col>
+                                                            <Row>
+                                                                <FormGroup check className="text-left">
+                                                                    <Label check>
+                                                                        <Input id="prunning" type="checkbox" />
+                                                                        <span className="form-check-sign" />I want to pruning the tree
+                                                                    </Label>
+                                                                </FormGroup>
+                                                            </Row>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <button type="submit" className="btn btn-primary" onClick={(e) => finishTrain(e)} >
+                                                    End train
+                                                </button>
+                                            </Row>
+                                        </Container>
+                                    </section>
+                                </Row>
+                            </Container>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PermissionsGate>
         </>
     );
 };

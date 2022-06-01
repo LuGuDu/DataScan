@@ -1,8 +1,14 @@
 import React from "react";
 
-import IndexNavbar from "components/Navbars/IndexNavbar.js"
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+
 import ContactHeader from "components/PageHeader/ContactHeader.js"
+
+import IndexNavbar from "components/Navbars/IndexNavbar.js"
+import LoginNavBar from "components/Navbars/LoginNavBar"
 import Footer from "components/Footer/Footer.js"
+import NoLoggedFooter from "components/Footer/NoLoggedFooter.js"
 
 import {
     Container,
@@ -21,15 +27,26 @@ export default function Contact() {
 
         // Specify how to clean up after this effect:
         return function cleanup() {
-          document.body.classList.toggle("profile-page");
-          document.body.classList.toggle("index-page");
+            document.body.classList.toggle("profile-page");
+            document.body.classList.toggle("index-page");
 
         };
-      },[]);
+    }, []);
 
     return (
         <>
-            <IndexNavbar />
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+            >
+                <IndexNavbar />
+            </PermissionsGate>
+
+            <PermissionsGate
+                scopes={[SCOPES.noLoggedCanAccess]}
+            >
+                <LoginNavBar />
+            </PermissionsGate>
+
             <div className="wrapper">
                 <ContactHeader />
                 <div className="main">
@@ -54,7 +71,18 @@ export default function Contact() {
                         </section>
                     </div>
                 </div>
-                <Footer />
+
+                <PermissionsGate
+                    scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+                >
+                    <Footer />
+                </PermissionsGate>
+
+                <PermissionsGate
+                    scopes={[SCOPES.noLoggedCanAccess]}
+                >
+                    <NoLoggedFooter />
+                </PermissionsGate>
             </div>
         </>
     );

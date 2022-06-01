@@ -2,13 +2,16 @@ import React from "react";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import {
     Container,
     Row,
     Col,
     Card,
     CardTitle,
-    CardImg,
     CardHeader,
     CardBody,
     CardFooter,
@@ -29,7 +32,6 @@ export default function ModelHistory() {
         getTrainModelHistory()
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
                 if (result['message'] === 200) {
 
                     var counter = 1;
@@ -87,13 +89,12 @@ export default function ModelHistory() {
 
     React.useEffect(() => {
 
-        document.body.classList.toggle("profile-page");
-        document.body.classList.toggle("index-page");
-        getModelHistory()
-        // Specify how to clean up after this effect:
+        var lista = document.getElementById("myTable");
+        if(lista != null) {
+            getModelHistory()
+        }
+
         return function cleanup() {
-            document.body.classList.toggle("profile-page");
-            document.body.classList.toggle("index-page");
         };
     }, []);
 
@@ -104,54 +105,59 @@ export default function ModelHistory() {
 
     return (
         <>
-            <AdminNavbar />
-            <div className="wrapper">
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            >
+                <AdminNavbar />
+                <div className="wrapper">
 
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <section className="section section-lg">
-                            <Container>
-                                <h5 className="text-on-back">Model</h5>
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <section className="section section-lg">
+                                <Container>
+                                    <h5 className="text-on-back">Model</h5>
 
-                                <Card >
-                                    <CardHeader>
-                                        <CardTitle tag="h3">History list</CardTitle>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Row>
-                                            <Col>
-                                                <Table responsive id="myTable" data-show-toggle="false" data-expand-first="true">
-                                                    <thead>
-                                                        <tr>
-                                                            <th className="text-left">#</th>
-                                                            <th classname="text-left">Archivo usado</th>
-                                                            <th className="text-left">Fecha</th>
-                                                            <th className="text-left">Tiempo </th>
-                                                            <th className="text-left">Podado</th>
-                                                            <th className="text-left">Accuracy</th>
-                                                            <th className="text-left">Filas</th>
-                                                            <th className="text-left">Columnas</th>
-                                                            <th className="text-left">Ataques</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                    <Card >
+                                        <CardHeader>
+                                            <CardTitle tag="h3">History list</CardTitle>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Row>
+                                                <Col>
+                                                    <Table responsive id="myTable" data-show-toggle="false" data-expand-first="true">
+                                                        <thead>
+                                                            <tr>
+                                                                <th className="text-left">#</th>
+                                                                <th className="text-left">Archivo usado</th>
+                                                                <th className="text-left">Fecha</th>
+                                                                <th className="text-left">Tiempo </th>
+                                                                <th className="text-left">Podado</th>
+                                                                <th className="text-left">Accuracy</th>
+                                                                <th className="text-left">Filas</th>
+                                                                <th className="text-left">Columnas</th>
+                                                                <th className="text-left">Ataques</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                                                    </tbody>
-                                                </Table>
-                                            </Col>
-                                        </Row>
-                                    </CardBody>
-                                    <CardFooter>
-                                        <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
-                                            Go up
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            </Container>
-                        </section>
+                                                        </tbody>
+                                                    </Table>
+                                                </Col>
+                                            </Row>
+                                        </CardBody>
+                                        <CardFooter>
+                                            <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
+                                                Go up
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </Container>
+                            </section>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PermissionsGate>
         </>
     );
 };

@@ -4,6 +4,10 @@ import classnames from "classnames";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import {
     Button,
     Card,
@@ -130,13 +134,7 @@ export default function CreateUserForm() {
     }
 
     React.useEffect(() => {
-        document.body.classList.toggle("profile-page");
-        document.body.classList.toggle("index-page");
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            document.body.classList.toggle("profile-page");
-            document.body.classList.toggle("index-page");
-        };
+        return function cleanup() {};
     }, []);
 
     const renderFeedback = (input, success, error) => {
@@ -151,116 +149,121 @@ export default function CreateUserForm() {
 
     return (
         <>
-            <AdminNavbar />
-            <div className="wrapper">
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            >
+                <AdminNavbar />
+                <div className="wrapper">
 
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <section className="section section-lg">
-                            <Container>
-                                <h5 className="text-on-back">User</h5>
-                                <Row>
-                                    <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
-                                        <div
-                                            className="square square-7"
-                                            id="square7"
-                                        />
-                                        <div
-                                            className="square square-8"
-                                            id="square8"
-                                        />
-                                        <Card className="card-register">
-                                            <CardHeader>
-                                                <CardImg
-                                                    alt="..."
-                                                    src={require("assets/img/square1.png").default}
-                                                />
-                                                <CardTitle tag="h5">Create</CardTitle>
-                                            </CardHeader>
-                                            <CardBody>
-                                                <Form className="form" autocomplete="off">
-                                                    <InputGroup
-                                                        className={classnames({
-                                                            "input-group-focus": fullNameFocus,
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-single-02" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            placeholder="Username"
-                                                            type="text"
-                                                            onFocus={(e) => setFullNameFocus(true)}
-                                                            onBlur={(e) => setFullNameFocus(false)}
-                                                            onChange={e => setUsername(e.target.value)}
-                                                        />
-                                                    </InputGroup>
-                                                    <InputGroup
-                                                        className={classnames({
-                                                            "input-group-focus": emailFocus,
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-email-85" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            placeholder="Email"
-                                                            type="text"
-                                                            onFocus={(e) => setEmailFocus(true)}
-                                                            onBlur={(e) => setEmailFocus(false)}
-                                                            onChange={e => setEmail(e.target.value)}
-                                                            valid={isValidEmail}
-                                                            invalid={isInvalidEmail}
-                                                        />
-                                                        {showFeedback ? renderFeedback(isValidEmail,
-                                                            "Valid email.", "Invalid email.") : null}
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <section className="section section-lg">
+                                <Container>
+                                    <h5 className="text-on-back">User</h5>
+                                    <Row>
+                                        <Col className="offset-lg-0 offset-md-3" lg="5" md="6">
+                                            <div
+                                                className="square square-7"
+                                                id="square7"
+                                            />
+                                            <div
+                                                className="square square-8"
+                                                id="square8"
+                                            />
+                                            <Card className="card-register">
+                                                <CardHeader>
+                                                    <CardImg
+                                                        alt="..."
+                                                        src={require("assets/img/square1.png").default}
+                                                    />
+                                                    <CardTitle tag="h5">Create</CardTitle>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <Form className="form" autocomplete="off">
+                                                        <InputGroup
+                                                            className={classnames({
+                                                                "input-group-focus": fullNameFocus,
+                                                            })}
+                                                        >
+                                                            <InputGroupAddon addonType="prepend">
+                                                                <InputGroupText>
+                                                                    <i className="tim-icons icon-single-02" />
+                                                                </InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <Input
+                                                                placeholder="Username"
+                                                                type="text"
+                                                                onFocus={(e) => setFullNameFocus(true)}
+                                                                onBlur={(e) => setFullNameFocus(false)}
+                                                                onChange={e => setUsername(e.target.value)}
+                                                            />
+                                                        </InputGroup>
+                                                        <InputGroup
+                                                            className={classnames({
+                                                                "input-group-focus": emailFocus,
+                                                            })}
+                                                        >
+                                                            <InputGroupAddon addonType="prepend">
+                                                                <InputGroupText>
+                                                                    <i className="tim-icons icon-email-85" />
+                                                                </InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <Input
+                                                                placeholder="Email"
+                                                                type="text"
+                                                                onFocus={(e) => setEmailFocus(true)}
+                                                                onBlur={(e) => setEmailFocus(false)}
+                                                                onChange={e => setEmail(e.target.value)}
+                                                                valid={isValidEmail}
+                                                                invalid={isInvalidEmail}
+                                                            />
+                                                            {showFeedback ? renderFeedback(isValidEmail,
+                                                                "Valid email.", "Invalid email.") : null}
 
-                                                    </InputGroup>
-                                                    <InputGroup
-                                                        className={classnames({
-                                                            "input-group-focus": passwordFocus,
-                                                        })}
-                                                    >
-                                                        <InputGroupAddon addonType="prepend">
-                                                            <InputGroupText>
-                                                                <i className="tim-icons icon-lock-circle" />
-                                                            </InputGroupText>
-                                                        </InputGroupAddon>
-                                                        <Input
-                                                            placeholder="Password"
-                                                            type="password"
-                                                            onFocus={(e) => setPasswordFocus(true)}
-                                                            onBlur={(e) => setPasswordFocus(false)}
-                                                            onChange={e => setPassword(e.target.value)}
-                                                            valid={isValidPwd}
-                                                            invalid={isInvalidPwd}
-                                                            Title={passRequirements} />
-                                                        {showFeedback ? renderFeedback(isValidPwd,
-                                                            "Valid password.", "Invalid password.") : null}
-                                                    </InputGroup>
-                                                    <FormGroup className="text-center">
-                                                        <Input type="checkbox" id="in-role" />Admin
-                                                    </FormGroup>
-                                                </Form>
-                                            </CardBody>
-                                            <CardFooter>
-                                                <Button className="btn-round" color="info" size="lg" onClick={(e) => create(e)}>
-                                                    Create
-                                                </Button>
-                                            </CardFooter>
-                                        </Card>
-                                    </Col>
-                                </Row>
+                                                        </InputGroup>
+                                                        <InputGroup
+                                                            className={classnames({
+                                                                "input-group-focus": passwordFocus,
+                                                            })}
+                                                        >
+                                                            <InputGroupAddon addonType="prepend">
+                                                                <InputGroupText>
+                                                                    <i className="tim-icons icon-lock-circle" />
+                                                                </InputGroupText>
+                                                            </InputGroupAddon>
+                                                            <Input
+                                                                placeholder="Password"
+                                                                type="password"
+                                                                onFocus={(e) => setPasswordFocus(true)}
+                                                                onBlur={(e) => setPasswordFocus(false)}
+                                                                onChange={e => setPassword(e.target.value)}
+                                                                valid={isValidPwd}
+                                                                invalid={isInvalidPwd}
+                                                                Title={passRequirements} />
+                                                            {showFeedback ? renderFeedback(isValidPwd,
+                                                                "Valid password.", "Invalid password.") : null}
+                                                        </InputGroup>
+                                                        <FormGroup className="text-center">
+                                                            <Input type="checkbox" id="in-role" />Admin
+                                                        </FormGroup>
+                                                    </Form>
+                                                </CardBody>
+                                                <CardFooter>
+                                                    <Button className="btn-round" color="info" size="lg" onClick={(e) => create(e)}>
+                                                        Create
+                                                    </Button>
+                                                </CardFooter>
+                                            </Card>
+                                        </Col>
+                                    </Row>
 
-                            </Container>
-                        </section>
+                                </Container>
+                            </section>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PermissionsGate>
         </>
     );
 };

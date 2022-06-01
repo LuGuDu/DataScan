@@ -18,32 +18,41 @@
 import React from "react";
 
 // core components
-import NoLoggedNavbar from "components/Navbars/NoLoggedNavbar.js";
+import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import PageHeader from "components/PageHeader/PageHeader.js";
-import NoLoggedFooter from "components/Footer/NoLoggedFooter.js";
+import Footer from "components/Footer/Footer.js";
 
 // sections for this page/view
 import AnalyzeInfo from "views/IndexSections/AnalyzeInfo.js";
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
 
-export default function Index() {
+
+export default function Welcome() {
   React.useEffect(() => {
     document.body.classList.toggle("index-page");
     // Specify how to clean up after this effect:
     return function cleanup() {
       document.body.classList.toggle("index-page");
     };
-  },[]);
+  }, []);
   return (
     <>
-      <NoLoggedNavbar />
-      <div className="wrapper">
-        <PageHeader />
-        <div className="main">
-          <AnalyzeInfo />
+      <PermissionsGate
+        scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+        RenderForbiddenContent={() => <RestrictedContent allowedRole={"noLogged"} />}
+      >
+        <IndexNavbar />
+        <div className="wrapper">
+          <PageHeader />
+          <div className="main">
+            <AnalyzeInfo />
+          </div>
+          <Footer />
         </div>
-        <NoLoggedFooter />
-      </div>
+      </PermissionsGate>
     </>
   );
 }

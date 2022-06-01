@@ -16,15 +16,10 @@
 
 */
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // reactstrap components
 import {
-  Button,
   Collapse,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
   NavbarBrand,
   Navbar,
   NavItem,
@@ -35,9 +30,7 @@ import {
   Col,
 } from "reactstrap";
 
-export default function IndexNavbar() {
-
-  const navigate = useNavigate();
+export default function NoLoggedNavbar() {
 
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
@@ -81,32 +74,11 @@ export default function IndexNavbar() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const analyze = (e) => {
-    e.preventDefault();
-    navigate('/analyze');
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const goAdminPane = (e) => {
-    e.preventDefault();
-    navigate('/admin');
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const logout = (e) => {
-    e.preventDefault();
-
-    sessionStorage.setItem("userRole", 'no-logged')
-
-    navigate('/login');
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   return (
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/welcome" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
+          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
             <span>DataScan </span>
           </NavbarBrand>
           <button
@@ -129,7 +101,7 @@ export default function IndexNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/welcome" onClick={(e) => smoothScroll(e)}>
+                <a href="/" onClick={(e) => smoothScroll(e)}>
                   DataScan
                 </a>
               </Col>
@@ -180,59 +152,6 @@ export default function IndexNavbar() {
                 <i className="fab fa-instagram" />
                 <p className="d-lg-none d-xl-none">Instagram</p>
               </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav>
-              <DropdownToggle
-                caret
-                color="default"
-                data-toggle="dropdown"
-                href="/"
-                nav
-                onClick={(e) => e.preventDefault()}
-              >
-                <i className="fa fa-cogs d-lg-none d-xl-none" />
-                More options
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/attacks_info" onClick={(e) => smoothScroll()}>
-                  About attacks
-                </DropdownItem>
-                <DropdownItem tag={Link} to="/contact" onClick={(e) => smoothScroll()}>
-                  Contact us
-                </DropdownItem>
-                <DropdownItem tag={Link} to="/landing-page">
-                  how it works?
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="primary"
-                onClick={(e) => analyze(e)}
-              >
-                <i className="tim-icons icon-zoom-split" /> Analyze
-              </Button>
-            </NavItem>
-
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="success"
-                onClick={(e) => goAdminPane(e)}
-              >
-                <i className="tim-icons icon-settings-gear-63" /> Admin pane
-              </Button>
-            </NavItem>
-
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="danger"
-                onClick={(e) => logout(e)}
-              >
-                <i className="tim-icons icon-user-run" /> Logout
-              </Button>
             </NavItem>
           </Nav>
         </Collapse>

@@ -1,6 +1,11 @@
 import React from "react";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
+import $ from 'jquery'
+
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
 
 import {
     Container,
@@ -15,9 +20,7 @@ import {
     FormGroup,
     Form,
     Input,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
+    Alert,
     Button,
 } from "reactstrap";
 
@@ -49,7 +52,8 @@ export default function ModelInfo() {
             .then(result => {
                 console.log('Success:', result);
                 if (result['message'] === 200) {
-                    alert("Accuracy: " + result['accuracy'])
+                    $('.AlertContainer').show()
+                    $('.AccuracyAlert').text("Accuracy: " + result["accuracy"])
                 }
             })
             .catch(error => {
@@ -71,7 +75,6 @@ export default function ModelInfo() {
         getTrainingModelData()
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
                 if (result['message'] === 200) {
                     var parElement = document.getElementById("resultData");
 
@@ -101,13 +104,17 @@ export default function ModelInfo() {
 
     React.useEffect(() => {
 
-        document.body.classList.toggle("profile-page");
-        document.body.classList.toggle("index-page");
-        getModelInfo()
+        $('.AlertContainer').hide()
+
+        var parElement = document.getElementById("resultData");
+
+        if(parElement != null){
+            getModelInfo()
+        }
         // Specify how to clean up after this effect:
         return function cleanup() {
-            document.body.classList.toggle("profile-page");
-            document.body.classList.toggle("index-page");
+            $('.AlertContainer').hide()
+
         };
     }, []);
 
@@ -117,121 +124,131 @@ export default function ModelInfo() {
 
     return (
         <>
-            <AdminNavbar />
-            <div className="wrapper">
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <section className="section section-lg">
-                            <Container>
-                                <h5 className="text-on-back">Model</h5>
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            >
+                <AdminNavbar />
+                <div className="wrapper">
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <section className="section section-lg">
+                                <Container>
+                                    <h5 className="text-on-back">Model</h5>
 
-                                <Row>
-                                    <Col className="offset-lg-0 offset-md-3" lg="20" md="20">
-                                        <div
-                                            className="square square-7"
-                                            id="square7"
-                                        />
-                                        <div
-                                            className="square square-8"
-                                            id="square8"
-                                        />
-                                        <Card className="card-register">
-                                            <CardHeader>
-                                                <CardImg
-                                                    alt="..."
-                                                    src={require("assets/img/square1.png").default}
-                                                />
-                                                <CardTitle tag="h4">data</CardTitle>
-                                            </CardHeader>
-                                            <CardBody>
-                                                <Form className="form" autocomplete="off">
-                                                <Row>
-                                                        <Col md="3">
-                                                            <FormGroup>
-                                                                <label>File used</label>
-                                                                <Input id="in-previous-file" style={modelData} defaultValue="File used" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="3">
-                                                            <FormGroup>
-                                                                <label>Accuracy</label>
-                                                                <Input id="in-accuracy" style={modelData} placeholder="Accuracy" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="4">
-                                                            <FormGroup>
-                                                                <label>Date</label>
-                                                                <Input id="in-date" style={modelData} placeholder="Date" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md="2">
-                                                            <FormGroup>
-                                                                <label>Rows</label>
-                                                                <Input id="in-rows" style={modelData} defaultValue="Rows" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="3">
-                                                            <FormGroup>
-                                                                <label>Training time (s)</label>
-                                                                <Input id="in-time" style={modelData} defaultValue="Training time (s)" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="2">
-                                                            <FormGroup>
-                                                                <label>Pruning</label>
-                                                                <Input id="in-pruning" style={modelData} defaultValue="Pruning" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md="12">
-                                                            <FormGroup>
-                                                                <label>Columns</label>
-                                                                <Input id="in-columns" style={modelData} placeholder="Columns" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md="12">
-                                                            <FormGroup>
-                                                                <label>Attacks</label>
-                                                                <Input id="in-attacks" style={modelData} placeholder="Attacks" type="text" readonly="readonly" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                </Form>
-                                            </CardBody>
-                                            <CardFooter>
-                                            <Form>
-                                                <h4>Check the model</h4>
-                                                    <div class="form-group" >
-                                                        <div class="custom-file" >
-                                                            <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" />
-                                                            <label id="labelFile" class="custom-file-label" for="file">
-                                                                Select a file
-                                                            </label>
+                                    <Row>
+                                        <Col className="offset-lg-0 offset-md-3" lg="20" md="20">
+                                            <div
+                                                className="square square-7"
+                                                id="square7"
+                                            />
+                                            <div
+                                                className="square square-8"
+                                                id="square8"
+                                            />
+                                            <Card className="card-register">
+                                                <CardHeader>
+                                                    <CardImg
+                                                        alt="..."
+                                                        src={require("assets/img/square1.png").default}
+                                                    />
+                                                    <CardTitle tag="h4">data</CardTitle>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <Form className="form" autocomplete="off">
+                                                        <Row>
+                                                            <Col md="3">
+                                                                <FormGroup>
+                                                                    <label>File used</label>
+                                                                    <Input id="in-previous-file" style={modelData} defaultValue="File used" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="3">
+                                                                <FormGroup>
+                                                                    <label>Accuracy</label>
+                                                                    <Input id="in-accuracy" style={modelData} placeholder="Accuracy" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="4">
+                                                                <FormGroup>
+                                                                    <label>Date</label>
+                                                                    <Input id="in-date" style={modelData} placeholder="Date" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col md="2">
+                                                                <FormGroup>
+                                                                    <label>Rows</label>
+                                                                    <Input id="in-rows" style={modelData} defaultValue="Rows" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="3">
+                                                                <FormGroup>
+                                                                    <label>Training time (s)</label>
+                                                                    <Input id="in-time" style={modelData} defaultValue="Training time (s)" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md="2">
+                                                                <FormGroup>
+                                                                    <label>Pruning</label>
+                                                                    <Input id="in-pruning" style={modelData} defaultValue="Pruning" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col md="12">
+                                                                <FormGroup>
+                                                                    <label>Columns</label>
+                                                                    <Input id="in-columns" style={modelData} placeholder="Columns" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col md="12">
+                                                                <FormGroup>
+                                                                    <label>Attacks</label>
+                                                                    <Input id="in-attacks" style={modelData} placeholder="Attacks" type="text" readonly="readonly" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                    </Form>
+                                                </CardBody>
+                                                <CardFooter>
+                                                    <Form>
+                                                        <h4>Check the model</h4>
+                                                        <div class="form-group" >
+                                                            <div class="custom-file" >
+                                                                <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" />
+                                                                <label id="labelFile" class="custom-file-label" for="file">
+                                                                    Select a file
+                                                                </label>
+                                                            </div>
                                                         </div>
+
+                                                        <Button className="btn-round" color="info" onClick={(e) => checkModel(e)} >
+                                                            Check model
+                                                        </Button>
+                                                    </Form>
+                                                    <div className="AlertContainer">
+                                                        <Alert className="AccuracyAlert" color="info">
+                                                            <strong></strong>
+                                                        </Alert >
                                                     </div>
+                                                </CardFooter>
+                                            </Card>
+                                        </Col>
+                                    </Row>
 
-                                                    <Button className="btn-round" color="info" onClick={(e) => checkModel(e)} >
-                                                        Check model
-                                                    </Button>
-                                                </Form>
-                                            </CardFooter>
-                                        </Card>
-                                    </Col>
-                                </Row>
+                                </Container>
+                                <Container>
 
-                            </Container>
-                            <Container>
-
-                            </Container>
-                        </section>
+                                </Container>
+                            </section>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PermissionsGate>
         </>
     );
 };

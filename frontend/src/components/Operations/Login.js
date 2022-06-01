@@ -78,16 +78,13 @@ export default function Login() {
             "email": email
         }
 
-        //if(validateData())
-
         loginUser(JSON.stringify(jsonData))
             .then(response => response.json())
             .then(result => {
                 console.log('Success:', result);
                 if (result['message'] === 200) {
                     if (result['login']) {
-                        setIsLogged(true);
-                        navigate('/');
+                        setIsLogged(true)
                     } else {
                         alert('email or password incorrect')
                     }
@@ -111,6 +108,7 @@ export default function Login() {
                     let key = getRandomKey(16);
                     sessionStorage.setItem("VALUE", key);
                     sessionStorage.setItem("userRole", AES.encrypt(result["role"], key).toString());
+                    navigate('/welcome')
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -149,7 +147,7 @@ export default function Login() {
                                             <CardTitle tag="h4">Login</CardTitle>
                                         </CardHeader>
                                         <CardBody>
-                                            <Form className="form" autocomplete="off">
+                                            <Form className="form" autoComplete="off">
                                                 <InputGroup
                                                     className={classnames({
                                                         "input-group-focus": emailFocus,

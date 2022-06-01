@@ -25,6 +25,8 @@ import "assets/demo/demo.css";
 
 import Index from "views/Index.js";
 
+import Welcome from "views/Welcome.js";
+
 import Login from "components/Operations/Login.js"
 import Register from "components/Operations/Register.js"
 
@@ -53,6 +55,7 @@ ReactDOM.render(
 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/welcome" element={<Welcome />} />
 
       <Route path="/analyze" element={<Analyze />} />
       <Route path="/attacks_info" element={<AttackTypesInfo />} />
