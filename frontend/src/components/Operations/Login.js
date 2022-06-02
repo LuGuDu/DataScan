@@ -114,7 +114,7 @@ export default function Login() {
                     console.error('Error:', error);
                 });
         }
-    }, [isLogged])
+    }, [isLogged, navigate, email])
 
     const smoothScroll = (e) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })

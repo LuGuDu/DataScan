@@ -43,11 +43,6 @@ import Users from "components/Admin/Users/UserList.js"
 import UserCreateForm from "components/Admin/Users/CreateUserForm.js"
 
 
-import LandingPage from "views/examples/LandingPage.js";
-import RegisterPage from "views/examples/RegisterPage.js";
-import ProfilePage from "views/examples/ProfilePage.js";
-
-
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
@@ -69,13 +64,6 @@ ReactDOM.render(
       <Route path="/admin/users" element={<Users />} />
       <Route path="/admin/users/create" element={<UserCreateForm />} />
 
-
-      <Route path="/admin/stadistics" element={<Admin />} />
-
-
-      <Route path="/landing-page" element={<LandingPage />} />
-      <Route path="/register-page" element={<RegisterPage />} />
-      <Route path="/profile-page" element={<ProfilePage />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

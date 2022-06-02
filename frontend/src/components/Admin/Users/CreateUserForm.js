@@ -43,7 +43,7 @@ function checkEmail(email) {
 
 // Function to check whether the password introduced has the correct format
 function checkPassword(pwd) {
-    var strongPwdPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    var strongPwdPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
     return strongPwdPattern.test(pwd);
 }
 

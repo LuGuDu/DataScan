@@ -44,10 +44,24 @@ export default function ModelInfo() {
         e.preventDefault();
 
         //Disable components
+        $('.AlertContainer').hide()
         document.getElementById("file").disabled = true;
         document.getElementById("btn-checkModel").disabled = true;
 
         const fileField = document.querySelector('input[type="file"]');
+
+        //Check if file type is .csv
+        if(fileField.files[0]['type'] !== 'text/csv'){
+            $('.AlertContainer').show()
+            $('.AccuracyAlert').text("File must be .csv format!")
+
+            //Enable components
+            document.getElementById("file").disabled = false;
+            document.getElementById("btn-checkModel").disabled = false;
+
+            return
+        }
+
         const formData = new FormData();
         formData.append('file', fileField.files[0]);
 
@@ -113,16 +127,11 @@ export default function ModelInfo() {
     React.useEffect(() => {
 
         $('.AlertContainer').hide()
-
-        var parElement = document.getElementById("resultData");
-
-        if (parElement != null) {
-            getModelInfo()
-        }
+        getModelInfo()
+        
         // Specify how to clean up after this effect:
         return function cleanup() {
             $('.AlertContainer').hide()
-
         };
     }, []);
 
@@ -227,7 +236,7 @@ export default function ModelInfo() {
                                                         <h4>Check the model</h4>
                                                         <div class="form-group" >
                                                             <div class="custom-file" >
-                                                                <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" />
+                                                                <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" accept=".csv"/>
                                                                 <label id="labelFile" class="custom-file-label" for="file">
                                                                     Select a file
                                                                 </label>

@@ -87,11 +87,29 @@ export default function Train() {
         }
     }
 
-
     const train = (e) => {
         e.preventDefault();
 
         cleanTableAndAlerts();
+
+        const fileField = document.querySelector('input[type="file"]');
+        const formData = new FormData();
+        formData.append('file', fileField.files[0]);
+
+        //Check if file type is .csv
+        if (fileField.files[0]['type'] !== 'text/csv') {
+            $('.AlertContainer').show()
+            $('.AccuracyAlert').text("File must be .csv format!")
+
+            //Enable components
+            document.getElementById("file").disabled = false;
+            document.getElementById("btn-analyzeFile").disabled = false;
+            //Disable other buttons
+            document.getElementById("btn-updatePredictors").disabled = true;
+            document.getElementById("btn-trainModel").disabled = true;
+
+            return
+        }
 
         $('.AlertContainer').show()
         $('.AccuracyAlert').text("Analyzing file, wait please...")
@@ -101,10 +119,6 @@ export default function Train() {
         document.getElementById("btn-analyzeFile").disabled = true;
         document.getElementById("btn-updatePredictors").disabled = true;
         document.getElementById("btn-trainModel").disabled = true;
-
-        const fileField = document.querySelector('input[type="file"]');
-        const formData = new FormData();
-        formData.append('file', fileField.files[0]);
 
         uploadFile(formData)
             .then(response => response.json())
@@ -283,7 +297,7 @@ export default function Train() {
                                                 <Form>
                                                     <div className="form-group" >
                                                         <div className="custom-file" >
-                                                            <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
+                                                            <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" accept=".csv"/>
                                                             <label id="labelFile" className="custom-file-label" htmlFor="file">
                                                                 Select file
                                                             </label>

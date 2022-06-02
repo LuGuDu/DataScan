@@ -9,6 +9,7 @@ import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
 import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
 
 import Chart from "chart.js"
+import $ from 'jquery'
 
 import {
     Container,
@@ -18,6 +19,7 @@ import {
     CardHeader,
     CardBody,
     Form,
+    Alert,
 } from "reactstrap";
 
 async function uploadFile(data) {
@@ -36,6 +38,8 @@ export default function Analyze() {
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
         document.body.classList.toggle("profile-page");
+
+        $('.AlertContainer').hide()
 
         const initializeCharts = () => {
             var ctx = document.getElementById('percentageChart');
@@ -85,32 +89,48 @@ export default function Analyze() {
         return function cleanup() {
             document.body.classList.toggle("profile-page");
             document.body.classList.toggle("index-page");
-
+            $('.AlertContainer').hide()
         };
     }, []);
 
     const update = (e) => {
         e.preventDefault();
 
+        $('.AlertContainer').show()
+
         const fileField = document.querySelector('input[type="file"]');
         const formData = new FormData();
         formData.append('file', fileField.files[0]);
 
+        //Disable components
+        $('.AnalyzeAlert').text("Analyzing dataset, wait...")
         document.getElementById("btn-analyze").disabled = true;
         document.getElementById("file").disabled = true;
         document.getElementById("resultData").innerHTML = "";
         //document.getElementById("btn-analyze").style.cursor = "wait"
 
+        //Check if file type is .csv
+        if (fileField.files[0]['type'] !== 'text/csv') {
+            $('.AlertContainer').show()
+            $('.AnalyzeAlert').text("File must be .csv format!")
+
+            //Enable components
+            document.getElementById("file").disabled = false;
+            document.getElementById("btn-analyze").disabled = false;
+            document.getElementById("resultData").innerHTML = "";
+
+            return
+        }
+
         uploadFile(formData)
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
                 if (result['message'] === 200) {
 
-                    //console.log(result['predicts'])
+                    $('.AnalyzeAlert').text("Analysis complete. See results below.")
+                    
                     document.getElementById("btn-analyze").disabled = false;
                     document.getElementById("file").disabled = false;
-                    //document.getElementById("btn-analyze").style.cursor = "auto"
 
                     var parElement = document.getElementById("resultData");
 
@@ -378,10 +398,15 @@ export default function Analyze() {
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
+                                                    <button type="submit" id="btn-analyze" className="btn btn-info" onClick={(e) => update(e)}>
                                                         Analyze
                                                     </button>
                                                 </Form>
+                                                <div className="AlertContainer">
+                                                        <Alert className="AnalyzeAlert" color="info">
+                                                            <strong></strong>
+                                                        </Alert >
+                                                    </div>
                                             </CardBody>
                                         </Card>
                                     </Col>
