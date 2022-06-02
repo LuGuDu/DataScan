@@ -5,7 +5,6 @@ import hashlib
 
 userDAO = UserDAO()
 
-
 def loginUser(data, mongo):
     password = json.loads(data.decode())["password"]
     email = json.loads(data.decode())["email"]
