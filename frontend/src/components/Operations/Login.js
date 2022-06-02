@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { AES } from 'crypto-js';
 
 import { useNavigate } from "react-router-dom";
+import $ from 'jquery';
 
 import LoginNavbar from "components/Navbars/LoginNavBar.js"
 
@@ -23,7 +24,8 @@ import {
     Row,
     Col,
     FormGroup,
-    Label
+    Label,
+    Alert,
 } from "reactstrap";
 
 function getRandomKey(string_length) {
@@ -52,6 +54,7 @@ async function getUserRole(data) {
 
 export default function Login() {
 
+
     const [emailFocus, setEmailFocus] = React.useState(false);
     const [passwordFocus, setPasswordFocus] = React.useState(false);
 
@@ -62,6 +65,8 @@ export default function Login() {
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
+        $('.AlertContainer').hide()
+
         // Specify how to clean up after this effect:
         return function cleanup() {
             document.body.classList.toggle("index-page");
@@ -72,6 +77,8 @@ export default function Login() {
 
     const login = (e) => {
         e.preventDefault();
+
+        $('.AlertContainer').hide()
 
         var jsonData = {
             "password": password,
@@ -86,7 +93,8 @@ export default function Login() {
                     if (result['login']) {
                         setIsLogged(true)
                     } else {
-                        alert('email or password incorrect')
+                        $('.AlertContainer').show()
+                        $('.LoginAlert').text("Bad credentials. Try again...")
                     }
                 }
             })
@@ -202,6 +210,11 @@ export default function Login() {
                                             <Button className="btn-round" id="btn-login" color="info" size="lg" onClick={(e) => login(e)}>
                                                 Login
                                             </Button>
+                                            <div className="AlertContainer">
+                                                <Alert className="LoginAlert" color="danger">
+                                                    <strong></strong>
+                                                </Alert >
+                                            </div>
                                         </CardFooter>
                                     </Card>
                                 </Col>
