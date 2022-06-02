@@ -18,7 +18,7 @@
 import React from "react";
 
 // core components
-import NoLoggedNavbar from "components/Navbars/NoLoggedNavbar.js";
+import LoginNavbar from "components/Navbars/LoginNavBar.js";
 import PageHeader from "components/PageHeader/PageHeader.js";
 import NoLoggedFooter from "components/Footer/NoLoggedFooter.js";
 
@@ -36,7 +36,7 @@ export default function Index() {
   },[]);
   return (
     <>
-      <NoLoggedNavbar />
+      <LoginNavbar />
       <div className="wrapper">
         <PageHeader />
         <div className="main">

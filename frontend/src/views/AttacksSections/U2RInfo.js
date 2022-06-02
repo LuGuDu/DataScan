@@ -19,7 +19,6 @@ import React from "react";
 
 // reactstrap components
 import {
-    Button,
     Container,
     Row,
     Col,
@@ -29,17 +28,9 @@ import {
 
 const carouselItems = [
     {
-        src: require("assets/img/analyze1.jpg").default,
+        src: require("assets/img/u2r_attack.png").default,
         altText: "Slide 1",
-    },
-    {
-        src: require("assets/img/analyze2.webp").default,
-        altText: "Slide 2",
-    },
-    {
-        src: require("assets/img/analyze3.jpg").default,
-        altText: "Slide 3",
-    },
+    }
 ];
 
 export default function U2RInfo() {
@@ -58,12 +49,9 @@ export default function U2RInfo() {
                         <p className="profile-description text-left">
                         User to Root (u2r): It occurs when a normal system user illegally 
                         accesses root or superuser privileges. root or superuser privileges. 
+                        <br/>
+                        Examples: buffer_overflow, loadmodule, perl or rootkit.
                         </p>
-                        <div className="btn-wrapper pt-3">
-                            <Button className="btn-simple" color="primary" href="" >
-                                More info
-                            </Button>
-                        </div>
                     </Col>
 
                 </Row>

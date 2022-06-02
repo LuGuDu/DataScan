@@ -19,7 +19,6 @@ import React from "react";
 
 // reactstrap components
 import {
-    Button,
     Container,
     Row,
     Col,
@@ -29,17 +28,9 @@ import {
 
 const carouselItems = [
     {
-        src: require("assets/img/analyze1.jpg").default,
+        src: require("assets/img/dos_attack.webp").default,
         altText: "Slide 1",
-    },
-    {
-        src: require("assets/img/analyze2.webp").default,
-        altText: "Slide 2",
-    },
-    {
-        src: require("assets/img/analyze3.jpg").default,
-        altText: "Slide 3",
-    },
+    }
 ];
 
 export default function DOSInfo() {
@@ -53,12 +44,9 @@ export default function DOSInfo() {
                         <p className="profile-description text-left mb-0">
                         Denial of Service (DoS): It occurs when an attacker attempts to deny legitimate 
                         users access to a particular service or resource. access to a particular service or resource. 
+                        <br />
+                        Examples: back, land, neptune, pod, smurf or teardrop.
                         </p>
-                        <div className="btn-wrapper pt-3">
-                            <Button className="btn-simple" color="primary" href="https://es.wikipedia.org/wiki/Ataque_de_denegaci%C3%B3n_de_servicio" target="_blank">
-                                More info
-                            </Button>
-                        </div>
                     </Col>
                     <Col md="5">
                         <Row className="justify-content-between align-items-center">
