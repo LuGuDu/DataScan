@@ -17,6 +17,10 @@
 */
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+
 // reactstrap components
 import {
   Button,
@@ -215,6 +219,10 @@ export default function IndexNavbar() {
               </Button>
             </NavItem>
 
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+            >
+
             <NavItem>
               <Button
                 className="nav-link d-none d-lg-block"
@@ -224,6 +232,8 @@ export default function IndexNavbar() {
                 <i className="tim-icons icon-settings-gear-63" /> Admin pane
               </Button>
             </NavItem>
+
+            </PermissionsGate>
 
             <NavItem>
               <Button
