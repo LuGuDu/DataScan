@@ -246,11 +246,27 @@ def getTrainModelHistory(mongo):
     return modelHistory
 
 
+def cleanExtraClasses(data, mongo):
+    attacks = list(modelRegistryDAO.getLastAttackList(mongo))
+
+    extra_attacks = []
+
+    for row in data.iterrows():
+        if (row[1]['class'] not in attacks):
+            extra_attacks.append(row[1]['class'])
+            data = data.drop(row[0])
+
+    extra_attacks_list = list(dict.fromkeys(extra_attacks))
+
+    return extra_attacks_list, data
+
+
 def checkModel(file, mongo):
     from sklearn.metrics import accuracy_score
     model = loadModel("modeloEntrenado.pickle")
-
+ 
     data = pd.read_csv(file)
+    extra_attacks_list, data = cleanExtraClasses(data, mongo)
     data = cleanData(data, mongo)
 
     X = data.iloc[:, :-1]
