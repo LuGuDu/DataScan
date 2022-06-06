@@ -10,8 +10,12 @@ mongodb_client = PyMongo(app)
 mongo = mongodb_client.db
 
 
+
+
+
 @app.route('/getModelData', methods=['GET'])
 def getModelData():
+
     if request.method == "GET":
         modelInfo = ml.getModelInfo(mongo)
         return {"message": 200, "modelInfo": modelInfo}

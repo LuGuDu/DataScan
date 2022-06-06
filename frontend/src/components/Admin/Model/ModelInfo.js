@@ -26,7 +26,10 @@ import {
 
 async function getTrainingModelData() {
     return fetch('/getModelData', {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
 };
 
@@ -117,10 +120,13 @@ export default function ModelInfo() {
 
                     var text = document.createTextNode(textToAdd);
                     parElement.appendChild(text);
+                    
+                } else {
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.log(error.message)
             });
     }
 
