@@ -33,6 +33,15 @@ async function getTrainingModelData() {
     });
 };
 
+async function getModelFormat() {
+    return fetch('/getModelFormat', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 async function uploadFileForCheck(data) {
     return fetch('/checkModel', {
         method: 'POST',
@@ -54,9 +63,10 @@ export default function ModelInfo() {
         const fileField = document.querySelector('input[type="file"]');
 
         //Check if file type is .csv
-        if(fileField.files[0]['type'] !== 'text/csv'){
+        if (fileField.files[0]['type'] !== 'text/csv') {
             $('.AlertContainer').show()
             $('.AccuracyAlert').text("File must be .csv format!")
+            $('.ExtraAttacksAlert').hide()
 
             //Enable components
             document.getElementById("file").disabled = false;
@@ -78,7 +88,12 @@ export default function ModelInfo() {
 
                 if (result['message'] === 200) {
                     $('.AlertContainer').show()
+                    $('.ExtraAttacksAlert').hide()
                     $('.AccuracyAlert').text("Accuracy: " + result["accuracy"])
+                    if (result["extraAttacks"].length !== 0) {
+                        $('.ExtraAttacksAlert').show()
+                        $('.ExtraAttacksAlert').text("We found some extra attacks that we remove for the check: " + result["extraAttacks"])
+                    }
                 }
             })
             .catch(error => {
@@ -96,6 +111,8 @@ export default function ModelInfo() {
     }
 
     const getModelInfo = (e) => {
+
+        $('.DatasetFormatAlert').hide()
 
         getTrainingModelData()
             .then(response => response.json())
@@ -120,7 +137,25 @@ export default function ModelInfo() {
 
                     var text = document.createTextNode(textToAdd);
                     parElement.appendChild(text);
-                    
+
+                } else {
+                    throw Error(result.message)
+                }
+            })
+            .catch(error => {
+                console.log(error.message)
+            });
+
+        getModelFormat()
+            .then(response => response.json())
+            .then(result => {
+                if (result['message'] === 200) {
+                    $('.DatasetFormatAlert').show()
+                    var text = ""
+                    result["modelFormat"].forEach(function (column) {
+                        text += column + ", "
+                    })
+                    $('.DatasetFormatAlert').text("File must have only this colums: " + text);
                 } else {
                     throw Error(result.message)
                 }
@@ -133,11 +168,13 @@ export default function ModelInfo() {
     React.useEffect(() => {
 
         $('.AlertContainer').hide()
+        $('.DatasetFormatAlert').hide()
         getModelInfo()
-        
+
         // Specify how to clean up after this effect:
         return function cleanup() {
             $('.AlertContainer').hide()
+            $('.DatasetFormatAlert').hide()
         };
     }, []);
 
@@ -160,7 +197,7 @@ export default function ModelInfo() {
                                     <h5 className="text-on-back">Model</h5>
 
                                     <Row>
-                                        <Col className="offset-lg-0 offset-md-3" lg="20" md="20">
+                                        <Col className="offset-lg-0 offset-md-3" >
                                             <div
                                                 className="square square-7"
                                                 id="square7"
@@ -238,11 +275,14 @@ export default function ModelInfo() {
                                                     </Form>
                                                 </CardBody>
                                                 <CardFooter>
+                                                    <Alert className="DatasetFormatAlert" color="info">
+                                                        <strong></strong>
+                                                    </Alert >
                                                     <Form>
                                                         <h4>Check the model</h4>
                                                         <div class="form-group" >
                                                             <div class="custom-file" >
-                                                                <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" accept=".csv"/>
+                                                                <input onChange={(e) => changeName(e)} type="file" class="custom-file-input" name="file" id="file" accept=".csv" />
                                                                 <label id="labelFile" class="custom-file-label" for="file">
                                                                     Select a file
                                                                 </label>
@@ -254,6 +294,9 @@ export default function ModelInfo() {
                                                         </Button>
                                                     </Form>
                                                     <div className="AlertContainer">
+                                                        <Alert className="ExtraAttacksAlert" color="danger">
+                                                            <strong></strong>
+                                                        </Alert >
                                                         <Alert className="AccuracyAlert" color="info">
                                                             <strong></strong>
                                                         </Alert >

@@ -227,6 +227,11 @@ def improveModel(X_train, y_train):
     return improvedModel
 
 
+def getModelFormat(mongo):
+    modelFormat = list(modelRegistryDAO.getLastColumnsList(mongo))
+    return modelFormat
+
+
 def getModelInfo(mongo):
     modelInfo = modelRegistryDAO.getLastRegistry(mongo)
     modelInfo.pop('_id', None)
@@ -274,7 +279,7 @@ def checkModel(file, mongo):
 
     preds = model.predict(X)
     score = accuracy_score(y, preds)
-    return score
+    return extra_attacks_list, score
 
 
 def predict(file, mongo):

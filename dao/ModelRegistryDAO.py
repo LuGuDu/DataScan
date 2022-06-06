@@ -6,6 +6,9 @@ class ModelRegistryDAO:
     def getLastAttackList(self, mongo):
         return mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["attack_list"]
 
+    def getLastColumnsList(self, mongo):
+        return mongo.modelTrainHistorial.find_one(sort=[("date", -1)])["columns"]
+
     def getLastRegistry(self, mongo):
         return mongo.modelTrainHistorial.find_one(sort=[("date", -1)])
 

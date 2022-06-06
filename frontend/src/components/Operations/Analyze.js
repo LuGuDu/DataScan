@@ -29,17 +29,55 @@ async function uploadFile(data) {
     });
 };
 
+async function getModelFormat() {
+    return fetch('/getModelFormat', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 
 export default function Analyze() {
 
     var percentageAttacksChart
     var typesChart
 
+
+    const getModelInfo = (e) => {
+
+        $('.DatasetFormatAlert').hide()
+
+        getModelFormat()
+            .then(response => response.json())
+            .then(result => {
+                if (result['message'] === 200) {
+                    $('.DatasetFormatAlert').show()
+                    var text = ""
+                    result["modelFormat"].forEach(function (column) {
+                        if(column !== 'class'){
+                            text += column + ", "
+                        } 
+                    })
+                    $('.DatasetFormatAlert').text("File must have only this colums: " + text);
+                } else {
+                    throw Error(result.message)
+                }
+            })
+            .catch(error => {
+                console.log(error.message)
+            });
+    }
+
+
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
         document.body.classList.toggle("profile-page");
 
         $('.AlertContainer').hide()
+        $('.DatasetFormatAlert').hide()
+        getModelInfo()
 
         const initializeCharts = () => {
             var ctx = document.getElementById('percentageChart');
@@ -90,6 +128,7 @@ export default function Analyze() {
             document.body.classList.toggle("profile-page");
             document.body.classList.toggle("index-page");
             $('.AlertContainer').hide()
+            $('.DatasetFormatAlert').hide()
         };
     }, []);
 
@@ -128,7 +167,7 @@ export default function Analyze() {
                 if (result['message'] === 200) {
 
                     $('.AnalyzeAlert').text("Analysis complete. See results below.")
-                    
+
                     document.getElementById("btn-analyze").disabled = false;
                     document.getElementById("file").disabled = false;
 
@@ -389,6 +428,9 @@ export default function Analyze() {
                                                 <h5 className="text-on-back">ANALYZE</h5>
                                             </CardHeader>
                                             <CardBody>
+                                                <Alert className="DatasetFormatAlert" color="info">
+                                                    <strong></strong>
+                                                </Alert >
                                                 <Form>
                                                     <div className="form-group">
                                                         <div id="fileSelector" className="custom-file">
@@ -403,10 +445,10 @@ export default function Analyze() {
                                                     </button>
                                                 </Form>
                                                 <div className="AlertContainer">
-                                                        <Alert className="AnalyzeAlert" color="info">
-                                                            <strong></strong>
-                                                        </Alert >
-                                                    </div>
+                                                    <Alert className="AnalyzeAlert" color="info">
+                                                        <strong></strong>
+                                                    </Alert >
+                                                </div>
                                             </CardBody>
                                         </Card>
                                     </Col>

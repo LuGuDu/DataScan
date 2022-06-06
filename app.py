@@ -12,10 +12,18 @@ mongo = mongodb_client.db
 
 @app.route('/getModelData', methods=['GET'])
 def getModelData():
-
     if request.method == "GET":
         modelInfo = ml.getModelInfo(mongo)
         return {"message": 200, "modelInfo": modelInfo}
+    
+    return {"message": 500}
+
+
+@app.route('/getModelFormat', methods=['GET'])
+def getModelFormat():
+    if request.method == "GET":
+        modelFormat = ml.getModelFormat(mongo)
+        return {"message": 200, "modelFormat": modelFormat}
     
     return {"message": 500}
 
@@ -36,9 +44,9 @@ def checkModel():
         if request.files:
             file = request.files["file"]
 
-            accuracy = ml.checkModel(file, mongo)
+            extra_attacks_list, accuracy = ml.checkModel(file, mongo)
 
-            return {"message": 200, "accuracy": accuracy}
+            return {"message": 200, "accuracy": accuracy, "extraAttacks": extra_attacks_list}
 
     return {"message": 500}
 
