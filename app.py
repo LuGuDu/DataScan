@@ -10,9 +10,6 @@ mongodb_client = PyMongo(app)
 mongo = mongodb_client.db
 
 
-
-
-
 @app.route('/getModelData', methods=['GET'])
 def getModelData():
 

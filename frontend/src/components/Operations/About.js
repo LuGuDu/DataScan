@@ -3,7 +3,7 @@ import React from "react";
 import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
 import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
 
-import ContactHeader from "components/PageHeader/ContactHeader.js"
+import AboutHeader from "components/PageHeader/AboutHeader.js"
 
 import IndexNavbar from "components/Navbars/IndexNavbar.js"
 import LoginNavBar from "components/Navbars/LoginNavBar"
@@ -17,10 +17,9 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Label,
 } from "reactstrap";
 
-export default function Contact() {
+export default function About() {
 
     React.useEffect(() => {
         document.body.classList.toggle("profile-page");
@@ -49,7 +48,7 @@ export default function Contact() {
             </PermissionsGate>
 
             <div className="wrapper">
-                <ContactHeader />
+                <AboutHeader />
                 <div className="main">
                     <div className="section section-basic" id="basic-elements">
                         <section className="section">
@@ -58,15 +57,26 @@ export default function Contact() {
                                     <Col md="8">
                                         <Card className="card-plain">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">Contact data</h1>
-                                                <h5 className="text-on-back">CONTACT</h5>
+                                                <h1 className="profile-title text-left">Presentation</h1>
+                                                <h5 className="text-on-back">About us</h5>
                                             </CardHeader>
                                             <CardBody>
                                                 <Row className="justify-content-between">
                                                     <Col>
-                                                        <p className="profile-description text-left mb-0">
-                                                            
-                                                            Contact-email: datascan.contacto@gmail.com
+                                                        <p className="profile-description text-left mb-0">         
+                                                        The DataScan project was born in 2022 as a computer engineering degree final 
+                                                        project. Its main objective is to provide a tool that helps users to detect 
+                                                        cyber-attacks in their datasets.
+                                                        <br/><br/>
+                                                        Lucas Gutiérrez is the developer of the project. He studied at the School of
+                                                        Computer Science of Ciudad Real, Spain. He specialized in Software Engineering.
+                                                        <br/><br/>
+                                                        In the future, this project may have different orientations: 
+                                                        <br/>
+                                                        1. To provide a multipurpose tool to train different machine 
+                                                        learning models. 
+                                                        <br/>
+                                                        2. To convert this IDS system into an IPS system.
                                                         </p>
                                                     </Col>
                                                 </Row>

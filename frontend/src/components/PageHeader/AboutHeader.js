@@ -20,7 +20,7 @@ import React from "react";
 // reactstrap components
 import { Container } from "reactstrap";
 
-export default function ContactHeader() {
+export default function AboutHeader() {
   return (
     <div className="page-header header-filter">
       <div className="squares square1" />
@@ -32,9 +32,9 @@ export default function ContactHeader() {
       <div className="squares square7" />
       <Container>
         <div className="content-center brand">
-          <h1 className="h1-seo">Contact us</h1>
+          <h1 className="h1-seo">About us</h1>
           <h3 className="d-none d-sm-block">
-          Contact us if you have doubts, problems, or any idea
+            Get to know us better
           </h3>
         </div>
       </Container>

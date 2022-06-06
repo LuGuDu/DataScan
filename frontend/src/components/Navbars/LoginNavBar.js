@@ -176,8 +176,8 @@ export default function IndexNavbar() {
                 <DropdownItem tag={Link} to="/contact" onClick={(e) => smoothScroll()}>
                   Contact us
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/landing-page">
-                  how it works?
+                <DropdownItem tag={Link} to="/about">
+                  About us
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

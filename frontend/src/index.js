@@ -33,6 +33,7 @@ import Register from "components/Operations/Register.js"
 import Analyze from "components/Operations/Analyze.js"
 import AttackTypesInfo from "components/Operations/AttackTypesInfo.js"
 import Contact from "components/Operations/Contact.js"
+import About from "components/Operations/About.js"
 
 import Admin from "components/Operations/Admin.js"
 import ModelInfo from "components/Admin/Model/ModelInfo.js"
@@ -55,6 +56,7 @@ ReactDOM.render(
       <Route path="/analyze" element={<Analyze />} />
       <Route path="/attacks_info" element={<AttackTypesInfo />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/about" element={<About />} />
 
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/model/train" element={<ModelTrain />} />
