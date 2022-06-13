@@ -1,15 +1,15 @@
-from fileinput import filename
-import pickle, time
-import pandas as pd
-import numpy as np
-
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
+import pickle
+import time
 from datetime import datetime
+from fileinput import filename
 
-from model.ModelRegistry import ModelRegistry
+import numpy as np
+import pandas as pd
 from dao.ModelRegistryDAO import ModelRegistryDAO
+from model.ModelRegistry import ModelRegistry
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
 
 modelRegistryDAO = ModelRegistryDAO()
 

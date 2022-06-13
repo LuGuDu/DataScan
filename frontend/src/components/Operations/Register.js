@@ -44,7 +44,7 @@ function checkPassword(pwd) {
 }
 
 
-export default function Login() {
+export default function Register() {
 
   const [fullNameFocus, setFullNameFocus] = React.useState(false);
   const [emailFocus, setEmailFocus] = React.useState(false);
