@@ -4,12 +4,9 @@ import controllers.MachineLearningController as ml
 import controllers.UserController as userController
 import json
 
-
 from flask_cors import CORS, cross_origin
 
-
-
-app = Flask(__name__, static_folder='frontend/build', static_url_path='')
+app = Flask(__name__, static_folder='frontend', static_url_path='')
 CORS(app)
 app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.gozlc.mongodb.net/datascan"
 mongodb_client = PyMongo(app)
