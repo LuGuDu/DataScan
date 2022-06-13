@@ -190,10 +190,10 @@ def modifyUser():
         return {"message": 200}
     return {"message": 500}
 
-#@app.route('/')
-#@cross_origin()
-#def serve():
-#    return send_from_directory(app.static_folder)
+@app.route('/')
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 if __name__ == '__main__':
