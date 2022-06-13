@@ -31,7 +31,7 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<Index />} />
 
-                        <Route exact path="/login" element={<Login />} />
+                        <Route exact path="#/login" element={<Login />} />
                         <Route exact path="/register" element={<Register />} />
                         <Route exact path="/welcome" element={<Welcome />} />
 
