@@ -9,7 +9,7 @@ from flask_cors import CORS, cross_origin
 
 
 
-app = Flask(__name__, static_folder='./frontend/build', static_url_path='index.html')
+app = Flask(__name__, static_folder='./frontend/build', static_url_path='')
 CORS(app)
 app.config["MONGO_URI"] = "mongodb+srv://admin:oYnyQDS4UcMqyoLA@clusterdatascan.gozlc.mongodb.net/datascan"
 mongodb_client = PyMongo(app)
