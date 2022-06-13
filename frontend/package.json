@@ -4,7 +4,7 @@
   "description": "An IDS to detect cyberattacks on datasets",
   "main": "index.js",
   "author": "Lucas Gutierrez Duran",
-  "proxy": "http://127.0.0.1:5000/",
+  "proxy": "https://datascan.herokuapp.com/",
   "license": "MIT",
   "repository": {
     "type": "git",
