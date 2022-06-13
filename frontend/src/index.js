@@ -17,7 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 
 import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.2.0";
@@ -45,7 +45,7 @@ import UserCreateForm from "components/Admin/Users/CreateUserForm.js"
 
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter>
     <Routes>
       <Route path="/" element={<Index />} />
 
@@ -67,6 +67,6 @@ ReactDOM.render(
       <Route path="/admin/users/create" element={<UserCreateForm />} />
 
     </Routes>
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById("root")
 );

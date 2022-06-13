@@ -190,6 +190,7 @@ def modifyUser():
         return {"message": 200}
     return {"message": 500}
 
+
 @app.route('/')
 @cross_origin()
 def serve():
