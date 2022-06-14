@@ -16,7 +16,7 @@
 
 */
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
 import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
@@ -41,7 +41,7 @@ import {
 
 export default function IndexNavbar() {
 
-  const navigate = useNavigate();
+  const navigate = useHistory();
 
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
@@ -87,13 +87,13 @@ export default function IndexNavbar() {
 
   const analyze = (e) => {
     e.preventDefault();
-    navigate('/analyze');
+    navigate.push('/analyze');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const goAdminPane = (e) => {
     e.preventDefault();
-    navigate('/admin');
+    navigate.push('/admin');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -102,7 +102,7 @@ export default function IndexNavbar() {
 
     sessionStorage.setItem("userRole", 'no-logged')
 
-    navigate('/login');
+    navigate.push('/login');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 

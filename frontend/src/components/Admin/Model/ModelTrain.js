@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import $ from 'jquery';
 
 import AdminNavBar from "components/Navbars/AdminNavbar"
@@ -246,7 +246,7 @@ export default function Train() {
             });
     }
 
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
     const finishTrain = () => {
 
@@ -269,7 +269,7 @@ export default function Train() {
             .then(result => {
                 console.log('Success:', result);
                 alert("Success training!")
-                navigate('/admin/model/info');
+                navigate.push('/admin/model/info');
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import classnames from "classnames";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
@@ -78,7 +78,7 @@ export default function CreateUserForm() {
     Must include 1 special char`
 
 
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
     const validateInputs = () => {
         var valid = false
@@ -128,7 +128,7 @@ export default function CreateUserForm() {
                     document.getElementById("btn-create").disabled = false;
                     if (result['message'] === 200) {
                         alert("User has been created!")
-                        navigate('/admin/users');
+                        navigate.push('/admin/users');
                     }
                 })
                 .catch(error => {
