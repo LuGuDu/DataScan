@@ -23,30 +23,30 @@ import UserCreateForm from "components/Admin/Users/CreateUserForm.js"
 
 function App() {
     return ( //JSX
-<>
-                <HashRouter>
-                    <Routes>
-                        <Route exact path="/" element={<Index />} />
+        <>
+            <HashRouter>
+                <Routes>
+                    <Route exact path="/" element={<Index />} />
 
-                        <Route exact path="/login" element={<Login />} />
-                        <Route exact path="/register" element={<Register />} />
-                        <Route exact path="/welcome" element={<Welcome />} />
+                    <Route exact path="/login" element={<Login />} />
+                    <Route exact path="/register" element={<Register />} />
+                    <Route exact path="/welcome" element={<Welcome />} />
 
-                        <Route exact path="/analyze" element={<Analyze />} />
-                        <Route exact path="/attacks_info" element={<AttackTypesInfo />} />
-                        <Route exact path="/contact" element={<Contact />} />
-                        <Route exact path="/about" element={<About />} />
+                    <Route exact path="/analyze" element={<Analyze />} />
+                    <Route exact path="/attacks_info" element={<AttackTypesInfo />} />
+                    <Route exact path="/contact" element={<Contact />} />
+                    <Route exact path="/about" element={<About />} />
 
-                        <Route exact path="/admin" element={<Admin />} />
-                        <Route exact path="/admin/model/train" element={<ModelTrain />} />
-                        <Route exact path="/admin/model/info" element={<ModelInfo />} />
-                        <Route exact path="/admin/model/history" element={<ModelHistory />} />
+                    <Route exact path="/admin" element={<Admin />} />
+                    <Route exact path="/admin/model/train" element={<ModelTrain />} />
+                    <Route exact path="/admin/model/info" element={<ModelInfo />} />
+                    <Route exact path="/admin/model/history" element={<ModelHistory />} />
 
-                        <Route exact path="/admin/users" element={<Users />} />
-                        <Route exact path="/admin/users/create" element={<UserCreateForm />} />
-                    </Routes>
-                </HashRouter>
-            </>
+                    <Route exact path="/admin/users" element={<Users />} />
+                    <Route exact path="/admin/users/create" element={<UserCreateForm />} />
+                </Routes>
+            </HashRouter>
+        </>
 
     );
 }
