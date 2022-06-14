@@ -44,7 +44,7 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/welcome" tag={Link} onClick={(e) => smoothScroll(e)}>
                   Home
                 </NavLink>
               </NavItem>
@@ -58,12 +58,12 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink href="/contact" onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/contact" tag={Link} onClick={(e) => smoothScroll(e)}>
                   Contact us
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="about-us" onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/about" tag={Link} onClick={(e) => smoothScroll(e)}>
                   About us
                 </NavLink>
               </NavItem>

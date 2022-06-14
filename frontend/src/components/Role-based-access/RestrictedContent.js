@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert, Button } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 //Page used when a user tries to access a page not autorized
 const RestrictedContent = ({ allowedRole }) => {
@@ -10,8 +11,11 @@ const RestrictedContent = ({ allowedRole }) => {
         noLogged: "Normal or Admin"
     }
 
+    const navigate = useNavigate();
+
     const redirectLogin = () => {
-        window.location.href = '/login';
+        //window.location.href = '/login';
+        navigate('/login')
     }
 
     return (
@@ -25,7 +29,7 @@ const RestrictedContent = ({ allowedRole }) => {
                         To access to this page, you need to be loggin as: <b>{mapAllowedRole[allowedRole]}</b>
                     </p>
                     <div className="btns">
-                        <Button onClick={() => redirectLogin()} >Login</Button>
+                        <Button onClick={() => navigate('/login')} >Login</Button>
                     </div>
                 </Alert>
             </div>
