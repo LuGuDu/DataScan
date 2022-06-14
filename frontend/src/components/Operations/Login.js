@@ -196,7 +196,7 @@ export default function Login() {
                                                     <Label check>
                                                         Click {" "}
                                                         <a
-                                                            href="/register"
+                                                            href="#/register"
                                                             onClick={(e) => smoothScroll(e)}
                                                         >
                                                             here
