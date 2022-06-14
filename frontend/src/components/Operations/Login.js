@@ -126,6 +126,7 @@ export default function Login() {
 
     const smoothScroll = (e) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
+        navigate('/register')
     }
 
     return (
@@ -196,7 +197,7 @@ export default function Login() {
                                                     <Label check>
                                                         Click {" "}
                                                         <a
-                                                            href="/#/register"
+                                                            href="#/"
                                                             onClick={(e) => smoothScroll(e)}
                                                         >
                                                             here
