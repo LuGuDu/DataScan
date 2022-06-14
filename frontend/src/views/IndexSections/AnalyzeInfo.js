@@ -16,7 +16,7 @@
 
 */
 import React from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -44,11 +44,11 @@ const carouselItems = [
 ];
 
 export default function Basics() {
-    const navigate = useHistory();
+    const navigate = useNavigate();
 
     const analyze = (e) => {
         e.preventDefault();
-        navigate.push('/analyze');
+        navigate('/analyze');
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { AES } from 'crypto-js';
 
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
 
 import LoginNavbar from "components/Navbars/LoginNavBar.js"
@@ -73,7 +73,7 @@ export default function Login() {
         };
     }, []);
 
-    const navigate = useHistory();
+    const navigate = useNavigate();
 
     const login = (e) => {
         e.preventDefault();
@@ -116,7 +116,7 @@ export default function Login() {
                     let key = getRandomKey(16);
                     sessionStorage.setItem("VALUE", key);
                     sessionStorage.setItem("userRole", AES.encrypt(result["role"], key).toString());
-                    navigate.push('/welcome')
+                    navigate('/welcome')
                 })
                 .catch(error => {
                     console.error('Error:', error);

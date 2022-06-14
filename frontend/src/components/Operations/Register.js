@@ -22,7 +22,7 @@ import {
   FormFeedback,
 } from "reactstrap";
 
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 async function registerUser(data) {
   return fetch('/registerUser', {
@@ -124,7 +124,7 @@ export default function Register() {
           document.getElementById("btn-register").disabled = false;
           document.getElementById("btn-login").disabled = false;
           if (result['message'] === 200) {
-            navigate.push('/login');
+            navigate('/login');
           }
         })
         .catch(error => {
@@ -143,11 +143,11 @@ export default function Register() {
       </FormFeedback>);
   }
 
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   const goLogin = (e) => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    navigate.push('/login');
+    navigate('/login');
   }
 
   return (

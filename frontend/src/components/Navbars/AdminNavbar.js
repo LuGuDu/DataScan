@@ -16,7 +16,7 @@
 
 */
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // reactstrap components
 import {
   Button,
@@ -36,7 +36,7 @@ import {
 
 export default function AdminNavbar() {
 
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
@@ -67,7 +67,7 @@ export default function AdminNavbar() {
 
   const goBack = (e) => {
     e.preventDefault();
-    navigate.push('/welcome');
+    navigate('/welcome');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 

@@ -26,7 +26,7 @@ import NoLoggedFooter from "components/Footer/NoLoggedFooter.js";
 import AnalyzeInfo from "views/IndexSections/AnalyzeInfo.js";
 
 
-const Index = () => {
+export default function Index() {
   React.useEffect(() => {
     document.body.classList.toggle("index-page");
     // Specify how to clean up after this effect:
@@ -47,5 +47,3 @@ const Index = () => {
     </>
   );
 }
-
-export default Index;
