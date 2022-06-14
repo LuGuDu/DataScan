@@ -125,6 +125,7 @@ export default function Login() {
     }, [isLogged, navigate, email])
 
     const smoothScroll = (e) => {
+        alert('hola')
         window.scrollTo({ top: 0, behavior: 'smooth' })
         navigate('/register')
     }
