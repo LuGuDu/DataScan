@@ -26,7 +26,8 @@ function App() {
         <>
             <HashRouter>
                 <Routes>
-                    
+                    <Route exact path="/" element={<Index />} />
+
                     <Route exact path="/login" element={<Login />} />
                     <Route exact path="/register" element={<Register />} />
                     <Route exact path="/welcome" element={<Welcome />} />
@@ -43,8 +44,6 @@ function App() {
 
                     <Route exact path="/admin/users" element={<Users />} />
                     <Route exact path="/admin/users/create" element={<UserCreateForm />} />
-                    
-                    <Route exact path="/" element={<Index />} />
                 </Routes>
             </HashRouter>
         </>
