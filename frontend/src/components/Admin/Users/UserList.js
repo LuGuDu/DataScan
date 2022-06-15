@@ -423,6 +423,11 @@ export default function CreateUserForm() {
                                                             </div>
                                                         </div>
                                                         : null}
+                                                    <div className="AlertContainer">
+                                                        <Alert className="Alert" color="info">
+                                                            <strong></strong>
+                                                        </Alert >
+                                                    </div>
                                                     <Button className="btn-round" id="btn-modify" color="info" size="lg" onClick={(e) => modify(e)}>
                                                         Modify
                                                     </Button>
@@ -471,21 +476,6 @@ export default function CreateUserForm() {
                                                 </CardFooter>
                                             </Card>
                                         </Col>
-                                    </Row>
-                                </Container>
-                                <Container>
-                                    <Row>
-                                        <div className="AlertContainer">
-                                            <Alert className="Alert" color="info">
-                                                <strong></strong>
-                                            </Alert >
-                                        </div>
-                                    </Row>
-                                </Container>
-
-                                <Container>
-                                    <Row>
-
                                     </Row>
                                 </Container>
                             </section>
