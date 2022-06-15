@@ -41,9 +41,10 @@ async function getModelFormat() {
 
 export default function Analyze() {
 
+    const [errorMessage, setErrorMessage] = React.useState('')
+
     var percentageAttacksChart
     var typesChart
-
 
     const getModelInfo = (e) => {
 
@@ -56,9 +57,9 @@ export default function Analyze() {
                     $('.DatasetFormatAlert').show()
                     var text = ""
                     result["modelFormat"].forEach(function (column) {
-                        if(column !== 'class'){
+                        if (column !== 'class') {
                             text += column + ", "
-                        } 
+                        }
                     })
                     $('.DatasetFormatAlert').text("File must have only this colums: " + text);
                 } else {
@@ -134,6 +135,7 @@ export default function Analyze() {
 
     const update = (e) => {
         e.preventDefault();
+        setErrorMessage('');
 
         $('.AlertContainer').show()
 
@@ -183,12 +185,16 @@ export default function Analyze() {
 
                     uploadCharts(result['predicts'])
 
+                } else {
+                    $('.AlertContainer').hide()
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 document.getElementById("btn-analyze").disabled = false;
                 document.getElementById("file").disabled = false;
+                setErrorMessage(error.message);
                 //document.getElementById("btn-analyze").style.cursor = "auto"
             });
     }
@@ -444,6 +450,13 @@ export default function Analyze() {
                                                         Analyze
                                                     </button>
                                                 </Form>
+                                                {errorMessage
+                                                    ? <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                        <div>
+                                                            {errorMessage}
+                                                        </div>
+                                                    </div>
+                                                    : null}
                                                 <div className="AlertContainer">
                                                     <Alert className="AnalyzeAlert" color="info">
                                                         <strong></strong>

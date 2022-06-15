@@ -2,6 +2,8 @@ import pickle
 import time
 from datetime import datetime
 from fileinput import filename
+from flask import abort as fabort, make_response
+import json
 
 import numpy as np
 import pandas as pd
@@ -14,6 +16,14 @@ from sklearn.tree import DecisionTreeClassifier
 modelRegistryDAO = ModelRegistryDAO()
 
 
+def abort(status_code, message):
+    data = {"message": message, "status_code": status_code}
+    response = make_response(json.dumps(data))
+    response.status_code = status_code
+    response.content_type = 'application/json'
+    fabort(response)
+
+
 def saveModel(model, fileName):
     # serializar nuestro modelo y salvarlo en el fichero area_model.pickle
     with open("models/" + fileName, "wb") as file:
@@ -22,9 +32,12 @@ def saveModel(model, fileName):
 
 
 def loadModel(fileName):
-    with open('models/' + fileName, "rb") as file:
-        modelLoad = pickle.load(file)
-    print("MODELO CARGADO")
+    try:
+        with open('models/' + fileName, "rb") as file:
+            modelLoad = pickle.load(file)
+        print("MODELO CARGADO")
+    except FileNotFoundError:
+        abort(500, 'No model trained found, train the model again.')
     return modelLoad
 
 
@@ -87,7 +100,7 @@ def checkAccuracy(model, X_test, y_test):
 
 
 def trainAuxModel(file):
-    data = pd.read_csv(file)
+    data = read_csv_file(file)
     data.to_csv('models/dataTrain.csv', encoding='utf-8', index=False)
     f = open("models/fileName.txt", "w")
     f.write(file.filename)
@@ -110,7 +123,7 @@ def trainAuxModel(file):
 
 
 def checkPredictors(predictors):
-    data = pd.read_csv('models/dataTrain.csv')
+    data = read_csv_file('models/dataTrain.csv')
     data = normalizeData(data)
     data = cleanDataPredictors(data, predictors)
     data.to_csv('models/dataTrainNewPredictors.csv', encoding='utf-8', index=False)
@@ -128,7 +141,7 @@ def checkPredictors(predictors):
 
 
 def getPrunningAccuracy():
-    data = pd.read_csv('models/dataTrainNewPredictors.csv')
+    data = read_csv_file('models/dataTrainNewPredictors.csv')
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -143,7 +156,7 @@ def getPrunningAccuracy():
 
 
 def finalTrainModel(prunning, mongo):
-    data = pd.read_csv('models/dataTrainNewPredictors.csv')
+    data = read_csv_file('models/dataTrainNewPredictors.csv')
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -172,7 +185,7 @@ def finalTrainModel(prunning, mongo):
     f = open("models/fileName.txt", "r")
     fileName = f.read()
     f.close()
-    dataOriginal = pd.read_csv('models/dataTrain.csv')
+    dataOriginal = read_csv_file('models/dataTrain.csv')
 
     #Debe hacerse antes de la normalizacion para obtener los nombres
     attackList = list(dict.fromkeys(sorted(dataOriginal['class'])))
@@ -265,14 +278,31 @@ def cleanExtraClasses(data, mongo):
 
     return extra_attacks_list, data
 
+def read_csv_file(file):
+    try:
+        data = pd.read_csv(file)
+    except Exception:
+        abort(500, 'The file has a bad format')
+    return data
+
 
 def checkModel(file, mongo):
     from sklearn.metrics import accuracy_score
     model = loadModel("modeloEntrenado.pickle")
- 
-    data = pd.read_csv(file)
-    extra_attacks_list, data = cleanExtraClasses(data, mongo)
-    data = cleanData(data, mongo)
+
+    data = read_csv_file(file) 
+    
+    try:    
+        extra_attacks_list, data = cleanExtraClasses(data, mongo)
+        data = cleanData(data, mongo)
+    except KeyError:
+        abort(500, 'The file has no class column')
+    except ValueError:
+        abort(500, 'The file has internal problems')
+    except AttributeError:
+        abort(500, 'The file dont have the right columns')
+    
+
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
@@ -284,9 +314,14 @@ def checkModel(file, mongo):
 
 def predict(file, mongo):
 
-    data = pd.read_csv(file)
-    dataForPredict = cleanData(data, mongo)
-    
+    data = read_csv_file(file)
+    try:
+        dataForPredict = cleanData(data, mongo)
+    except ValueError:
+        abort(500, 'The file has internal problems')
+    except AttributeError:
+        abort(500, 'The file dont have the right columns')
+
     model = loadModel("modeloEntrenado.pickle")
 
     attackList = modelRegistryDAO.getLastAttackList(mongo)

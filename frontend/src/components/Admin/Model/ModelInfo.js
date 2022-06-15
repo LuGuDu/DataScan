@@ -52,8 +52,11 @@ async function uploadFileForCheck(data) {
 
 export default function ModelInfo() {
 
+    const [errorMessage, setErrorMessage] = React.useState('')
+
     const checkModel = (e) => {
         e.preventDefault();
+        setErrorMessage('');
 
         //Disable components
         $('.AlertContainer').hide()
@@ -94,10 +97,13 @@ export default function ModelInfo() {
                         $('.ExtraAttacksAlert').show()
                         $('.ExtraAttacksAlert').text("We found some extra attacks that we remove for the check: " + result["extraAttacks"])
                     }
+                } else {
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                setErrorMessage(error.message)
             });
     }
 
@@ -289,10 +295,19 @@ export default function ModelInfo() {
                                                             </div>
                                                         </div>
 
+                                                        
+
                                                         <Button className="btn-round" color="info" id="btn-checkModel" onClick={(e) => checkModel(e)} >
                                                             Check model
                                                         </Button>
                                                     </Form>
+                                                    {errorMessage
+                                                        ? <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                            <div>
+                                                                {errorMessage}
+                                                            </div>
+                                                        </div>
+                                                        : null}
                                                     <div className="AlertContainer">
                                                         <Alert className="ExtraAttacksAlert" color="danger">
                                                             <strong></strong>
