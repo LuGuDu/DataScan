@@ -1,4 +1,4 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, session
 from flask_pymongo import PyMongo
 import controllers.MachineLearningController as ml
 import controllers.UserController as userController
@@ -160,6 +160,7 @@ def deleteUser():
         userController.deleteUser(request.data, mongo)
         return {"message": 200}
     return {"message": 500}
+
 
 @app.route('/getUser', methods=['GET'])
 @cross_origin()

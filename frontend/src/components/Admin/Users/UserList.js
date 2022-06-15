@@ -81,6 +81,8 @@ export default function CreateUserForm() {
     // Variable to show or not the feedback
     const [showFeedback, setShowFeedback] = React.useState(false);
 
+    const [errorMessage, setErrorMessage] = React.useState('')
+
     const passRequirements = `Password requirements:
         Must have a minimum length of 8 characters
         Must include 1 capital letter and 1 small letter
@@ -175,6 +177,7 @@ export default function CreateUserForm() {
 
         setShowFeedback(false);
         setIsInvalidEmail(false);
+        setErrorMessage('');
 
         getUser(data)
             .then(response => response.json())
@@ -187,15 +190,18 @@ export default function CreateUserForm() {
                     document.getElementById("in-email").value = result['user']['email'];
                     document.getElementById("in-pass").value = "";
                     document.getElementById("in-role").checked = result['user']['role'];
+                } else {
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                setErrorMessage(error.message);
             });
     }
 
     const remove = (data) => {
-
+        setErrorMessage('');
         removeUser(JSON.stringify(data))
             .then(response => response.json())
             .then(result => {
@@ -204,10 +210,13 @@ export default function CreateUserForm() {
                     getUsers()
                     $('.AlertContainer').show()
                     $('.Alert').text("User deleted!")
+                } else {
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                setErrorMessage(error.message);
             });
     }
 
@@ -230,6 +239,7 @@ export default function CreateUserForm() {
     const modify = (e) => {
 
         e.preventDefault();
+        setErrorMessage('');
 
         var username = document.getElementById('in-username').value
         var password = document.getElementById('in-pass').value
@@ -265,10 +275,13 @@ export default function CreateUserForm() {
                     getUsers()
                     $('.AlertContainer').show()
                     $('.Alert').text("User modified!")
+                } else {
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                setErrorMessage(error.message);
             });
     }
 
@@ -277,7 +290,7 @@ export default function CreateUserForm() {
         $('.AlertContainer').hide()
         var table = document.getElementById('myTable');
 
-        if(table != null){
+        if (table != null) {
             getUsers()
         }
 
@@ -403,6 +416,13 @@ export default function CreateUserForm() {
                                                     </Form>
                                                 </CardBody>
                                                 <CardFooter>
+                                                    {errorMessage
+                                                        ? <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                            <div>
+                                                                {errorMessage}
+                                                            </div>
+                                                        </div>
+                                                        : null}
                                                     <Button className="btn-round" id="btn-modify" color="info" size="lg" onClick={(e) => modify(e)}>
                                                         Modify
                                                     </Button>

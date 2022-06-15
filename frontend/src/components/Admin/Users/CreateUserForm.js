@@ -71,6 +71,8 @@ export default function CreateUserForm() {
     // Variable to show or not the feedback
     const [showFeedback, setShowFeedback] = useState(false);
 
+    const [errorMessage, setErrorMessage] = React.useState('')
+
     const passRequirements = `Password requirements:
     Must have a minimum length of 8 characters
     Must include 1 capital letter and 1 small letter
@@ -107,7 +109,7 @@ export default function CreateUserForm() {
     const create = (e) => {
         e.preventDefault();
         setShowFeedback(false);
-
+        setErrorMessage('');
 
         var role = document.getElementById('in-role').checked
 
@@ -129,16 +131,19 @@ export default function CreateUserForm() {
                     if (result['message'] === 200) {
                         alert("User has been created!")
                         navigate('/admin/users');
+                    } else {
+                        throw Error(result.message)
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    setErrorMessage(error.message);
                 });
         }
     }
 
     React.useEffect(() => {
-        return function cleanup() {};
+        return function cleanup() { };
     }, []);
 
     const renderFeedback = (input, success, error) => {
@@ -254,6 +259,13 @@ export default function CreateUserForm() {
                                                     </Form>
                                                 </CardBody>
                                                 <CardFooter>
+                                                    {errorMessage
+                                                        ? <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                            <div>
+                                                                {errorMessage}
+                                                            </div>
+                                                        </div>
+                                                        : null}
                                                     <Button className="btn-round" color="info" id="btn-create" size="lg" onClick={(e) => create(e)}>
                                                         Create
                                                     </Button>
