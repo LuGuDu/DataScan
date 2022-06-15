@@ -50,6 +50,8 @@ export default function Register() {
   const [emailFocus, setEmailFocus] = React.useState(false);
   const [passwordFocus, setPasswordFocus] = React.useState(false);
 
+  const [errorMessage, setErrorMessage] = React.useState('')
+
   const [username, setUsername] = useState('');
 
   const [password, setPassword] = useState('');
@@ -108,6 +110,7 @@ export default function Register() {
   const register = (e) => {
     e.preventDefault();
     setShowFeedback(false);
+    setErrorMessage('');
 
     var jsonData = {
       "username": username,
@@ -125,10 +128,17 @@ export default function Register() {
           document.getElementById("btn-login").disabled = false;
           if (result['message'] === 200) {
             navigate('/login');
+          } else {
+            document.getElementById("btn-register").disabled = false;
+            document.getElementById("btn-login").disabled = false;
+            setShowFeedback(true)
+
+            throw Error(result.message)
           }
         })
         .catch(error => {
           console.error('Error:', error);
+          setErrorMessage(error.message);
         });
     }
   }
@@ -244,6 +254,13 @@ export default function Register() {
                       </Form>
                     </CardBody>
                     <CardFooter>
+                      {errorMessage
+                        ? <div class="alert alert-danger d-flex align-items-center" role="alert">
+                          <div>
+                            {errorMessage}
+                          </div>
+                        </div>
+                        : null}
                       <Button className="btn-round" color="info" size="lg" id="btn-register" onClick={(e) => register(e)}>
                         Register
                       </Button>
