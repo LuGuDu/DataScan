@@ -1,23 +1,30 @@
-from re import A
-from model.User import User
+"""UserDAO class"""
 
 class UserDAO:
+    """Class with methods for users persistance"""
 
     def save(self, mongo, user):
+        """Takes an user and save it on mongoDB"""
         mongo.users.insert_one(user)
 
-    def getAll(self, mongo):
+    def get_all(self, mongo):
+        """"Returns all the users as list"""
         return list(mongo.users.find({}))
 
-    def deleteByUsernameEmail(self, mongo, username, email):
+    def delete_by_username_email(self, mongo, username, email):
+        """Takes an username and an email and delete the user from mongoDB"""
         mongo.users.delete_one({"username": username, "email": email})
 
-    def getByUsernameEmail(self, mongo, username, email):
+    def get_by_username_email(self, mongo, username, email):
+        """Takes an username and an email and returns the user"""
         return mongo.users.find_one({"username": username, "email": email})
 
     def update(self, mongo, user):
-        print(user)
-        mongo.users.update_one({'email': user["email"]}, {'$set': {"username": user["username"], "password": user["password"], "role": user["role"]}})
+        """Takes an user and update it on mongoDB"""
+        mongo.users.update_one({'email': user["email"]},
+{'$set': {"username": user["username"],
+"password": user["password"], "role": user["role"]}})
 
-    def getByEmail(self, mongo, email):
+    def get_by_email(self, mongo, email):
+        """Takes an email and returns the user from mongoDB"""
         return mongo.users.find_one({"email": email})

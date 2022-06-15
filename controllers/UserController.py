@@ -1,35 +1,37 @@
-from flask import abort as fabort, make_response
-from model.User import User
-from dao.UserDAO import UserDAO
+"""User controller class"""
+
 import json
 import hashlib
 import re
+from flask import abort as fabort, make_response
+
+from model.User import User
+from dao.UserDAO import UserDAO
 
 from exceptions.UserExistsException import UserExistsException
 from exceptions.UserNoExistsException import UserNoExistsException
 from exceptions.EmailInvalidException import EmailInvalidException
 from exceptions.PasswordInvalidException import PasswordInvalidException
 
-userDAO = UserDAO()
+user_dao = UserDAO()
 
-regexEmail = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-regexPassword = re.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}")
+regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+regex_password = re.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}")
 
 
-def checkEmail(email):
-    if(re.fullmatch(regexEmail, email)):
+def check_email(email):
+    """Method to verify the email"""
+    if re.fullmatch(regex_email, email):
         return True
-    else:
-        return False
 
-def checkPassword(password):
-    if(re.search(regexPassword, password)):
+def check_password(password):
+    """Method to verify the password"""
+    if re.search(regex_password, password):
         return True
-    else:
-        return False
 
 
 def abort(status_code, message):
+    """Method to abort the request"""
     data = {"message": message, "status_code": status_code}
     response = make_response(json.dumps(data))
     response.status_code = status_code
@@ -37,151 +39,156 @@ def abort(status_code, message):
     fabort(response)
 
 
-def loginUser(data, mongo):
+def login_user(data, mongo):
+    """Method to login an user"""
     password = json.loads(data.decode())["password"]
     email = json.loads(data.decode())["email"]
 
-    user = userDAO.getByEmail(mongo, email) 
+    user = user_dao.get_by_email(mongo, email)
 
-    encryptPass = hashlib.sha256(password.encode()).hexdigest()
-    if(user and encryptPass == user["password"]):
+    encrypt_pass = hashlib.sha256(password.encode()).hexdigest()
+    if user and encrypt_pass == user["password"]:
         return True
 
     return False
 
 
-def registerUser(data, mongo):
-
+def register_user(data, mongo):
+    """Method to register a new user"""
     username = json.loads(data.decode())["username"]
     password = json.loads(data.decode())["password"]
     email = json.loads(data.decode())["email"]
     role = False
 
-    try: 
-        if(checkEmail(email) == False):
+    try:
+        if check_email(email) is False:
             raise EmailInvalidException
-        if(checkPassword(password) == False):
+        if check_password(password) is False:
             raise PasswordInvalidException
-        if(userDAO.getByEmail(mongo,email)):
+        if user_dao.get_by_email(mongo,email):
             raise UserExistsException
     except EmailInvalidException:
-        print("Email not valid")        
+        print("Email not valid")
         abort(500, "Email not valid")
     except PasswordInvalidException:
-        print("Password not valid")        
-        abort(500, "Password not valid")     
+        print("Password not valid")
+        abort(500, "Password not valid")
     except UserExistsException:
-        print("User already exists")        
-        abort(500, "User already exists")        
+        print("User already exists")
+        abort(500, "User already exists")
 
     user = User(username, password, email, role)
 
-    userDAO.save(mongo, user.getJson())
+    user_dao.save(mongo, user.get_json())
 
 
-def createUser(data, mongo):
+def create_user(data, mongo):
+    """Method to create a new user"""
     username = json.loads(data.decode())["username"]
     password = json.loads(data.decode())["password"]
     email = json.loads(data.decode())["email"]
     role = json.loads(data.decode())["role"]
 
-    try: 
-        if(checkEmail(email) == False):
+    try:
+        if check_email(email) is False:
             raise EmailInvalidException
-        if(checkPassword(password) == False):
+        if check_password(password) is False:
             raise PasswordInvalidException
-        if(userDAO.getByEmail(mongo,email)):
+        if user_dao.get_by_email(mongo,email):
             raise UserExistsException
     except EmailInvalidException:
-        print("Email not valid")        
+        print("Email not valid")
         abort(500, "Email not valid")
     except PasswordInvalidException:
-        print("Password not valid")        
-        abort(500, "Password not valid")     
+        print("Password not valid")
+        abort(500, "Password not valid")
     except UserExistsException:
-        print("User already exists")        
-        abort(500, "User already exists")  
+        print("User already exists")
+        abort(500, "User already exists")
 
     user = User(username, password, email, role)
-    userDAO.save(mongo, user.getJson())
+    user_dao.save(mongo, user.get_json())
 
-def deleteUser(data, mongo):
+def delete_user(data, mongo):
+    """Method to delete an existing user"""
     username = json.loads(data.decode())["username"]
     email = json.loads(data.decode())["email"]
 
     try:
-        if(userDAO.getByEmail(mongo,email) is None):
+        if user_dao.get_by_email(mongo,email) is None:
             raise UserNoExistsException
     except UserNoExistsException:
-        print("User doesnt exists")        
+        print("User doesnt exists")
         abort(500, "User doesnt exists")
 
-    userDAO.deleteByUsernameEmail(mongo, username, email)
-    
+    user_dao.delete_by_username_email(mongo, username, email)
 
-def getUserList(mongo):
-    userList = userDAO.getAll(mongo)
-    for user in userList:
+
+def get_user_list(mongo):
+    """Method to obtains the users list"""
+    user_list = user_dao.get_all(mongo)
+    for user in user_list:
         user['_id'] = str(user['_id'])
+    return user_list
 
-    return userList
+def get_user(username, email, mongo):
+    """Method to obtains the info of an user"""
+    user = user_dao.get_by_username_email(mongo, username, email)
 
-def getUser(username, email, mongo):
-    user = userDAO.getByUsernameEmail(mongo, username, email)
-    
     try:
         if user:
             user['_id'] = str(user['_id'])
         else:
             raise UserNoExistsException
     except UserNoExistsException:
-        print("User doesnt exists")        
+        print("User doesnt exists")
         abort(500, "User doesnt exists")
 
     return user
 
-def getRole(email, mongo):
-    user = userDAO.getByEmail(mongo, email)
+def get_role(email, mongo):
+    """Method to obtains the role of an user"""
+    user = user_dao.get_by_email(mongo, email)
     try:
         if user:
-            if(user["role"]):
+            if user["role"]:
                 role = "administrator"
             else:
                 role = "normal"
         else:
             raise UserNoExistsException
     except UserNoExistsException:
-        print("User doesnt exists")        
+        print("User doesnt exists")
         abort(500, "User doesnt exists")
 
     return role
 
-def modifyUser(data, mongo):
+def modify_user(data, mongo):
+    """Method to modify an existing user"""
+    user_json = json.loads(data.decode())
 
-    userJson = json.loads(data.decode())
+    username = user_json["username"]
+    email = user_json["email"]
+    role = user_json["role"]
 
-    username = userJson["username"]
-    email = userJson["email"]
-    role = userJson["role"]
-
-    user = userDAO.getByEmail(mongo, email) 
+    user = user_dao.get_by_email(mongo, email)
 
     try:
-        if(userDAO.getByEmail(mongo,email) is None):
+        if user_dao.get_by_email(mongo,email) is None:
             raise UserNoExistsException
     except UserNoExistsException:
-        print("User doesnt exists")        
+        print("User doesnt exists")
         abort(500, "User doesnt exists")
 
-    if "password" in userJson:
+    if "password" in user_json:
         password = json.loads(data.decode())["password"]
 
-        try: 
-            if(checkPassword(password) == False):
+        try:
+            if check_password(password) is False:
                 raise PasswordInvalidException
         except PasswordInvalidException:
-            print("Password not valid")        
-            abort(500, "Password not valid")     
+            print("Password not valid")
+            abort(500, "Password not valid")
 
         user["password"] = hashlib.sha256(password.encode()).hexdigest()
 
@@ -189,4 +196,4 @@ def modifyUser(data, mongo):
     user["email"] = email
     user["role"] = role
 
-    userDAO.update(mongo, user)
+    user_dao.update(mongo, user)
