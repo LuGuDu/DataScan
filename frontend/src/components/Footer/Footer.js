@@ -30,7 +30,7 @@ import {
 
 export default function Footer() {
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -44,12 +44,12 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/welcome" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/welcome" tag={Link} onClick={() => smoothScroll()}>
                   Home
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/analyze" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/analyze" tag={Link} onClick={() => smoothScroll()}>
                   Analyze
                 </NavLink>
               </NavItem>
@@ -58,12 +58,12 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/contact" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/contact" tag={Link} onClick={() => smoothScroll()}>
                   Contact us
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/about" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/about" tag={Link} onClick={() => smoothScroll()}>
                   About us
                 </NavLink>
               </NavItem>

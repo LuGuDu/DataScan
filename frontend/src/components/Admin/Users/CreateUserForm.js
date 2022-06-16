@@ -142,10 +142,6 @@ export default function CreateUserForm() {
         }
     }
 
-    React.useEffect(() => {
-        return function cleanup() { };
-    }, []);
-
     const renderFeedback = (input, success, error) => {
         return (input
             ? <FormFeedback valid>
@@ -203,8 +199,8 @@ export default function CreateUserForm() {
                                                             <Input
                                                                 placeholder="Username"
                                                                 type="text"
-                                                                onFocus={(e) => setFullNameFocus(true)}
-                                                                onBlur={(e) => setFullNameFocus(false)}
+                                                                onFocus={() => setFullNameFocus(true)}
+                                                                onBlur={() => setFullNameFocus(false)}
                                                                 onChange={e => setUsername(e.target.value)}
                                                             />
                                                         </InputGroup>
@@ -221,8 +217,8 @@ export default function CreateUserForm() {
                                                             <Input
                                                                 placeholder="Email"
                                                                 type="text"
-                                                                onFocus={(e) => setEmailFocus(true)}
-                                                                onBlur={(e) => setEmailFocus(false)}
+                                                                onFocus={() => setEmailFocus(true)}
+                                                                onBlur={() => setEmailFocus(false)}
                                                                 onChange={e => setEmail(e.target.value)}
                                                                 valid={isValidEmail}
                                                                 invalid={isInvalidEmail}
@@ -244,8 +240,8 @@ export default function CreateUserForm() {
                                                             <Input
                                                                 placeholder="Password"
                                                                 type="password"
-                                                                onFocus={(e) => setPasswordFocus(true)}
-                                                                onBlur={(e) => setPasswordFocus(false)}
+                                                                onFocus={() => setPasswordFocus(true)}
+                                                                onBlur={() => setPasswordFocus(false)}
                                                                 onChange={e => setPassword(e.target.value)}
                                                                 valid={isValidPwd}
                                                                 invalid={isInvalidPwd}

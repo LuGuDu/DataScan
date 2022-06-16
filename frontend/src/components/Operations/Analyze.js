@@ -46,7 +46,7 @@ export default function Analyze() {
     var percentageAttacksChart
     var typesChart
 
-    const getModelInfo = (e) => {
+    const getModelInfo = () => {
 
         $('.DatasetFormatAlert').hide()
 
@@ -336,7 +336,7 @@ export default function Analyze() {
             g = generateRandomNumber(100, 200),
             b = generateRandomNumber(100, 200)
         var a = 0.8
-        labelsArray.forEach(function (number) {
+        labelsArray.forEach(function () {
             colors[count] = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
             r = generateRandomNumber(100, 200)
             g = generateRandomNumber(100, 200)

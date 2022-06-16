@@ -70,7 +70,7 @@ export default function NoLoggedNavbar() {
     setCollapseOut("");
   };
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -78,7 +78,7 @@ export default function NoLoggedNavbar() {
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
+          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
             <span>DataScan </span>
           </NavbarBrand>
           <button
@@ -101,7 +101,7 @@ export default function NoLoggedNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/" onClick={(e) => smoothScroll(e)}>
+                <a href="/" onClick={() => smoothScroll()}>
                   DataScan
                 </a>
               </Col>

@@ -155,7 +155,7 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const goLogin = (e) => {
+  const goLogin = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
     navigate('/login');
   }
@@ -200,8 +200,8 @@ export default function Register() {
                           <Input
                             placeholder="Username"
                             type="text"
-                            onFocus={(e) => setFullNameFocus(true)}
-                            onBlur={(e) => setFullNameFocus(false)}
+                            onFocus={() => setFullNameFocus(true)}
+                            onBlur={() => setFullNameFocus(false)}
                             onChange={e => setUsername(e.target.value)}
                           />
                         </InputGroup>
@@ -218,8 +218,8 @@ export default function Register() {
                           <Input
                             placeholder="Email"
                             type="text"
-                            onFocus={(e) => setEmailFocus(true)}
-                            onBlur={(e) => setEmailFocus(false)}
+                            onFocus={() => setEmailFocus(true)}
+                            onBlur={() => setEmailFocus(false)}
                             onChange={e => setEmail(e.target.value)}
                             valid={isValidEmail}
                             invalid={isInvalidEmail}
@@ -241,8 +241,8 @@ export default function Register() {
                           <Input
                             placeholder="Password"
                             type="password"
-                            onFocus={(e) => setPasswordFocus(true)}
-                            onBlur={(e) => setPasswordFocus(false)}
+                            onFocus={() => setPasswordFocus(true)}
+                            onBlur={() => setPasswordFocus(false)}
                             onChange={(e) => setPassword(e.target.value)}
                             valid={isValidPwd}
                             invalid={isInvalidPwd}
@@ -264,7 +264,7 @@ export default function Register() {
                       <Button className="btn-round" color="info" size="lg" id="btn-register" onClick={(e) => register(e)}>
                         Register
                       </Button>
-                      <Button className="btn-round" color="info" size="lg" id="btn-login" onClick={(e) => goLogin(e)}>
+                      <Button className="btn-round" color="info" size="lg" id="btn-login" onClick={() => goLogin()}>
                         Login
                       </Button>
                     </CardFooter>

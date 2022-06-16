@@ -89,7 +89,7 @@ export default function CreateUserForm() {
         Must include 1 number
         Must include 1 special char`
 
-    const getUsers = (e) => {
+    const getUsers = () => {
 
         var tableHeaderRowCount = 1;
         var table = document.getElementById('myTable');
@@ -294,8 +294,6 @@ export default function CreateUserForm() {
             getUsers()
         }
 
-        return () => {
-        };
     }, []);
 
     const renderFeedback = (input, success, error) => {
@@ -355,8 +353,8 @@ export default function CreateUserForm() {
                                                                 id="in-username"
                                                                 placeholder="Username"
                                                                 type="text"
-                                                                onFocus={(e) => setFullNameFocus(true)}
-                                                                onBlur={(e) => setFullNameFocus(false)}
+                                                                onFocus={() => setFullNameFocus(true)}
+                                                                onBlur={() => setFullNameFocus(false)}
                                                             />
                                                         </InputGroup>
                                                         <InputGroup
@@ -374,8 +372,8 @@ export default function CreateUserForm() {
                                                                 placeholder="Email"
                                                                 type="text"
                                                                 readonly="readonly"
-                                                                onFocus={(e) => setEmailFocus(true)}
-                                                                onBlur={(e) => setEmailFocus(false)}
+                                                                onFocus={() => setEmailFocus(true)}
+                                                                onBlur={() => setEmailFocus(false)}
                                                                 valid={isValidEmail}
                                                                 invalid={isInvalidEmail}
                                                             />
@@ -396,8 +394,8 @@ export default function CreateUserForm() {
                                                                 id="in-pass"
                                                                 placeholder="New password"
                                                                 type="password"
-                                                                onFocus={(e) => setPasswordFocus(true)}
-                                                                onBlur={(e) => setPasswordFocus(false)}
+                                                                onFocus={() => setPasswordFocus(true)}
+                                                                onBlur={() => setPasswordFocus(false)}
                                                                 invalid={isInvalidPwd}
                                                                 Title={passRequirements} />
                                                             {showFeedback ? renderFeedback(isValidPwd,

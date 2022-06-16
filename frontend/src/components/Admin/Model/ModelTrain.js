@@ -123,7 +123,6 @@ export default function Train() {
         uploadFile(formData)
             .then(response => response.json())
             .then(result => {
-                //console.log('Success:', result);
                 if (result['message'] === 200) {
 
                     $('.AlertContainer').show()
@@ -197,7 +196,6 @@ export default function Train() {
 
         $('table [type="checkbox"]').each(function (i, chk) {
             if (chk.checked) {
-                //console.log(resume_table.rows[i + 1].cells[1].innerText, "Checked!");
                 predictors.push(resume_table.rows[i + 1].cells[1].innerText)
                 predictorsCount += 1
             }
@@ -248,7 +246,8 @@ export default function Train() {
 
     const navigate = useNavigate();
 
-    const finishTrain = () => {
+    const finishTrain = (e) => {
+        e.preventDefault()
 
         document.getElementById("file").disabled = true;
         document.getElementById("btn-analyzeFile").disabled = true;

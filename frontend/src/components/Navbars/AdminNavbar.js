@@ -41,13 +41,6 @@ export default function AdminNavbar() {
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
 
-  React.useEffect(() => {
-
-    return function cleanup() {
-
-    };
-  }, []);
-
   const toggleCollapse = () => {
     document.documentElement.classList.toggle("nav-open");
     setCollapseOpen(!collapseOpen);
@@ -61,7 +54,7 @@ export default function AdminNavbar() {
     setCollapseOut("");
   };
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -75,7 +68,7 @@ export default function AdminNavbar() {
     <Navbar className={"fixed-top bg-info"} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/admin" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
+          <NavbarBrand to="/admin" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
             <span>DataScan - Admin pane</span>
           </NavbarBrand>
           <button
@@ -98,7 +91,7 @@ export default function AdminNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/welcome" onClick={(e) => smoothScroll(e)}>
+                <a href="/welcome" onClick={() => smoothScroll()}>
                   DataScan
                 </a>
               </Col>
@@ -127,10 +120,10 @@ export default function AdminNavbar() {
                 Model
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/admin/model/train" onClick={(e) => smoothScroll()}>
+                <DropdownItem tag={Link} to="/admin/model/train" onClick={() => smoothScroll()}>
                   Train
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/admin/model/info" onClick={(e) => smoothScroll()}>
+                <DropdownItem tag={Link} to="/admin/model/info" onClick={() => smoothScroll()}>
                   Actual model
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/admin/model/history">
@@ -152,10 +145,10 @@ export default function AdminNavbar() {
                 Users
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/admin/users" onClick={(e) => smoothScroll()}>
+                <DropdownItem tag={Link} to="/admin/users" onClick={() => smoothScroll()}>
                   List
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/admin/users/create" onClick={(e) => smoothScroll()}>
+                <DropdownItem tag={Link} to="/admin/users/create" onClick={() => smoothScroll()}>
                   Create
                 </DropdownItem>
               </DropdownMenu>

@@ -124,7 +124,7 @@ export default function Login() {
         }
     }, [isLogged, navigate, email])
 
-    const smoothScroll = (e) => {
+    const smoothScroll = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
@@ -169,8 +169,8 @@ export default function Login() {
                                                     <Input
                                                         placeholder="Email"
                                                         type="text"
-                                                        onFocus={(e) => setEmailFocus(true)}
-                                                        onBlur={(e) => setEmailFocus(false)}
+                                                        onFocus={() => setEmailFocus(true)}
+                                                        onBlur={() => setEmailFocus(false)}
                                                         onChange={e => setEmail(e.target.value)}
                                                     />
                                                 </InputGroup>
@@ -187,8 +187,8 @@ export default function Login() {
                                                     <Input
                                                         placeholder="Password"
                                                         type="password"
-                                                        onFocus={(e) => setPasswordFocus(true)}
-                                                        onBlur={(e) => setPasswordFocus(false)}
+                                                        onFocus={() => setPasswordFocus(true)}
+                                                        onBlur={() => setPasswordFocus(false)}
                                                         onChange={e => setPassword(e.target.value)}
                                                     />
                                                 </InputGroup>
@@ -197,7 +197,7 @@ export default function Login() {
                                                         Click {" "}
                                                         <a
                                                             href="#/register"
-                                                            onClick={(e) => smoothScroll(e)}
+                                                            onClick={() => smoothScroll()}
                                                         >
                                                             here
                                                         </a>

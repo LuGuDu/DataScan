@@ -13,11 +13,6 @@ const RestrictedContent = ({ allowedRole }) => {
 
     const navigate = useNavigate();
 
-    const redirectLogin = () => {
-        //window.location.href = '/login';
-        navigate('/login')
-    }
-
     return (
         <div id="error-page">
             <div className="content">

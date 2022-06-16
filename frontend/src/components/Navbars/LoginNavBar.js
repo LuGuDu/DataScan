@@ -74,15 +74,15 @@ export default function IndexNavbar() {
     setCollapseOut("");
   };
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
-    <Navbar className={"fixed-top bg-info"} color-on-scroll="100" expand="lg">
+    <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
+          <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
             <span>DataScan </span>
           </NavbarBrand>
           <button
@@ -105,7 +105,7 @@ export default function IndexNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/" onClick={(e) => smoothScroll(e)}>
+                <a href="/" onClick={() => smoothScroll()}>
                   DataScan
                 </a>
               </Col>
@@ -170,10 +170,10 @@ export default function IndexNavbar() {
                 More options
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/attacks_info" onClick={(e) => smoothScroll()}>
+                <DropdownItem tag={Link} to="/attacks_info" onClick={() => smoothScroll()}>
                   About attacks
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/contact" onClick={(e) => smoothScroll()}>
+                <DropdownItem tag={Link} to="/contact" onClick={() => smoothScroll()}>
                   Contact us
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/about">

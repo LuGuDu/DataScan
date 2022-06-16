@@ -27,7 +27,7 @@ async function getTrainModelHistory() {
 
 export default function ModelHistory() {
 
-    const getModelHistory = (e) => {
+    const getModelHistory = () => {
 
         getTrainModelHistory()
             .then(response => response.json())
@@ -93,9 +93,6 @@ export default function ModelHistory() {
         if(lista != null) {
             getModelHistory()
         }
-
-        return function cleanup() {
-        };
     }, []);
 
     const goUp = (e) => {

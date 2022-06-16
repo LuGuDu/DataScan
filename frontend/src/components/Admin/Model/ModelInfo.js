@@ -116,7 +116,7 @@ export default function ModelInfo() {
             x.innerHTML = fileField.files[0]['name']
     }
 
-    const getModelInfo = (e) => {
+    const getModelInfo = () => {
 
         $('.DatasetFormatAlert').hide()
 

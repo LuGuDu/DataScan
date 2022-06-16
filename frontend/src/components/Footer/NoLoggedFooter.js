@@ -30,7 +30,7 @@ import {
 
 export default function NoLoggedFooter() {
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -44,17 +44,17 @@ export default function NoLoggedFooter() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/" tag={Link} onClick={() => smoothScroll()}>
                   Home
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/login" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/login" tag={Link} onClick={() => smoothScroll()}>
                   Login
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/register" tag={Link} onClick={(e) => smoothScroll(e)}>
+                <NavLink to="/register" tag={Link} onClick={() => smoothScroll()}>
                   Register
                 </NavLink>
               </NavItem>
