@@ -35,26 +35,26 @@ async function modifyUser(data) {
         method: 'PUT',
         body: data
     });
-};
+}
 
 async function removeUser(data) {
     return fetch('/deleteUser', {
         method: 'DELETE',
         body: data
     });
-};
+}
 
 async function getUserList() {
     return fetch('/getUsers', {
         method: 'GET'
     });
-};
+}
 
 async function getUser(data) {
     return fetch(`/getUser?username=${data['username']}&email=${data['email']}`, {
         method: 'GET'
     });
-};
+}
 
 // Function to check whether the password introduced has the correct format
 function checkPassword(pwd) {
@@ -62,7 +62,7 @@ function checkPassword(pwd) {
     return strongPwdPattern.test(pwd);
 }
 
-export default function CreateUserForm() {
+export default function UserList() {
 
     const [fullNameFocus, setFullNameFocus] = React.useState(false);
     const [emailFocus, setEmailFocus] = React.useState(false);
@@ -264,7 +264,7 @@ export default function CreateUserForm() {
         if (changePass) {
             if (validateInputs(password)) {
                 jsonData["password"] = password
-            };
+            }
         }
         document.getElementById("btn-modify").disabled = true;
         modifyUser(JSON.stringify(jsonData))
@@ -483,4 +483,4 @@ export default function CreateUserForm() {
             </PermissionsGate>
         </>
     );
-};
+}

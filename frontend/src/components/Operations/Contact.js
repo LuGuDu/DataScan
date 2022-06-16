@@ -1,14 +1,8 @@
 import React from "react";
 
-import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
-import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
-
 import ContactHeader from "components/PageHeader/ContactHeader.js"
-
 import IndexNavbar from "components/Navbars/IndexNavbar.js"
-import LoginNavBar from "components/Navbars/LoginNavBar"
 import Footer from "components/Footer/Footer.js"
-import NoLoggedFooter from "components/Footer/NoLoggedFooter.js"
 
 import {
     Container,
@@ -17,37 +11,21 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Label,
 } from "reactstrap";
 
 export default function Contact() {
 
     React.useEffect(() => {
-        document.body.classList.toggle("profile-page");
         document.body.classList.toggle("index-page");
-
-        // Specify how to clean up after this effect:
         return function cleanup() {
-            document.body.classList.toggle("profile-page");
             document.body.classList.toggle("index-page");
-
         };
     }, []);
 
+
     return (
         <>
-            <PermissionsGate
-                scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
-            >
-                <IndexNavbar />
-            </PermissionsGate>
-
-            <PermissionsGate
-                scopes={[SCOPES.noLoggedCanAccess]}
-            >
-                <LoginNavBar />
-            </PermissionsGate>
-
+            <IndexNavbar />
             <div className="wrapper">
                 <ContactHeader />
                 <div className="main">
@@ -65,7 +43,7 @@ export default function Contact() {
                                                 <Row className="justify-content-between">
                                                     <Col>
                                                         <p className="profile-description text-left mb-0">
-                                                            
+
                                                             Contact-email: datascan.contacto@gmail.com
                                                         </p>
                                                     </Col>
@@ -79,19 +57,8 @@ export default function Contact() {
                         </section>
                     </div>
                 </div>
-
-                <PermissionsGate
-                    scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
-                >
-                    <Footer />
-                </PermissionsGate>
-
-                <PermissionsGate
-                    scopes={[SCOPES.noLoggedCanAccess]}
-                >
-                    <NoLoggedFooter />
-                </PermissionsGate>
+                <Footer />
             </div>
         </>
     );
-};
+}

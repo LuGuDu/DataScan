@@ -18,12 +18,12 @@
 import React from "react";
 
 // core components
-import LoginNavbar from "components/Navbars/LoginNavBar.js";
 import PageHeader from "components/PageHeader/PageHeader.js";
-import NoLoggedFooter from "components/Footer/NoLoggedFooter.js";
 
 // sections for this page/view
 import AnalyzeInfo from "views/IndexSections/AnalyzeInfo.js";
+import IndexNavbar from "components/Navbars/IndexNavbar";
+import Footer from "components/Footer/Footer";
 
 
 export default function Index() {
@@ -36,13 +36,13 @@ export default function Index() {
   },[]);
   return (
     <>
-      <LoginNavbar />
+      <IndexNavbar />
       <div className="wrapper">
         <PageHeader />
         <div className="main">
           <AnalyzeInfo />
         </div>
-        <NoLoggedFooter />
+        <Footer />
       </div>
     </>
   );

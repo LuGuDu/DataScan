@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 
-import LoginNavBar from "components/Navbars/LoginNavBar.js"
+import IndexNavbar from "components/Navbars/IndexNavbar.js"
 
 import {
   Button,
@@ -29,7 +29,7 @@ async function registerUser(data) {
     method: 'POST',
     body: data
   });
-};
+}
 
 // Function to check whether the email introduced has the correct format
 function checkEmail(email) {
@@ -38,7 +38,7 @@ function checkEmail(email) {
 }
 
 // Function to check whether the password introduced has the correct format
-function checkPassword(pwd) {
+function checkPass(pwd) {
   var strongPwdPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
   return strongPwdPattern.test(pwd);
 }
@@ -48,13 +48,13 @@ export default function Register() {
 
   const [fullNameFocus, setFullNameFocus] = React.useState(false);
   const [emailFocus, setEmailFocus] = React.useState(false);
-  const [passwordFocus, setPasswordFocus] = React.useState(false);
+  const [passFocus, setPassFocus] = React.useState(false);
 
   const [errorMessage, setErrorMessage] = React.useState('')
 
   const [username, setUsername] = useState('');
 
-  const [password, setPassword] = useState('');
+  const [pass, setPass] = useState('');
   // Variable to store if the pwd introduced is valid
   const [isValidPwd, setIsValidPwd] = useState(false);
   // Variable to store if the pwd introduced is invalid
@@ -89,7 +89,7 @@ export default function Register() {
       setShowFeedback(true);
       setIsValidEmail(false);
       setIsInvalidEmail(true);
-    } else if (!checkPassword(password)) {
+    } else if (!checkPass(pass)) {
       setIsValidEmail(true);
       setIsInvalidEmail(false);
       setShowFeedback(true);
@@ -114,7 +114,7 @@ export default function Register() {
 
     var jsonData = {
       "username": username,
-      "password": password,
+      "password": pass,
       "email": email
     }
 
@@ -162,7 +162,7 @@ export default function Register() {
 
   return (
     <>
-      <LoginNavBar />
+      <IndexNavbar />
       <div className="wrapper">
         <div className="main">
           <div className="section">
@@ -230,7 +230,7 @@ export default function Register() {
 
                         <InputGroup
                           className={classnames({
-                            "input-group-focus": passwordFocus,
+                            "input-group-focus": passFocus,
                           })}
                         >
                           <InputGroupAddon addonType="prepend">
@@ -241,9 +241,9 @@ export default function Register() {
                           <Input
                             placeholder="Password"
                             type="password"
-                            onFocus={() => setPasswordFocus(true)}
-                            onBlur={() => setPasswordFocus(false)}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onFocus={() => setPassFocus(true)}
+                            onBlur={() => setPassFocus(false)}
+                            onChange={(e) => setPass(e.target.value)}
                             valid={isValidPwd}
                             invalid={isInvalidPwd}
                             Title={passRequirements} />
@@ -277,4 +277,4 @@ export default function Register() {
       </div>
     </>
   );
-};
+}

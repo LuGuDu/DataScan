@@ -28,29 +28,29 @@ async function uploadFile(data) {
         method: 'POST',
         body: data
     });
-};
+}
 
 async function setPredictors(data) {
     return fetch('/setPredictors', {
         method: 'POST',
         body: data
     });
-};
+}
 
 async function getPrunningData() {
     return fetch('/prunning', {
         method: 'GET'
     });
-};
+}
 
 async function finishModelTrain(data) {
     return fetch('/finishModelTrain', {
         method: 'POST',
         body: data
     });
-};
+}
 
-export default function Train() {
+export default function ModelTrain() {
 
     React.useEffect(() => {
         document.body.classList.toggle("profile-page");
@@ -399,5 +399,4 @@ export default function Train() {
             </PermissionsGate>
         </>
     );
-};
-
+}

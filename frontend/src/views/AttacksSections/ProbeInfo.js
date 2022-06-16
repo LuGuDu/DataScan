@@ -33,7 +33,7 @@ const carouselItems = [
     }
 ];
 
-export default function Basics() {
+export default function ProbeInfo() {
 
     return (
         <div className="section">

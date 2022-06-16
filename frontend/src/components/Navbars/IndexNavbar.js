@@ -46,13 +46,13 @@ export default function IndexNavbar() {
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
   const [color, setColor] = React.useState("navbar-transparent");
-  
+
   React.useEffect(() => {
     window.addEventListener("scroll", changeColor);
     return function cleanup() {
       window.removeEventListener("scroll", changeColor);
     };
-  },[]);
+  }, []);
 
   const changeColor = () => {
     if (
@@ -110,9 +110,22 @@ export default function IndexNavbar() {
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/welcome" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
-            <span>DataScan </span>
-          </NavbarBrand>
+          <PermissionsGate
+            scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+          >
+            <NavbarBrand to="/welcome" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
+              <span>DataScan </span>
+            </NavbarBrand>
+          </PermissionsGate>
+
+          <PermissionsGate
+            scopes={[SCOPES.noLoggedCanAccess]}
+          >
+            <NavbarBrand to="/" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
+              <span>DataScan </span>
+            </NavbarBrand>
+          </PermissionsGate>
+
           <button
             aria-expanded={collapseOpen}
             className="navbar-toggler navbar-toggler"
@@ -132,11 +145,27 @@ export default function IndexNavbar() {
         >
           <div className="navbar-collapse-header">
             <Row>
-              <Col className="collapse-brand" xs="6">
-                <a href="/welcome" onClick={() => smoothScroll()}>
-                  DataScan
-                </a>
-              </Col>
+
+              <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+              >
+                <Col className="collapse-brand" xs="6">
+                  <a href="/welcome" onClick={() => smoothScroll()}>
+                    DataScan
+                  </a>
+                </Col>
+              </PermissionsGate>
+
+              <PermissionsGate
+                scopes={[SCOPES.noLoggedCanAccess]}
+              >
+                <Col className="collapse-brand" xs="6">
+                  <a href="/" onClick={() => smoothScroll()}>
+                    DataScan
+                  </a>
+                </Col>
+              </PermissionsGate>
+
               <Col className="collapse-close text-right" xs="6">
                 <button
                   aria-expanded={collapseOpen}
@@ -209,41 +238,44 @@ export default function IndexNavbar() {
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="primary"
-                onClick={(e) => analyze(e)}
-              >
-                <i className="tim-icons icon-zoom-split" /> Analyze
-              </Button>
-            </NavItem>
 
             <PermissionsGate
-                scopes={[SCOPES.administratorCanAccess]}
+              scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
             >
+              <NavItem>
+                <Button
+                  className="nav-link d-none d-lg-block"
+                  color="primary"
+                  onClick={(e) => analyze(e)}
+                >
+                  <i className="tim-icons icon-zoom-split" /> Analyze
+                </Button>
+              </NavItem>
 
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="success"
-                onClick={(e) => goAdminPane(e)}
+              <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
               >
-                <i className="tim-icons icon-settings-gear-63" /> Admin pane
-              </Button>
-            </NavItem>
+                <NavItem>
+                  <Button
+                    className="nav-link d-none d-lg-block"
+                    color="success"
+                    onClick={(e) => goAdminPane(e)}
+                  >
+                    <i className="tim-icons icon-settings-gear-63" /> Admin pane
+                  </Button>
+                </NavItem>
+              </PermissionsGate>
 
+              <NavItem>
+                <Button
+                  className="nav-link d-none d-lg-block"
+                  color="danger"
+                  onClick={(e) => logout(e)}
+                >
+                  <i className="tim-icons icon-user-run" /> Logout
+                </Button>
+              </NavItem>
             </PermissionsGate>
-
-            <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="danger"
-                onClick={(e) => logout(e)}
-              >
-                <i className="tim-icons icon-user-run" /> Logout
-              </Button>
-            </NavItem>
           </Nav>
         </Collapse>
       </Container>

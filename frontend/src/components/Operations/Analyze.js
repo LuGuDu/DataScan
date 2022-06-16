@@ -27,7 +27,7 @@ async function uploadFile(data) {
         method: 'POST',
         body: data
     });
-};
+}
 
 async function getModelFormat() {
     return fetch('/getModelFormat', {
@@ -36,7 +36,7 @@ async function getModelFormat() {
             'Content-Type': 'application/json'
         }
     });
-};
+}
 
 
 export default function Analyze() {
@@ -513,4 +513,4 @@ export default function Analyze() {
             </PermissionsGate>
         </>
     );
-};
+}

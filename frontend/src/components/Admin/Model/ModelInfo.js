@@ -31,7 +31,7 @@ async function getTrainingModelData() {
             'Content-Type': 'application/json'
         }
     });
-};
+}
 
 async function getModelFormat() {
     return fetch('/getModelFormat', {
@@ -40,14 +40,14 @@ async function getModelFormat() {
             'Content-Type': 'application/json'
         }
     });
-};
+}
 
 async function uploadFileForCheck(data) {
     return fetch('/checkModel', {
         method: 'POST',
         body: data
     });
-};
+}
 
 
 export default function ModelInfo() {
@@ -332,4 +332,4 @@ export default function ModelInfo() {
             </PermissionsGate>
         </>
     );
-};
+}

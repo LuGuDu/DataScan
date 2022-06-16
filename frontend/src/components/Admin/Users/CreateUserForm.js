@@ -33,7 +33,7 @@ async function createUser(data) {
         method: 'POST',
         body: data
     });
-};
+}
 
 // Function to check whether the email introduced has the correct format
 function checkEmail(email) {
@@ -278,4 +278,4 @@ export default function CreateUserForm() {
             </PermissionsGate>
         </>
     );
-};
+}

@@ -23,7 +23,7 @@ async function getTrainModelHistory() {
     return fetch('/getTrainModelHistory', {
         method: 'GET'
     });
-};
+}
 
 export default function ModelHistory() {
 
@@ -157,4 +157,4 @@ export default function ModelHistory() {
             </PermissionsGate>
         </>
     );
-};
+}

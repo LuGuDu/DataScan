@@ -5,7 +5,7 @@ import { AES } from 'crypto-js';
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery';
 
-import LoginNavbar from "components/Navbars/LoginNavBar.js"
+import IndexNavbar from "components/Navbars/IndexNavbar"
 
 import {
     Button,
@@ -35,10 +35,9 @@ function getRandomKey(string_length) {
     var i
 
     for (i = 0; i < string_length; i++) {
-        var random = crypto.getRandomValues(new Uint32Array(1))[0]/2**32
+        var random = crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32
         random_string = random_string + char.charAt(Math.floor(random * char.length))
     }
-    alert(random_string)
     return random_string
 }
 
@@ -47,13 +46,13 @@ async function loginUser(data) {
         method: 'POST',
         body: data
     });
-};
+}
 
 async function getUserRole(data) {
     return fetch(`/getRole?email=${data['email']}`, {
         method: 'GET'
     });
-};
+}
 
 export default function Login() {
 
@@ -133,7 +132,7 @@ export default function Login() {
 
     return (
         <>
-            <LoginNavbar />
+            <IndexNavbar />
             <div className="wrapper">
                 <div className="page-header">
                     <div className="page-header-image" />
@@ -230,4 +229,4 @@ export default function Login() {
             </div>
         </>
     );
-};
+}

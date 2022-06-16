@@ -43,7 +43,7 @@ const carouselItems = [
     },
 ];
 
-export default function Basics() {
+export default function AnalyzeInfo() {
     const navigate = useNavigate();
 
     const analyze = (e) => {
