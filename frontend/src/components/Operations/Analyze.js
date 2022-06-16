@@ -325,7 +325,8 @@ export default function Analyze() {
     }
 
     const generateRandomNumber = (min, max) => {
-        return Math.floor(Math.random() * (max - min) + min);
+        var random = crypto.getRandomValues(new Uint32Array(1))[0]/2**32
+        return Math.floor(random * (max - min) + min);
     };
 
     const getColors = (labelsArray) => {

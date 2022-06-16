@@ -28,14 +28,17 @@ import {
     Alert,
 } from "reactstrap";
 
+
 function getRandomKey(string_length) {
     var random_string = ''
     var char = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     var i
 
     for (i = 0; i < string_length; i++) {
-        random_string = random_string + char.charAt(Math.floor(Math.random() * char.length))
+        var random = crypto.getRandomValues(new Uint32Array(1))[0]/2**32
+        random_string = random_string + char.charAt(Math.floor(random * char.length))
     }
+    alert(random_string)
     return random_string
 }
 
