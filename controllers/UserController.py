@@ -23,11 +23,13 @@ def check_email(email):
     """Method to verify the email"""
     if re.fullmatch(regex_email, email):
         return True
+    return False
 
 def check_password(password):
     """Method to verify the password"""
     if re.search(regex_password, password):
         return True
+    return False
 
 
 def abort(status_code, message):
