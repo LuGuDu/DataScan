@@ -159,9 +159,10 @@ def get_prunning_accuracy():
 
     x_data = data.iloc[:, :-1]
     y_data = data.iloc[:, -1]
+    print(y_data)
 
     x_train, x_test, y_train, y_test = train_test_split(
-x_data, y_data, test_size=0.3, random_state=1)
+x_data, y_data, test_size=0.3, random_state=123)
 
     improved_model_dt = improve_model(x_train, y_train)
 
@@ -179,7 +180,7 @@ def final_train_model(pruning, mongo):
     y_data = data.iloc[:, -1]
 
     x_train, x_test, y_train, y_test = train_test_split(
-x_data, y_data, test_size=0.3, random_state=1)
+x_data, y_data, test_size=0.3, random_state=123)
 
     begin_time = 0
     final_time = 0
@@ -250,6 +251,7 @@ def improve_model(x_train, y_train):
         refit      = True,
         return_train_score = True
     )
+
     grid.fit(x_train, y_train)
 
     improved_model = grid.best_estimator_
