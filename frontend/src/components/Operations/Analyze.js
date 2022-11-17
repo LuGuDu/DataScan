@@ -4,7 +4,12 @@ import IndexNavbar from "components/Navbars/IndexNavbar.js"
 import AnalyzeHeader from "components/PageHeader/AnalyzeHeader.js"
 import Footer from "components/Footer/Footer.js"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import Chart from "chart.js"
+import $ from 'jquery'
 
 import {
     Container,
@@ -14,6 +19,7 @@ import {
     CardHeader,
     CardBody,
     Form,
+    Alert,
 } from "reactstrap";
 
 async function uploadFile(data) {
@@ -21,55 +27,99 @@ async function uploadFile(data) {
         method: 'POST',
         body: data
     });
-};
+}
+
+async function getModelFormat() {
+    return fetch('/getModelFormat', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
 
 
 export default function Analyze() {
 
+    const [errorMessage, setErrorMessage] = React.useState('')
+
     var percentageAttacksChart
     var typesChart
+
+    const getModelInfo = () => {
+
+        $('.DatasetFormatAlert').hide()
+
+        getModelFormat()
+            .then(response => response.json())
+            .then(result => {
+                if (result['message'] === 200) {
+                    $('.DatasetFormatAlert').show()
+                    var text = ""
+                    result["modelFormat"].forEach(function (column) {
+                        if (column !== 'class') {
+                            text += column + ", "
+                        }
+                    })
+                    $('.DatasetFormatAlert').text("File must have only this colums: " + text);
+                } else {
+                    throw Error(result.message)
+                }
+            })
+            .catch(error => {
+                console.log(error.message)
+            });
+    }
+
 
     React.useEffect(() => {
         document.body.classList.toggle("index-page");
         document.body.classList.toggle("profile-page");
 
+        $('.AlertContainer').hide()
+        $('.DatasetFormatAlert').hide()
+        getModelInfo()
+
         const initializeCharts = () => {
             var ctx = document.getElementById('percentageChart');
-    
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            percentageAttacksChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3]
-                    }]
-                },
-                options: {}
-            });
-          
-            percentageAttacksChart.render(); 
-            percentageAttacksChart.destroy();
+
+            if (ctx != null) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                percentageAttacksChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: [12, 19, 3, 5, 2, 3]
+                        }]
+                    },
+                    options: {}
+                });
+
+                percentageAttacksChart.render();
+                percentageAttacksChart.destroy();
+            }
 
             ctx = document.getElementById('typesChart')
 
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            typesChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3]
-                    }]
-                },
-                options: {}
-            });
-                      
-            typesChart.render(); 
-            typesChart.destroy();
+            if (ctx != null) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                typesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: [12, 19, 3, 5, 2, 3]
+                        }]
+                    },
+                    options: {}
+                });
 
+                typesChart.render();
+                typesChart.destroy();
+            }
         }
 
         initializeCharts()
@@ -78,32 +128,50 @@ export default function Analyze() {
         return function cleanup() {
             document.body.classList.toggle("profile-page");
             document.body.classList.toggle("index-page");
-
+            $('.AlertContainer').hide()
+            $('.DatasetFormatAlert').hide()
         };
     }, []);
 
     const update = (e) => {
         e.preventDefault();
+        setErrorMessage('');
+
+        $('.AlertContainer').show()
 
         const fileField = document.querySelector('input[type="file"]');
         const formData = new FormData();
         formData.append('file', fileField.files[0]);
 
+        //Disable components
+        $('.AnalyzeAlert').text("Analyzing dataset, wait...")
         document.getElementById("btn-analyze").disabled = true;
         document.getElementById("file").disabled = true;
         document.getElementById("resultData").innerHTML = "";
         //document.getElementById("btn-analyze").style.cursor = "wait"
 
+        //Check if file type is .csv
+        if (fileField.files[0]['type'] !== 'text/csv') {
+            $('.AlertContainer').show()
+            $('.AnalyzeAlert').text("File must be .csv format!")
+
+            //Enable components
+            document.getElementById("file").disabled = false;
+            document.getElementById("btn-analyze").disabled = false;
+            document.getElementById("resultData").innerHTML = "";
+
+            return
+        }
+
         uploadFile(formData)
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
                 if (result['message'] === 200) {
 
-                    //console.log(result['predicts'])
+                    $('.AnalyzeAlert').text("Analysis complete. See results below.")
+
                     document.getElementById("btn-analyze").disabled = false;
                     document.getElementById("file").disabled = false;
-                    //document.getElementById("btn-analyze").style.cursor = "auto"
 
                     var parElement = document.getElementById("resultData");
 
@@ -117,12 +185,16 @@ export default function Analyze() {
 
                     uploadCharts(result['predicts'])
 
+                } else {
+                    $('.AlertContainer').hide()
+                    throw Error(result.message)
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 document.getElementById("btn-analyze").disabled = false;
                 document.getElementById("file").disabled = false;
+                setErrorMessage(error.message);
                 //document.getElementById("btn-analyze").style.cursor = "auto"
             });
     }
@@ -165,7 +237,7 @@ export default function Analyze() {
     const uploadCharts = (dataset) => {
 
         const resultsJSON = JSON.stringify(dataset);
-        
+
         uploadPercentageChart(JSON.parse(resultsJSON))
         uploadTypesChart(JSON.parse(resultsJSON))
 
@@ -191,20 +263,20 @@ export default function Analyze() {
         for (const [key, value] of Object.entries(dataset)) {
             if (dosAttacks.includes(key)) {
                 dosValue += parseInt(value)
-            } else if (r2lAttacks.includes(key)){
+            } else if (r2lAttacks.includes(key)) {
                 r2lValue += parseInt(value)
-            } else if (u2rAttacks.includes(key)){
+            } else if (u2rAttacks.includes(key)) {
                 u2rValue += parseInt(value)
-            } else if (probingAttacks.includes(key)){
+            } else if (probingAttacks.includes(key)) {
                 probingValue += parseInt(value)
             }
             delete dataset[key]
             count = count + 1
         }
-        dataset["Ataques DOS"] = dosValue
-        dataset["Ataques R2L"] = r2lValue
-        dataset["Ataques U2R"] = u2rValue
-        dataset["Ataques probing"] = probingValue
+        dataset["DOS attacks"] = dosValue
+        dataset["R2L attacks"] = r2lValue
+        dataset["U2R attacks"] = u2rValue
+        dataset["Probing attacks"] = probingValue
 
         console.log(dataset)
 
@@ -227,7 +299,7 @@ export default function Analyze() {
             labels: labelsArray
         };
 
-        if(typesChart != null){
+        if (typesChart != null) {
             typesChart.destroy();
         }
 
@@ -237,10 +309,10 @@ export default function Analyze() {
             options: {
                 title: {
                     display: true,
-                    text: 'Tipos de Ataque',
+                    text: 'Attacks by type',
                     fontSize: '18',
                     fontColor: '#fff',
-                    padding: '20', 
+                    padding: '20',
                 },
                 legend: {
                     position: 'bottom'
@@ -253,7 +325,8 @@ export default function Analyze() {
     }
 
     const generateRandomNumber = (min, max) => {
-        return Math.floor(Math.random() * (max - min) + min);
+        var random = crypto.getRandomValues(new Uint32Array(1))[0]/2**32
+        return Math.floor(random * (max - min) + min);
     };
 
     const getColors = (labelsArray) => {
@@ -264,7 +337,7 @@ export default function Analyze() {
             g = generateRandomNumber(100, 200),
             b = generateRandomNumber(100, 200)
         var a = 0.8
-        labelsArray.forEach(function (number) {
+        labelsArray.forEach(function () {
             colors[count] = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
             r = generateRandomNumber(100, 200)
             g = generateRandomNumber(100, 200)
@@ -316,7 +389,7 @@ export default function Analyze() {
             labels: labelsArray
         };
 
-        if(percentageAttacksChart != null){
+        if (percentageAttacksChart != null) {
             percentageAttacksChart.destroy();
         }
 
@@ -326,10 +399,10 @@ export default function Analyze() {
             options: {
                 title: {
                     display: true,
-                    text: 'Porcentaje de ataques',
+                    text: 'Attacks percentage',
                     fontSize: '18',
                     fontColor: '#fff',
-                    padding: '20', 
+                    padding: '20',
                 },
                 legend: {
                     position: 'bottom'
@@ -344,80 +417,100 @@ export default function Analyze() {
 
     return (
         <>
-            <IndexNavbar />
-            <div className="wrapper">
-                <AnalyzeHeader />
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <Container >
-                            <Row >
-                                <Col md="10">
-                                    <Card className="card-plain">
-                                        <CardHeader>
-                                            <h1 className="profile-title text-left">Selecciona el archivo</h1>
-                                            <h5 className="text-on-back">ANALIZAR</h5>
-                                        </CardHeader>
-                                        <CardBody>
-                                            <Form>
-                                                <div className="form-group">
-                                                    <div id="fileSelector" className="custom-file">
-                                                        <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" />
-                                                        <label id="labelFile" className="custom-file-label" htmlFor="file">
-                                                            Selecciona un archivo...
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" id="btn-analyze" className="btn btn-primary" onClick={(e) => update(e)}>
-                                                    Analizar
-                                                </button>
-                                            </Form>
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </Container>
-                        <section className="section section-lg">
-                            <Container>
-                                <Row>
-                                    <Col>
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"noLogged"} />}
+            >
+                <IndexNavbar />
+                <div className="wrapper">
+                    <AnalyzeHeader />
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <Container >
+                                <Row >
+                                    <Col md="10">
                                         <Card className="card-plain">
                                             <CardHeader>
-                                                <h1 className="profile-title text-left">Datos del Analisis</h1>
-                                                <h5 className="text-on-back">RESULTADO</h5>
+                                                <h1 className="profile-title text-left">Select a file</h1>
+                                                <h5 className="text-on-back">ANALYZE</h5>
                                             </CardHeader>
                                             <CardBody>
-                                                <div className="results" style={results}>
-                                                    <pre id="resultData">
-                                                    </pre>
+                                                <Alert className="DatasetFormatAlert" color="info">
+                                                    <strong></strong>
+                                                </Alert >
+                                                <Form>
+                                                    <div className="form-group">
+                                                        <div id="fileSelector" className="custom-file">
+                                                            <input onChange={(e) => changeName(e)} type="file" className="custom-file-input" name="file" id="file" accept=".csv" />
+                                                            <label id="labelFile" className="custom-file-label" htmlFor="file">
+                                                                Select a file...
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" id="btn-analyze" className="btn btn-info" onClick={(e) => update(e)}>
+                                                        Analyze
+                                                    </button>
+                                                </Form>
+                                                {errorMessage
+                                                    ? <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                        <div>
+                                                            {errorMessage}
+                                                        </div>
+                                                    </div>
+                                                    : null}
+                                                <div className="AlertContainer">
+                                                    <Alert className="AnalyzeAlert" color="info">
+                                                        <strong></strong>
+                                                    </Alert >
                                                 </div>
-
                                             </CardBody>
                                         </Card>
                                     </Col>
                                 </Row>
                             </Container>
-                        </section>
-                        <div className="section section-nucleo-icons">
-                            <Container>
-                                <Row md="12">
-                                    <Col md="6">
-                                        <div className="percentages">
-                                            <canvas id="percentageChart" width="100" height="100"></canvas>
-                                        </div>
-                                    </Col>
-                                    <Col md="6">
-                                        <div className="types">
-                                            <canvas id="typesChart" width="100" height="100"></canvas>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Container>
+                            <section className="section section-lg">
+                                <Container>
+                                    <Row>
+                                        <Col>
+                                            <Card className="card-plain">
+                                                <CardHeader>
+                                                    <h1 className="profile-title text-left">Analyze data</h1>
+                                                    <h5 className="text-on-back">RESULTS</h5>
+                                                </CardHeader>
+                                                <CardBody>
+                                                    <div className="results" style={results}>
+                                                        <pre id="resultData">
+                                                        </pre>
+                                                    </div>
 
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </section>
+                            <div className="section section-nucleo-icons">
+                                <Container>
+                                    <Row md="12">
+                                        <Col md="6">
+                                            <div className="percentages">
+                                                <canvas id="percentageChart" width="100" height="100"></canvas>
+                                            </div>
+                                        </Col>
+                                        <Col md="6">
+                                            <div className="types">
+                                                <canvas id="typesChart" width="100" height="100"></canvas>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Container>
+
+                            </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
-                <Footer />
-            </div>
+            </PermissionsGate>
         </>
     );
-};
+}

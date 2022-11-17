@@ -43,7 +43,7 @@ const carouselItems = [
     },
 ];
 
-export default function Basics() {
+export default function AnalyzeInfo() {
     const navigate = useNavigate();
 
     const analyze = (e) => {
@@ -57,17 +57,17 @@ export default function Basics() {
             <Container className="align-items-center">
                 <Row className="justify-content-between">
                     <Col md="6">
-                        <Label className="text-on-back">Analizar</Label>
+                        <Label className="text-on-back">Analyze</Label>
                         <p className="profile-description text-left">
-                            Mediante el uso de un modelo entrenado de Machine Learning podemos
-                            clasificar tus datos con el objetivo de decir cuales son las
-                            infiltraciones que ha tenido.
-                            Para ello debe proporcionarnos únicamente un dataset con los datos que 
-                            le especificamos.
+                        By using a trained Machine Learning model, we can classify your data in order to 
+                        tell which are the classify your data in order to tell which are the infiltrations 
+                        you have had. infiltrations you have had. 
+                        <br/>
+                        To do so, you only need to provide us with a dataset with the data we specify
                         </p>
                         <div className="btn-wrapper pt-3">
                             <Button className="btn-simple" color="primary" onClick={(e) => analyze(e)} >
-                                Analizar
+                                Analyze data
                             </Button>
                         </div>
                     </Col>

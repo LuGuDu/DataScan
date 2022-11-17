@@ -1,0 +1,6 @@
+projectKey=DataScan
+serverUrl=http://localhost:9000
+serverVersion=9.4.0.54424
+dashboardUrl=http://localhost:9000/dashboard?id=DataScan
+ceTaskId=AYFsZU1TzdVZV8XLV69q
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYFsZU1TzdVZV8XLV69q

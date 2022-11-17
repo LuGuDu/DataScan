@@ -41,6 +41,7 @@
     "bootstrap": "4.5.3",
     "chart.js": "^2.9.4",
     "classnames": "2.2.6",
+    "crypto-js": "^4.1.1",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8",
     "moment": "^2.29.3",
@@ -58,7 +59,7 @@
     "web-vitals": "1.0.1"
   },
   "optionalDependencies": {
-    "jquery": "3.5.1",
+    "jquery": "^3.5.1",
     "typescript": "^4.1.2"
   },
   "scripts": {
@@ -69,7 +70,8 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "compile-sass": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css",
     "minify-sass": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.min.css --output-style compressed",
-    "map-sass": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css --source-map true"
+    "map-sass": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/blk-design-system-react.scss src/assets/css/blk-design-system-react.css --source-map true",
+    "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
     "extends": [

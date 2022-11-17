@@ -32,9 +32,9 @@ export default function AnalyzeHeader() {
       <div className="squares square7" />
       <Container>
         <div className="content-center brand">
-          <h1 className="h1-seo">Analizar</h1>
+          <h1 className="h1-seo">Analyze</h1>
           <h3 className="d-none d-sm-block">
-            Seleccione un archivo para poder analizarlo y detectar todos los ataques que contiene
+            Select a file in order to analyze it and detect all the cyberattacks it contains
           </h3>
         </div>
       </Container>

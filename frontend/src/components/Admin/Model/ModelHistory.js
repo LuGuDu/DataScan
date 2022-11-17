@@ -2,31 +2,36 @@ import React from "react";
 
 import AdminNavbar from "components/Navbars/AdminNavbar"
 
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+import RestrictedContent from 'components/Role-based-access/RestrictedContent.js'
+
 import {
     Container,
     Row,
     Col,
     Card,
+    CardTitle,
     CardHeader,
     CardBody,
-
+    CardFooter,
     Table,
+    Button,
 } from "reactstrap";
 
 async function getTrainModelHistory() {
     return fetch('/getTrainModelHistory', {
         method: 'GET'
     });
-};
+}
 
 export default function ModelHistory() {
 
-    const getModelHistory = (e) => {
+    const getModelHistory = () => {
 
         getTrainModelHistory()
             .then(response => response.json())
             .then(result => {
-                console.log('Success:', result);
                 if (result['message'] === 200) {
 
                     var counter = 1;
@@ -84,40 +89,44 @@ export default function ModelHistory() {
 
     React.useEffect(() => {
 
-        document.body.classList.toggle("profile-page");
-        document.body.classList.toggle("index-page");
-        getModelHistory()
-        // Specify how to clean up after this effect:
-        return function cleanup() {
-            document.body.classList.toggle("profile-page");
-            document.body.classList.toggle("index-page");
-        };
+        var lista = document.getElementById("myTable");
+        if(lista != null) {
+            getModelHistory()
+        }
     }, []);
+
+    const goUp = (e) => {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
     return (
         <>
-            <AdminNavbar />
-            <div className="wrapper">
+            <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess]}
+                RenderForbiddenContent={() => <RestrictedContent allowedRole={"administrator"} />}
+            >
+                <AdminNavbar />
+                <div className="wrapper">
 
-                <div className="main">
-                    <div className="section section-basic" id="basic-elements">
-                        <section className="section section-lg">
-                            <Container>
-                                <Row>
-                                    <Col md="12">
-                                        <Card className="card-plain">
-                                            <CardHeader>
-                                                <h1 className="profile-title text-left">Historial de entrenamientos</h1>
-                                                <h5 className="text-on-back">MODELO</h5>
-                                            </CardHeader>
-                                            <CardBody>
-                                                <Col className="ml-auto mr-auto" lg="12" md="5" >
+                    <div className="main">
+                        <div className="section section-basic" id="basic-elements">
+                            <section className="section section-lg">
+                                <Container>
+                                    <h5 className="text-on-back">Model</h5>
 
-                                                    <Table responsive id="myTable">
+                                    <Card >
+                                        <CardHeader>
+                                            <CardTitle tag="h3">History list</CardTitle>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Row>
+                                                <Col>
+                                                    <Table responsive id="myTable" data-show-toggle="false" data-expand-first="true">
                                                         <thead>
                                                             <tr>
                                                                 <th className="text-left">#</th>
-                                                                <th classname="text-left">Archivo usado</th>
+                                                                <th className="text-left">Archivo usado</th>
                                                                 <th className="text-left">Fecha</th>
                                                                 <th className="text-left">Tiempo </th>
                                                                 <th className="text-left">Podado</th>
@@ -132,18 +141,20 @@ export default function ModelHistory() {
                                                         </tbody>
                                                     </Table>
                                                 </Col>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                                <Row>
-
-                                </Row>
-                            </Container>
-                        </section>
+                                            </Row>
+                                        </CardBody>
+                                        <CardFooter>
+                                            <Button className="btn-round" color="info" size="lg" onClick={(e) => goUp(e)}>
+                                                Go up
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </Container>
+                            </section>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </PermissionsGate>
         </>
     );
-};
+}

@@ -19,7 +19,6 @@ import React from "react";
 
 // reactstrap components
 import {
-    Button,
     Container,
     Row,
     Col,
@@ -29,20 +28,12 @@ import {
 
 const carouselItems = [
     {
-        src: require("assets/img/analyze1.jpg").default,
+        src: require("assets/img/probing_attack.png").default,
         altText: "Slide 1",
-    },
-    {
-        src: require("assets/img/analyze2.webp").default,
-        altText: "Slide 2",
-    },
-    {
-        src: require("assets/img/analyze3.jpg").default,
-        altText: "Slide 3",
-    },
+    }
 ];
 
-export default function Basics() {
+export default function ProbeInfo() {
 
     return (
         <div className="section">
@@ -56,16 +47,13 @@ export default function Basics() {
                     <Col md="6">
                         <Label className="text-on-back">Probe</Label>
                         <p className="profile-description text-left">
-                        Probe: Se produce cuando un atacante escanea una red para recopilar información o 
-                        encontrar vulnerabilidades conocidas que le permitan hackear toda la red. 
+                        Probe: It occurs when an attacker scans a network to gather information or 
+                        find known vulnerabilities that will allow him to find known vulnerabilities 
+                        that allow him to hack the entire network. 
+                        <br/>
+                        Examples: ipsweep, nmap, portsweep or satan.
                         </p>
-                        <div className="btn-wrapper pt-3">
-                            <Button className="btn-simple" color="primary" href="" >
-                                Más información
-                            </Button>
-                        </div>
                     </Col>
-
                 </Row>
             </Container>
         </div>

@@ -34,7 +34,7 @@ export default function PageHeader() {
         <div className="content-center brand">
           <h1 className="h1-seo">DataScan</h1>
           <h3 className="d-none d-sm-block">
-            Un Sistema de Detección de Intrusiones (IDS) que analiza tus datasets para encontrar ciberataques
+            An Intrussion Detection Sistem (IDS) that analyzes your datasets in order to find cyberattacks
           </h3>
         </div>
       </Container>

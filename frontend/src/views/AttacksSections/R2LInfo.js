@@ -19,7 +19,6 @@ import React from "react";
 
 // reactstrap components
 import {
-    Button,
     Container,
     Row,
     Col,
@@ -29,17 +28,9 @@ import {
 
 const carouselItems = [
     {
-        src: require("assets/img/analyze1.jpg").default,
+        src: require("assets/img/r2l_attack.webp").default,
         altText: "Slide 1",
-    },
-    {
-        src: require("assets/img/analyze2.webp").default,
-        altText: "Slide 2",
-    },
-    {
-        src: require("assets/img/analyze3.jpg").default,
-        altText: "Slide 3",
-    },
+    }
 ];
 
 export default function R2LInfo() {
@@ -51,15 +42,11 @@ export default function R2LInfo() {
                     <Col md="6">
                         <Label className="text-on-back">R2L</Label>
                         <p className="profile-description text-left">
-                        Remote to Local (r2l): Ocurre cuando un atacante no tiene una cuenta en la máquina víctima, e intenta obtener 
-                        acceso enviando paquetes a una máquina a través de una red para generar alguna vulnerabilidad 
-                        en esa máquina que le permita obtener acceso local como usuario de esa máquina. 
+                        Remote to Local (r2l): It occurs when an attacker wants to gain unauthorized access to 
+                        a victim hacine in the entire network.
+                        <br/>
+                        Examples: ftp_write, guess_passwd, imap, multihop, phf, spy, warezclient or warezmaster.
                         </p>
-                        <div className="btn-wrapper pt-3">
-                            <Button className="btn-simple" color="primary" href="">
-                                Más información
-                            </Button>
-                        </div>
                     </Col>
                     <Col md="5">
                         <Row className="justify-content-between align-items-center">

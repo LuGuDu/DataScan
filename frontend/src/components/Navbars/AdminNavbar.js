@@ -25,7 +25,6 @@ import {
   Navbar,
   NavItem,
   Nav,
-  NavLink,
   Container,
   Row,
   Col,
@@ -42,13 +41,6 @@ export default function AdminNavbar() {
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
 
-  React.useEffect(() => {
-
-    return function cleanup() {
-
-    };
-  }, []);
-
   const toggleCollapse = () => {
     document.documentElement.classList.toggle("nav-open");
     setCollapseOpen(!collapseOpen);
@@ -62,13 +54,13 @@ export default function AdminNavbar() {
     setCollapseOut("");
   };
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const goBack = (e) => {
     e.preventDefault();
-    navigate('/');
+    navigate('/welcome');
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -76,8 +68,8 @@ export default function AdminNavbar() {
     <Navbar className={"fixed-top bg-info"} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/admin" tag={Link} id="navbar-brand" onClick={(e) => smoothScroll(e)}>
-            <span>DataScan - Panel administrador</span>
+          <NavbarBrand to="/admin" tag={Link} id="navbar-brand" onClick={() => smoothScroll()}>
+            <span>DataScan - Admin pane</span>
           </NavbarBrand>
           <button
             aria-expanded={collapseOpen}
@@ -99,7 +91,7 @@ export default function AdminNavbar() {
           <div className="navbar-collapse-header">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <a href="/" onClick={(e) => smoothScroll(e)}>
+                <a href="/welcome" onClick={() => smoothScroll()}>
                   DataScan
                 </a>
               </Col>
@@ -115,7 +107,7 @@ export default function AdminNavbar() {
             </Row>
           </div>
           <Nav navbar>
-          <UncontrolledDropdown nav>
+            <UncontrolledDropdown nav>
               <DropdownToggle
                 caret
                 color="primary"
@@ -125,47 +117,49 @@ export default function AdminNavbar() {
                 onClick={(e) => e.preventDefault()}
               >
                 <i className="fa fa-cogs d-lg-none d-xl-none" />
-                Modelo
+                Model
               </DropdownToggle>
               <DropdownMenu className="dropdown-with-icons">
-                <DropdownItem tag={Link} to="/admin/model/train" onClick={(e) => smoothScroll()}>
-                  Entrenamiento
+                <DropdownItem tag={Link} to="/admin/model/train" onClick={() => smoothScroll()}>
+                  Train
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/admin/model/info" onClick={(e) => smoothScroll()}>
-                  Modelo actual
+                <DropdownItem tag={Link} to="/admin/model/info" onClick={() => smoothScroll()}>
+                  Actual model
                 </DropdownItem>
                 <DropdownItem tag={Link} to="/admin/model/history">
-                  Ver historial
+                  History
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <NavItem>
-            <NavLink
-                data-placement="bottom"
-                href="admin/users"
-                rel="noopener noreferrer"
+
+            <UncontrolledDropdown nav>
+              <DropdownToggle
+                caret
+                color="primary"
+                data-toggle="dropdown"
+                href="/admin/user"
+                nav
+                onClick={(e) => e.preventDefault()}
               >
-                <p className="d-lg d-xl">Usuarios</p>
-              </NavLink>
-            </NavItem>
-            <NavItem>
-            <NavItem>
-            <NavLink
-                data-placement="bottom"
-                href="admin/stadistics"
-                rel="noopener noreferrer"
-              >
-                <p className="d-lg d-xl">Estadisticas</p>
-              </NavLink>
-            </NavItem>
-            </NavItem>
+                <i className="fa fa-cogs d-lg-none d-xl-none" />
+                Users
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-with-icons">
+                <DropdownItem tag={Link} to="/admin/users" onClick={() => smoothScroll()}>
+                  List
+                </DropdownItem>
+                <DropdownItem tag={Link} to="/admin/users/create" onClick={() => smoothScroll()}>
+                  Create
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
             <NavItem>
               <Button
                 className="nav-link d-none d-lg-block"
                 color="default"
                 onClick={(e) => goBack(e)}
               >
-                Volver
+                Back
               </Button>
             </NavItem>
           </Nav>

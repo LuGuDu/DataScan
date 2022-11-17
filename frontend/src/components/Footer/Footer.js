@@ -17,6 +17,10 @@
 */
 import React from "react";
 import { Link } from "react-router-dom";
+
+import PermissionsGate from 'components/Role-based-access/PermissionsGate.js'
+import { SCOPES } from 'components/Role-based-access/PermissionsMap.js'
+
 // reactstrap components
 import {
   Button,
@@ -30,7 +34,7 @@ import {
 
 export default function Footer() {
 
-  const smoothScroll = (e) => {
+  const smoothScroll = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -41,41 +45,72 @@ export default function Footer() {
           <Col md="3">
             <h1 className="title">DataScan</h1>
           </Col>
-          <Col md="3">
+          <Col md="2">
+            <Nav>
+              <PermissionsGate
+                scopes={[SCOPES.administratorCanAccess, SCOPES.normalCanAccess]}
+              >
+                <NavItem>
+                  <NavLink to="/welcome" tag={Link} onClick={() => smoothScroll()}>
+                    Home
+                  </NavLink>
+                </NavItem>
+              </PermissionsGate>
+
+              <PermissionsGate
+                scopes={[SCOPES.noLoggedCanAccess]}
+              >
+                <NavItem>
+                  <NavLink to="/" tag={Link} onClick={() => smoothScroll()}>
+                    Home
+                  </NavLink>
+                </NavItem>
+              </PermissionsGate>
+
+
+            </Nav>
+          </Col>
+          <Col md="2">
             <Nav>
               <NavItem>
-                <NavLink to="/" tag={Link} onClick={(e) => smoothScroll(e)}>
-                  Home
+                <NavLink to="/analyze" tag={Link} onClick={() => smoothScroll()}>
+                  Analyze
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/train" tag={Link} onClick={(e) => smoothScroll(e)}>
-                  Entrenar
+                <NavLink to="/contact" tag={Link} onClick={() => smoothScroll()}>
+                  Contact us
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/analyze" tag={Link} onClick={(e) => smoothScroll(e)}>
-                  Analizar
+                <NavLink to="/about" tag={Link} onClick={() => smoothScroll()}>
+                  About us
                 </NavLink>
               </NavItem>
             </Nav>
           </Col>
+
+          <PermissionsGate
+            scopes={[SCOPES.noLoggedCanAccess]}
+          >
+            <Col md="2">
+              <Nav>
+                <NavItem>
+                  <NavLink to="/login" tag={Link} onClick={() => smoothScroll()}>
+                    Login
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/register" tag={Link} onClick={() => smoothScroll()}>
+                    Register
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </Col>
+          </PermissionsGate>
+
           <Col md="3">
-            <Nav>
-              <NavItem>
-                <NavLink href="/contact" onClick={(e) => smoothScroll(e)}>
-                  Contacta
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="about-us" onClick={(e) => smoothScroll(e)}>
-                  Acerca de
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Col>
-          <Col md="3">
-            <h3 className="title">Síguenos:</h3>
+            <h3 className="title">Follow us:</h3>
             <div className="btn-wrapper profile">
               <Button
                 className="btn-icon btn-neutral btn-round btn-simple"
